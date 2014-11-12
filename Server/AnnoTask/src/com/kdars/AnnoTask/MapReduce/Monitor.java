@@ -6,10 +6,10 @@ import com.kdars.AnnoTask.DB.DocByTerm;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 
 public class Monitor extends Thread{
-	private ArrayList<ContentProcessor>	jobList;
+	private ArrayList<ContentProcessor>	processContext;
 	
 	public Monitor(){
-		jobList = new ArrayList<ContentProcessor>();
+		processContext = new ArrayList<ContentProcessor>();
 	}
 	
 	public void run(){

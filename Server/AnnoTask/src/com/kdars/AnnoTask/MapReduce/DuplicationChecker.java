@@ -5,9 +5,8 @@ import com.kdars.AnnoTask.DB.ThesaurusDBManager;
 
 public class DuplicationChecker {
 
-	public boolean checkDuplication(DocByTerm docByTerm) {
-		// TODO 반드시 다시구현~! 예제임.
-		return getConceptFrom("1111");
+	public boolean checkDuplication(String term) {
+		return getConceptFrom(term);
 	}
 	
 	private boolean getConceptFrom(String term){
