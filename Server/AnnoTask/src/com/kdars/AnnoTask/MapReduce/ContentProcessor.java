@@ -58,7 +58,7 @@ public class ContentProcessor extends Thread{
 			DocByTerm docByTerm = tokenizer.termGenerate(document, ngram);
 			
 			for (String term : docByTerm.keySet()){
-				if (stopWordRemover.isDeleting(term) || dupChecker.checkDuplication(term)){
+				if (stopWordRemover.isStopWord(term) || dupChecker.checkDuplication(term)){
 					continue;
 				}
 				
