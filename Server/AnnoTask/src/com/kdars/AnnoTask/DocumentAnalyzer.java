@@ -1,9 +1,9 @@
 package com.kdars.AnnoTask;
 
-import com.kdars.AnnoTask.MapReduce.Master;
+import com.kdars.AnnoTask.MapReduce.Monitor;
 
 public class DocumentAnalyzer {
-	private Master master = new Master();
+	private Monitor master = new Monitor();
 	private String analysisStatus;
 	
 	public void run(){

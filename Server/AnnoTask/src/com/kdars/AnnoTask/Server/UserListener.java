@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import com.kdars.AnnoTask.DocumentAnalyzer;
 
-public class ListenUser extends Thread{
+public class UserListener extends Thread{
 	private DocumentAnalyzer documentAnalyzer;
 	private ArrayList<UserControl>	connectUserList = new  ArrayList<UserControl>();	// TODO : 이거 쓰레드로 변형해서 주기적 커넥션 체크.
 	
-	public ListenUser(DocumentAnalyzer documentAnalyzer) {
+	public UserListener(DocumentAnalyzer documentAnalyzer) {
 		// TODO Auto-generated constructor stub
 		this.documentAnalyzer = documentAnalyzer;
 	}

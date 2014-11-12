@@ -1,6 +1,6 @@
 package com.kdars.AnnoTask;
 
-import com.kdars.AnnoTask.Server.ListenUser;
+import com.kdars.AnnoTask.Server.UserListener;
 
 public class Driver {
 	private AnnoTask annoTask = new AnnoTask();
@@ -11,7 +11,7 @@ public class Driver {
 	
 	public void run(){
 		DocumentAnalyzer	documentAnalyzer = new DocumentAnalyzer();
-		ListenUser			listenUser = new ListenUser(documentAnalyzer);
+		UserListener			listenUser = new UserListener(documentAnalyzer);
 		
 		listenUser.start();
 		documentAnalyzer.run();
