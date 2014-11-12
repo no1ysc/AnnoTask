@@ -7,8 +7,8 @@ public class DocumentAnalyzer {
 	private String analysisStatus;
 	
 	public void run(){
-		//master.start(); // TODO:시퀸스 다이어그램 임시.
-		master.run();
+		master.start(); // TODO:시퀸스 다이어그램 임시.
+//		master.run();
 	}
 	
 	public String getAnalysisStatus(){
