@@ -5,7 +5,7 @@ import com.kdars.AnnoTask.DB.ContentDBManager;
 import com.kdars.AnnoTask.DB.DocByTerm;
 import com.kdars.AnnoTask.DB.Document;
 
-public class Job extends Thread{
+public class ContentProcessor extends Thread{
 	private DuplicationChecker dupChecker;
 //	private NgramFilter ngramFilter;	// TODO: 저쪽으로 가야할듯., 유저가 가저가기 전,,,,,,에서 하는걸로,.
 	private int startDocIDIndex;
@@ -13,7 +13,7 @@ public class Job extends Thread{
 	
 	private JobResultTable	jobResultTable;
 	
-	public Job(int startDocID, int count){
+	public ContentProcessor(int startDocID, int count){
 		this.startDocIDIndex = startDocID;
 		this.endDocIDIndex = startDocID + count;
 		
