@@ -1,7 +1,7 @@
 package com.kdars.AnnoTask.DB;
 
 public class ContentDBManager {
-	private static ContentDBManager thisClass = new ContentDBManager();
+	private static ContentDBManager contentDBManager = new ContentDBManager();
 	private ContentDBConnector contentDB;
 	
 	public ContentDBManager(){
@@ -9,11 +9,11 @@ public class ContentDBManager {
 	}
 	
 	public static ContentDBManager getInstance(){
-		return	thisClass;
+		return	contentDBManager;
 	}
 	
 	public Document getContent(int docID){
 		// TODO : 예제.
-		return contentDB.query("docid", String.valueOf(docID));
+		return contentDB.query("docID", String.valueOf(docID));
 	}
 }

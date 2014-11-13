@@ -13,7 +13,9 @@ public class Monitor extends Thread{
 	}
 	
 	public void run(){
-		while(true){
+		
+		
+/*		while(true){
 			ContentProcessor job = jobAllocate();
 			job.start();
 			
@@ -21,6 +23,13 @@ public class Monitor extends Thread{
 				reduce();
 			}
 		}
+*/
+	}
+	
+	private boolean checkUpdates(){
+		
+		
+		return false;
 	}
 	
 	private void reduce() {

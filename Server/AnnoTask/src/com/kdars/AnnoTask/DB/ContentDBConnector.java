@@ -11,6 +11,19 @@ public class ContentDBConnector {
 	private java.sql.Connection sqlConnection;
 	private String tableName = GlobalContext.getInstance().CONTENT_DB_TABLE_NAME;
 	
+	// These queries for creating trigger in ContentDB
+	private String [] queries = {
+			"DROP TRIGGER IF EXISTS update_trigger;",
+			"DELIMITER //",
+			"CREATE TRIGGER update_trigger",
+			"AFTER INSERT ON ContentDB",
+			"FOR EACH ROW",
+			"BEGIN",
+			"insert into job_table(doc_id, working_status, complete_status) values(NEW.docID, 0, 0)",
+			"END; //",
+			"DELIMITER ;"
+	};
+	
 	public ContentDBConnector(){
 		while (!connect());
 	}
@@ -22,43 +35,45 @@ public class ContentDBConnector {
 	public boolean delete(Document document){
 		return false;
 	}
-	
-	public Document query(String colName, String value){
-		ArrayList<QueueEntry> result = new ArrayList<QueueEntry>();
-		String query = "\""+queryURL+"\"";
-		java.sql.Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			String cmd = "select * from " + tableName + " where url=" + query + ";";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(cmd);
-			
-			if(tableName.equals("url")){
-				while(rs.next()){
-					QueueEntry QueueEntrytemp = new QueueEntry();
-					QueueEntrytemp.setSiteURL(rs.getString(1));
-					result.add(QueueEntrytemp);		
-				}
-			}else{
-				while(rs.next()){
-					QueueEntry QueueEntrytemp = new QueueEntry();
-					Article articleTemp = new Article();
-					QueueEntrytemp.setSiteURL(rs.getString(5));
-					articleTemp.date = rs.getString(2);
-					articleTemp.press = rs.getString(4);
-					articleTemp.title = unescape(rs.getString(5));
-					articleTemp.content = unescape(rs.getString(6));
-					
-					QueueEntrytemp.setArticle(articleTemp);
-					result.add(QueueEntrytemp);					
-				}
-			}
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+	public Document query(String colName, String value){ // TODO : 다 고쳐야함
+//		ArrayList<QueueEntry> result = new ArrayList<QueueEntry>();
+//		String query = "\""+queryURL+"\"";
+//		java.sql.Statement stmt = null;
+//		ResultSet rs = null;
+//		try {
+//			String cmd = "select * from " + tableName + " where url=" + query + ";";
+//			stmt = conn.createStatement();
+//			rs = stmt.executeQuery(cmd);
+//			
+//			if(tableName.equals("url")){
+//				while(rs.next()){e
+//					QueueEntry QueueEntrytemp = new QueueEntry();
+//					QueueEntrytemp.setSiteURL(rs.getString(1));
+//					result.add(QueueEntrytemp);		
+//				}
+//			}else{
+//				while(rs.next()){
+//					QueueEntry QueueEntrytemp = new QueueEntry();
+//					Article articleTemp = new Article();
+//					QueueEntrytemp.setSiteURL(rs.getString(5));
+//					articleTemp.date = rs.getString(2);
+//					articleTemp.press = rs.getString(4);
+//					articleTemp.title = unescape(rs.getString(5));
+//					articleTemp.content = unescape(rs.getString(6));
+//					
+//					QueueEntrytemp.setArticle(articleTemp);
+//					result.add(QueueEntrytemp);					
+//				}
+//			}
+//			
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		return null;
 	}
+	
 	
 	private boolean connect(){
 		String jdbcUrl = GlobalContext.getInstance().CONTENT_DB_JDBC_URL;
@@ -85,6 +100,25 @@ public class ContentDBConnector {
 			System.err.println("ContentDB Connection Error.");
 			return false;
 		}
+		
+
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			
+			// Create Trigger 
+			for(String query : queries){
+				stmt.addBatch(query);
+			}
+			
+			stmt.executeBatch();
+			// 여기다 작업해야함
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		return true;
 	}

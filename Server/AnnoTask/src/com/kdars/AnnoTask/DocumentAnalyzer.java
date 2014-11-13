@@ -3,12 +3,11 @@ package com.kdars.AnnoTask;
 import com.kdars.AnnoTask.MapReduce.Monitor;
 
 public class DocumentAnalyzer {
-	private Monitor master = new Monitor();
+	private Monitor contentMonitor = new Monitor();
 	private String analysisStatus;
 	
 	public void run(){
-		master.start(); // TODO:시퀸스 다이어그램 임시.
-//		master.run();
+		contentMonitor.start();
 	}
 	
 	public String getAnalysisStatus(){
