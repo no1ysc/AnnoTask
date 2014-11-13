@@ -24,7 +24,7 @@ public class ThesaurusDBManager {
 		return null;
 	}
 	
-	public boolean setContent(String from, String to){
+	public boolean setEntry(String from, String to){
 		// TODO : for Phase2.
 		return false;
 	}
