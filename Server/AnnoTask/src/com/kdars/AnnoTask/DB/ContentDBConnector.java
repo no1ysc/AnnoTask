@@ -1,13 +1,18 @@
 package com.kdars.AnnoTask.DB;
 
-import com.mysql.jdbc.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import com.kdars.AnnoTask.GlobalContext;
 
 public class ContentDBConnector {
-	private Connection sqlConnection;
-	// TODO : 향후 한번에 조절하기 위해 모아야할 정보 : SQL 커넥션 정보,
+	private java.sql.Connection sqlConnection;
+	private String tableName = GlobalContext.getInstance().CONTENT_DB_TABLE_NAME;
 	
 	public ContentDBConnector(){
-		connect();
+		while (!connect());
 	}
 	
 	public boolean add(Document document){
@@ -19,16 +24,84 @@ public class ContentDBConnector {
 	}
 	
 	public Document query(String colName, String value){
-		return null;
+		ArrayList<QueueEntry> result = new ArrayList<QueueEntry>();
+		String query = "\""+queryURL+"\"";
+		java.sql.Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			String cmd = "select * from " + tableName + " where url=" + query + ";";
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(cmd);
+			
+			if(tableName.equals("url")){
+				while(rs.next()){
+					QueueEntry QueueEntrytemp = new QueueEntry();
+					QueueEntrytemp.setSiteURL(rs.getString(1));
+					result.add(QueueEntrytemp);		
+				}
+			}else{
+				while(rs.next()){
+					QueueEntry QueueEntrytemp = new QueueEntry();
+					Article articleTemp = new Article();
+					QueueEntrytemp.setSiteURL(rs.getString(5));
+					articleTemp.date = rs.getString(2);
+					articleTemp.press = rs.getString(4);
+					articleTemp.title = unescape(rs.getString(5));
+					articleTemp.content = unescape(rs.getString(6));
+					
+					QueueEntrytemp.setArticle(articleTemp);
+					result.add(QueueEntrytemp);					
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private boolean connect(){
-//		sqlConnection;
-		return false;
+		String jdbcUrl = GlobalContext.getInstance().CONTENT_DB_JDBC_URL;
+		String DBName = GlobalContext.getInstance().CONTENT_DB_NAME;
+		String userID = GlobalContext.getInstance().CONTENT_DB_USER_ID;
+		String userPass = GlobalContext.getInstance().CONTENT_DB_USER_PASS;
+		
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+		}catch(ClassNotFoundException e){
+//			e.printStackTrace();
+			System.err.println("JDBC is not found.");
+			return false;
+		}
+		
+		try{
+			sqlConnection = DriverManager.getConnection(jdbcUrl, userID, userPass);
+			
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute("use "+DBName);
+			stmt.close();
+		}catch(SQLException e){
+//			e.printStackTrace();
+			System.err.println("ContentDB Connection Error.");
+			return false;
+		}
+		
+		return true;
 	}
 	
 	private boolean disconnect(){
-//		sqlConnection;
-		return false;
+		try {
+			sqlConnection.close();
+		} catch (SQLException e) {
+			System.err.println("ContentDB Disconnection Error.");
+			return	false;
+		}
+		
+		return true;
+	}
+	
+	private void reConnect(){
+		disconnect();
+		while(!connect());
 	}
 }
