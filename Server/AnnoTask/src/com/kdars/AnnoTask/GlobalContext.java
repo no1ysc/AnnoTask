@@ -15,9 +15,19 @@ public class GlobalContext {
 	/* N-Gram Setting */
 	
 	/* Special Character Remove */
-	private boolean IS_REMOVE = false;	// 최대 N-gram
-	public boolean isSpecialCharRemove(){
-		return this.IS_REMOVE;
+	private String DELIM = " ";
+	public String getDelim(){
+		return this.DELIM;
 	}
-	/* N-Gram Setting */
+	/* Special Character Remove */
+	
+	
+	
+	/* Content DB Connect Info(Running time is not changed.)*/   
+	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.7:3306/webcrawler_v01";
+	public final String CONTENT_DB_NAME = "webcrawler_v01"; 
+	public final String CONTENT_DB_USER_ID = "root";
+	public final String CONTENT_DB_USER_PASS = "1q2w3e4r";
+	public final String CONTENT_DB_TABLE_NAME = "content_v01";
+	/* Content DB Connect Info */
 }

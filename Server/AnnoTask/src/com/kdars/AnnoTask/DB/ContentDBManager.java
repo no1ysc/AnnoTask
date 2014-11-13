@@ -12,8 +12,8 @@ public class ContentDBManager {
 		return	thisClass;
 	}
 	
-	public Document getContent(){
+	public Document getContent(int docID){
 		// TODO : 예제.
-		return contentDB.query("DocumentIndex", "10");
+		return contentDB.query("docid", String.valueOf(docID));
 	}
 }

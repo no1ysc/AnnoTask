@@ -5,8 +5,6 @@ import com.kdars.AnnoTask.DB.DocByTerm;
 import com.kdars.AnnoTask.DB.Document;
 
 public class Tokenizer {
-	private boolean isSpecialCharRemove = GlobalContext.getInstance().isSpecialCharRemove();
-	
 	public Tokenizer(){
 		
 	}
@@ -19,12 +17,9 @@ public class Tokenizer {
 		DocByTerm ret = new DocByTerm(document.getDocumentID(), ngram, document.getCategory());
 				
 		/* Working Tokenize */
-		if (this.isSpecialCharRemove){
-			
-		} else {
-			
-		}
-		specialCharRemove();
+		String delim = GlobalContext.getInstance().getDelim();
+		
+		//TODO : 토큰하자.
 		return null;
 	}
 	

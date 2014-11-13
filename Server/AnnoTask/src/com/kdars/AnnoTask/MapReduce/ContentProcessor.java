@@ -42,7 +42,7 @@ public class ContentProcessor extends Thread{
 		StopWordRemover stopWordRemover = new StopWordRemover();
 	
 		for (int docID = this.startDocIDIndex; docID <= this.endDocIDIndex; docID++){
-			Document document = ContentDBManager.getInstance().getContent();
+			Document document = ContentDBManager.getInstance().getContent(docID);
 			
 			extractTermStructure(tokenizer, dupChecker, stopWordRemover, document);
 		}
