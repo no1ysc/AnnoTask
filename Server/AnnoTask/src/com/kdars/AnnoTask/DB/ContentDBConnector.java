@@ -9,25 +9,37 @@ import com.kdars.AnnoTask.GlobalContext;
 
 public class ContentDBConnector {
 	private java.sql.Connection sqlConnection;
-	private String tableName = GlobalContext.getInstance().CONTENT_DB_TABLE_NAME;
+	private String contentTable = GlobalContext.getInstance().CONTENT_DB_contentTABLE_NAME;
+	private String jobTable = GlobalContext.getInstance().CONTENT_DB_jobTABLE_NAME;
 	
 	// These queries for creating trigger in ContentDB
-	private String [] queries = {
-			"DROP TRIGGER IF EXISTS update_trigger;",
-			"DELIMITER //",
-			"CREATE TRIGGER update_trigger",
-			"AFTER INSERT ON ContentDB",
-			"FOR EACH ROW",
-			"BEGIN",
-			"insert into job_table(doc_id, working_status, complete_status) values(NEW.docID, 0, 0)",
-			"END; //",
-			"DELIMITER ;"
-	};
+	String Query_FOR_CREATE_TRIGGER = "CREATE TRIGGER update_trigger "
+														+ "AFTER INSERT ON "
+														+ contentTable + " "
+														+ "FOR EACH ROW "
+														+ "BEGIN "
+														+ "INSERT INTO " + jobTable 
+														+ "(doc_id, working_status, complete_status) " 
+														+ "VALUES " 
+														+ "(NEW.doc_id, 0, 0);"
+														+ "END;";
 	
 	public ContentDBConnector(){
 		while (!connect());
+		setTrigger();
 	}
 	
+	private void setTrigger() {
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute(Query_FOR_CREATE_TRIGGER);
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public boolean add(Document document){
 		return false;
 	}
@@ -100,25 +112,6 @@ public class ContentDBConnector {
 			System.err.println("ContentDB Connection Error.");
 			return false;
 		}
-		
-
-		try {
-			java.sql.Statement stmt = sqlConnection.createStatement();
-			
-			// Create Trigger 
-			for(String query : queries){
-				stmt.addBatch(query);
-			}
-			
-			stmt.executeBatch();
-			// 여기다 작업해야함
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		
 		return true;
 	}
