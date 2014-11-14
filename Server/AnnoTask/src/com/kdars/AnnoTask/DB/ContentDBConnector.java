@@ -32,6 +32,7 @@ public class ContentDBConnector {
 	private void setTrigger() {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute("DROP TRIGGER IF EXISTS update_trigger;");
 			stmt.execute(Query_FOR_CREATE_TRIGGER);
 			stmt.close();
 		} catch (SQLException e) {
@@ -47,8 +48,20 @@ public class ContentDBConnector {
 	public boolean delete(Document document){
 		return false;
 	}
-
-	public Document query(String colName, String value){ // TODO : 다 고쳐야함
+	
+	public Document query(String colName, String value){
+		ResultSet resultSet = null;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			
+			resultSet = stmt.executeQuery("select * from "+ "test_table" + " where " + colName + " = " + String.valueOf(value));
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 //		ArrayList<QueueEntry> result = new ArrayList<QueueEntry>();
 //		String query = "\""+queryURL+"\"";
 //		java.sql.Statement stmt = null;
@@ -59,7 +72,7 @@ public class ContentDBConnector {
 //			rs = stmt.executeQuery(cmd);
 //			
 //			if(tableName.equals("url")){
-//				while(rs.next()){e
+//				while(rs.next()){
 //					QueueEntry QueueEntrytemp = new QueueEntry();
 //					QueueEntrytemp.setSiteURL(rs.getString(1));
 //					result.add(QueueEntrytemp);		
@@ -83,7 +96,30 @@ public class ContentDBConnector {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		return null;
+	}
+	
+	public ArrayList<Integer> checkUpdates(String tableName, String columnName, int value){ 
+		ResultSet resultSet = null;
+		ArrayList<Integer> docID_List = new ArrayList<Integer>();
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			resultSet = stmt.executeQuery("select * from "+ tableName + " where " + columnName + " = " + String.valueOf(value));
+			while(resultSet.next()){
+				docID_List.add(resultSet.getInt("doc_id"));
+				System.out.println(docID_List.get(docID_List.size()-1));
+			}
+			
+			// update working_status
+			for(int i = 0; i< docID_List.size(); i++){
+				stmt.execute("update " + tableName + " set working_status = 1 where doc_id = " + docID_List.get(i));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+		return docID_List;
 	}
 	
 	

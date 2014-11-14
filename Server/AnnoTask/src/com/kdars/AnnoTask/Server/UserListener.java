@@ -14,11 +14,11 @@ public class UserListener extends Thread{
 	}
 
 	public void run(){
-		while(true){
+//		while(true){
 			accept();
 			UserControl	user = createUser();
 			user.start();
-		}
+//		}
 	}
 
 	private UserControl createUser() {

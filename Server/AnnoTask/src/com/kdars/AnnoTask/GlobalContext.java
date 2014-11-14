@@ -38,7 +38,12 @@ public class GlobalContext {
 	public final String CONTENT_DB_USER_PASS = "1qaz@WSX";
 	public final String CONTENT_DB_contentTABLE_NAME = "test_table";
 	public final String CONTENT_DB_jobTABLE_NAME = "job_table";
-
+	
+	/* ContentProcessor Attributes */
+	private int maxContentProcessor = 10;
+	public int getMaxContentProcessor(){
+		return this.maxContentProcessor;
+	}
 	
 	
 	/* Content DB Connect Info */
