@@ -11,11 +11,10 @@ import java.util.regex.Pattern;
 public class Tokenizer {
 	private ArrayList<String> termList;
 	private String specialCharsPattern;
-
+	private String specialChars = GlobalContext.getInstance().getSpecialChars();
 	public Tokenizer() {
 		/* For processing special characters faster */
-		StringTokenizer str = new StringTokenizer(GlobalContext.getInstance()
-				.getSpecialChars(), "");
+		StringTokenizer str = new StringTokenizer(GlobalContext.getInstance().getSpecialChars(), "");
 		StringBuilder patternString = new StringBuilder();
 		patternString.append("[");
 		while (str.hasMoreTokens()) {
@@ -30,25 +29,25 @@ public class Tokenizer {
 		String doc = document.getBody();
 
 		/* Setting Meta Data */
-		DocByTerm ret = new DocByTerm(document.getDocumentID(), ngram,
-				document.getCategory());
+		DocByTerm ret = new DocByTerm(document.getDocumentID(), ngram, document.getCategory());
 
 		/* Working Tokenize */
 		String delim = GlobalContext.getInstance().getDelim();
 
 		/* Tokenizing according to delimiter configuration */
-		termList = (ArrayList<String>) ((ArrayList) Collections
-				.list(new StringTokenizer(doc, delim)));
+		termList = (ArrayList<String>) ((ArrayList) Collections.list(new StringTokenizer(doc, delim)));
 
 		/* Getting n_gram list */
-		ArrayList<String> listOfNgrams = getNgramTerms(ngram);
-
-		return null;
+		//ArrayList<String> listOfNgrams = getNgramTerms(ngram, ret);
+		getNgramTerms(ngram,ret);
+		return ret;
 	}
 
-	public ArrayList<String> getNgramTerms(int n) {
+	//private ArrayList<String> getNgramTerms(int n, DocByTerm ret) {
+	private void getNgramTerms(int n, DocByTerm docTerm) {
+			
 		/* Making n_grams with tokens */
-		ArrayList<String> ngramList = new ArrayList<String>();
+		//ArrayList<String> ngramList = new ArrayList<String>();
 		for (int i = 0; i < (termList.size() - n + 1); i++) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(termList.get(i));
@@ -57,11 +56,12 @@ public class Tokenizer {
 			}
 			String processedString = specialCharRemove(sb.toString());
 			if (processedString != null){
-			ngramList.add(processedString);
+				docTerm.increaseFreq(processedString);
+			//ngramList.add(processedString);
 			}
 		}
 
-		return ngramList;
+		//return ngramList;
 	}
 
 	private String specialCharRemove(String rawstring) {
@@ -75,36 +75,40 @@ public class Tokenizer {
 		if (b == false) {
 			return rawstring;
 		} else {
-			String specialChars = GlobalContext.getInstance().getSpecialChars();
-			String processingStr = rawstring;
-			for (int k = 0; k < specialChars.length(); k++) {
-				// Removing special characters at the beginning and the end of the string
-				while (processingStr.startsWith(Character.toString(specialChars.charAt(k)))
-							|| processingStr.endsWith(Character.toString(specialChars.charAt(k)))) {
-
-					if (processingStr.startsWith(Character.toString(specialChars.charAt(k)))
-							&& processingStr.endsWith(Character.toString(specialChars.charAt(k)))) {
-						processingStr = processingStr.substring(1,processingStr.length() - 1);
-					} else if (rawstring.startsWith(Character.toString(specialChars.charAt(k)))) {
-						processingStr = processingStr.substring(1,processingStr.length());
-					} else if (rawstring.endsWith(Character.toString(specialChars.charAt(k)))) {
-						processingStr = processingStr.substring(0,processingStr.length() - 1);
-					} else {
-						System.out.println("not prepared for this case");
+			String processingStr = removePrePostSpecialChar(rawstring);
+			for(int n = 0; n < processingStr.length(); n++){
+				if (specialChars.contains(String.valueOf(processingStr.charAt(n)))){
+					if (processingStr.charAt(n-1)== ' ' || processingStr.charAt(n+1)== ' '){
+						return null;
 					}
 				}
-				//Returning null for strings that contain special characters with white spaces attached to them
-				for(int n = 0; n < processingStr.length(); n++){
-					if (processingStr.charAt(n) == specialChars.charAt(k)){
-						if (processingStr.charAt(n-1)== ' ' || processingStr.charAt(n+1)== ' '){
-							return null;
-						}
-					}
-				}
-
 			}
-
 			return processingStr;
 		}
 	}
+
+	private String removePrePostSpecialChar(String processingStr) {
+		int firstIndex = 0;
+		int lastIndex = processingStr.length();
+		
+		for (int index = 0; index < processingStr.length(); index++){
+			String temp = String.valueOf(processingStr.charAt(index));
+			if (!specialChars.contains(temp)){
+				firstIndex = index;
+				break;
+			}
+		}
+		
+		for (int index = processingStr.length() - 1; index >= 0; index--){
+			String temp = String.valueOf(processingStr.charAt(index));
+			if (!specialChars.contains(temp)){
+				lastIndex = index + 1;
+				break;
+			}
+		}
+		
+		return processingStr.substring(firstIndex, lastIndex);
+	}
+
+	
 }

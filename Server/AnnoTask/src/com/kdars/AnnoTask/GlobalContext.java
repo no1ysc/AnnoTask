@@ -20,7 +20,7 @@ public class GlobalContext {
 		return this.DELIM;
 	}
 	/* Special Character Remove */
-	private String SpecialChars = ".";
+	private String SpecialChars = "/,.\"?";
 	public String getSpecialChars(){
 		return this.SpecialChars;
 	}
