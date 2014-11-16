@@ -1,5 +1,9 @@
 package com.kdars.AnnoTask.Server;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import com.kdars.AnnoTask.DocumentAnalyzer;
@@ -7,6 +11,7 @@ import com.kdars.AnnoTask.DocumentAnalyzer;
 public class UserListener extends Thread{
 	private DocumentAnalyzer documentAnalyzer;
 	private ArrayList<UserControl>	connectUserList = new  ArrayList<UserControl>();	// TODO : 이거 쓰레드로 변형해서 주기적 커넥션 체크.
+	private ServerSocket serverSocket = null;
 	
 	public UserListener(DocumentAnalyzer documentAnalyzer) {
 		// TODO Auto-generated constructor stub
@@ -14,22 +19,37 @@ public class UserListener extends Thread{
 	}
 
 	public void run(){
+		try {
+			serverSocket = new ServerSocket(50000);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			// 요청대기시간 설정 (Exception : SocketTimeoutException)
+            serverSocket.setSoTimeout(0);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		        
 		while(true){
-			accept();
-			UserControl	user = createUser();
+			// 서버소켓은 클라이언트의 연결요청이 올 때까지 실행을 멈추고 대기.
+	        // 클라이언트의 연결요청이 오면 클라이언트 소켓과 통신할 새로운 소켓을 생성한다.
+	        Socket socket;
+			try {
+				socket = serverSocket.accept();
+				System.out.println(socket.getInetAddress() + "로부터 연결요청이 들어왔습니다.");
+			} catch (IOException e) {
+				e.printStackTrace();
+				continue;
+			}
+	        
+	        UserControl user = new UserControl(socket); 
+	        connectUserList.add(user);
 			user.start();
 		}
-	}
-
-	private UserControl createUser() {
-		// TODO Auto-generated method stub
-		connectUserList.add(new UserControl());
-		return	new UserControl();
-	}
-
-	private void accept() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	private void disConnect(UserControl user){

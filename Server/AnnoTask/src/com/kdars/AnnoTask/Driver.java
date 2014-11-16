@@ -10,10 +10,10 @@ public class Driver {
 	}
 	
 	public void run(){
-		DocumentAnalyzer	documentAnalyzer = new DocumentAnalyzer();
-		UserListener			listenUser = new UserListener(documentAnalyzer);
+//		DocumentAnalyzer	documentAnalyzer = new DocumentAnalyzer();
+		UserListener			listenUser = new UserListener(null);
 		
 		listenUser.start();
-		documentAnalyzer.run();
+//		documentAnalyzer.run();
 	}
 }
