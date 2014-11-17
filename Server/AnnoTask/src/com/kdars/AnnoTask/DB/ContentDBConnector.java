@@ -104,4 +104,13 @@ public class ContentDBConnector {
 		disconnect();
 		while(!connect());
 	}
+
+	public ArrayList<Integer> queryFromDate(String startDate, String endDate,
+			boolean bNaver, boolean bDaum, boolean bNate) {
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		
+		
+		
+		return null;
+	}
 }
