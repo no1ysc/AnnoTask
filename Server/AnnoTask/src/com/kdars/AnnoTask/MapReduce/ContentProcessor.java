@@ -9,6 +9,7 @@ import com.kdars.AnnoTask.DB.TermFreqDBManager;
 public class ContentProcessor extends Thread{
 //	private NgramFilter ngramFilter;	// TODO: 저쪽으로 가야할듯., 유저가 가저가기 전,,,,,,에서 하는걸로,.
 	private int nGram;
+	private Document document = null;
 	
 	public enum ProcessState{
 		Ready, Running, Completed 
@@ -18,18 +19,11 @@ public class ContentProcessor extends Thread{
 	private JobResultTable	jobResultTable;
 	
 	public ContentProcessor(int docID){
-		Document doc = ContentDBManager.getInstance().getContent(docID);
-		
-//		this.nGram = GlobalContext.getInstance().getN_Gram();
-//		jobResultTable = new JobResultTable();
-		
+		document = ContentDBManager.getInstance().getContent(docID);
+				
 		this.state = ProcessState.Ready;
 	}
 
-	public JobResultTable getJobResultTable(){
-		return	this.jobResultTable;
-	}
-	
 	public void run(){
 		this.state = ProcessState.Running;
 
@@ -61,5 +55,13 @@ public class ContentProcessor extends Thread{
 				TermFreqDBManager.getInstance().addDocByTerm(docByTerm);
 			}
 		}
+	}
+	
+	public ProcessState getProcessState(){
+		return state;
+	}
+	
+	public Document getDocument(){
+		return document;
 	}
 }

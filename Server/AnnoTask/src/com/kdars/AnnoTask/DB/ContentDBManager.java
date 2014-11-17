@@ -15,14 +15,17 @@ public class ContentDBManager {
 	}
 	
 	public Document getContent(int docID){
-		// TODO : 예제.
 		return contentDB.query("doc_id", String.valueOf(docID));
 	}
 	
 	public ArrayList<Integer> getJobCandidates(){
 		ArrayList <Integer> jobCandidates = new ArrayList<Integer>();
-		jobCandidates = contentDB.checkUpdates("job_table", "working_status", 0);
+		jobCandidates = contentDB.checkUpdates("job_table", "working_status", 0); // tableName, colName, value
 		
 		return jobCandidates;
+	}
+
+	public void updateJobCompletion(int docID) {
+		contentDB.update("complete_status", docID);
 	}
 }

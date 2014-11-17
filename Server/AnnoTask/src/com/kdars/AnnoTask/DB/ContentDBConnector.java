@@ -51,51 +51,30 @@ public class ContentDBConnector {
 	
 	public Document query(String colName, String value){
 		ResultSet resultSet = null;
+		Document doc = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			
 			resultSet = stmt.executeQuery("select * from "+ "test_table" + " where " + colName + " = " + String.valueOf(value));
-			
-			
+			doc = new Document(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), 
+														resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(9), 
+														resultSet.getString(7), resultSet.getString(8), resultSet.getString(10), resultSet.getString(11));
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
-//		ArrayList<QueueEntry> result = new ArrayList<QueueEntry>();
-//		String query = "\""+queryURL+"\"";
-//		java.sql.Statement stmt = null;
-//		ResultSet rs = null;
-//		try {
-//			String cmd = "select * from " + tableName + " where url=" + query + ";";
-//			stmt = conn.createStatement();
-//			rs = stmt.executeQuery(cmd);
-//			
-//			if(tableName.equals("url")){
-//				while(rs.next()){
-//					QueueEntry QueueEntrytemp = new QueueEntry();
-//					QueueEntrytemp.setSiteURL(rs.getString(1));
-//					result.add(QueueEntrytemp);		
-//				}
-//			}else{
-//				while(rs.next()){
-//					QueueEntry QueueEntrytemp = new QueueEntry();
-//					Article articleTemp = new Article();
-//					QueueEntrytemp.setSiteURL(rs.getString(5));
-//					articleTemp.date = rs.getString(2);
-//					articleTemp.press = rs.getString(4);
-//					articleTemp.title = unescape(rs.getString(5));
-//					articleTemp.content = unescape(rs.getString(6));
-//					
-//					QueueEntrytemp.setArticle(articleTemp);
-//					result.add(QueueEntrytemp);					
-//				}
-//			}
-//			
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		return doc;
+	}
+
+	public boolean update(String columnName, int value){ //for job completion updates
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute("update job_table set " + columnName + " = 1 where doc_id = " + value);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	public ArrayList<Integer> checkUpdates(String tableName, String columnName, int value){ 
@@ -118,7 +97,6 @@ public class ContentDBConnector {
 			e.printStackTrace();
 		}
 		
-
 		return docID_List;
 	}
 	
