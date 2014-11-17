@@ -33,10 +33,10 @@ public class GlobalContext {
 	
 	
 	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://127.0.0.1:3306/job_database";
-	public final String CONTENT_DB_NAME = "job_database"; 
+	public final String CONTENT_DB_NAME = "contentdb"; 
 	public final String CONTENT_DB_USER_ID = "root";
 	public final String CONTENT_DB_USER_PASS = "1qaz@WSX";
-	public final String CONTENT_DB_contentTABLE_NAME = "test_table";
+	public final String CONTENT_DB_contentTABLE_NAME = "content_v02";
 	public final String CONTENT_DB_jobTABLE_NAME = "job_table";
 	
 	/* ContentProcessor Attributes */

@@ -5,6 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.print.attribute.standard.PresentationDirection;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.kdars.AnnoTask.GlobalContext;
 
 public class ContentDBConnector {
@@ -54,10 +58,12 @@ public class ContentDBConnector {
 		Document doc = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			resultSet = stmt.executeQuery("select * from "+ "test_table" + " where " + colName + " = " + String.valueOf(value));
-			doc = new Document(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), 
-														resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(9), 
-														resultSet.getString(7), resultSet.getString(8), resultSet.getString(10), resultSet.getString(11));
+			resultSet = stmt.executeQuery("select * from " + contentTable + " where " + colName + " = " + String.valueOf(value));
+			
+			doc = new Document(resultSet.getInt(ContentDBSchema.doc_id), resultSet.getString(ContentDBSchema.url), resultSet.getString(ContentDBSchema.collect_date), 
+										resultSet.getString(ContentDBSchema.news_date), resultSet.getString(ContentDBSchema.site_name), resultSet.getString(ContentDBSchema.press_name), 
+										resultSet.getString(ContentDBSchema.category), unescape(resultSet.getString(ContentDBSchema.title)), unescape(resultSet.getString(ContentDBSchema.body)), 
+										resultSet.getString(ContentDBSchema.comments), resultSet.getString(ContentDBSchema.crawler_version));
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -69,7 +75,7 @@ public class ContentDBConnector {
 	public boolean update(String columnName, int value){ //for job completion updates
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.execute("update job_table set " + columnName + " = 1 where doc_id = " + value);
+			stmt.execute("update " + jobTable + " set " + columnName + " = 1 where doc_id = " + value);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,12 +83,13 @@ public class ContentDBConnector {
 		return false;
 	}
 	
-	public ArrayList<Integer> checkUpdates(String tableName, String columnName, int value){ 
+	public ArrayList<Integer> checkUpdates(String columnName, int value){ 
 		ResultSet resultSet = null;
 		ArrayList<Integer> docID_List = new ArrayList<Integer>();
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			resultSet = stmt.executeQuery("select * from "+ tableName + " where " + columnName + " = " + String.valueOf(value));
+			// add docID_List where working_status is equal to 0
+			resultSet = stmt.executeQuery("select * from " + jobTable + " where " + columnName + " = " + String.valueOf(value));
 			while(resultSet.next()){
 				docID_List.add(resultSet.getInt("doc_id"));
 				System.out.println(docID_List.get(docID_List.size()-1));
@@ -90,7 +97,7 @@ public class ContentDBConnector {
 			
 			// update working_status
 			for(int i = 0; i< docID_List.size(); i++){
-				stmt.execute("update " + tableName + " set working_status = 1 where doc_id = " + docID_List.get(i));
+				stmt.execute("update " + jobTable + " set working_status = 1 where doc_id = " + docID_List.get(i));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -144,5 +151,15 @@ public class ContentDBConnector {
 	private void reConnect(){
 		disconnect();
 		while(!connect());
+	}
+	
+	private String escape(String text) {
+		String result = StringEscapeUtils.escapeHtml4(text);
+		return result;
+	}
+	
+	private String unescape(String text) {
+		String result = StringEscapeUtils.unescapeHtml4(text);
+		return result;
 	}
 }

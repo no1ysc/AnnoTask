@@ -20,7 +20,7 @@ public class ContentDBManager {
 	
 	public ArrayList<Integer> getJobCandidates(){
 		ArrayList <Integer> jobCandidates = new ArrayList<Integer>();
-		jobCandidates = contentDB.checkUpdates("job_table", "working_status", 0); // tableName, colName, value
+		jobCandidates = contentDB.checkUpdates("working_status", 0); // tableName, colName, value
 		
 		return jobCandidates;
 	}

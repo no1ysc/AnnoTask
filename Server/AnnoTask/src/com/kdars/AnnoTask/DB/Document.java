@@ -14,8 +14,8 @@ public class Document {
 	private String crawlerVersion;
 	
 	public Document(int documentID, String collectDate, String newsDate, String siteName,
-			String pressName, String url, String category, String title, String body,
-			String comment, String crawlerVersion){
+							String pressName, String url, String category, String title, String body,
+							String comment, String crawlerVersion){ //TODO: DB 스키마 바뀌면 수정해야함!
 		this.documentID = documentID;
 		this.collectDate = collectDate; 
 		this.newsDate = newsDate;
