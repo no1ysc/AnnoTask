@@ -1,10 +1,12 @@
 package com.kdars.AnnoTask.MapReduce;
 
 import java.util.ArrayList;
+
 import com.kdars.AnnoTask.GlobalContext;
 import com.kdars.AnnoTask.DB.ContentDBManager;
 import com.kdars.AnnoTask.DB.DocByTerm;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
+import com.kdars.AnnoTask.MapReduce.ContentProcessor.ProcessState;
 
 public class Monitor extends Thread{
 	private ArrayList<ContentProcessor>	processQueue;
@@ -25,8 +27,13 @@ public class Monitor extends Thread{
 				}
 			}
 			
-			//	3. Check ContentProcessor's status, if complete then delete from ArrayList and set complete_status to 1 in job_table
-
+			// 3. Check ContentProcessor's status, if complete then delete from ArrayList and set complete_status to 1 in job_table
+			for(int i = processQueue.size()-1; i >= 0 ; i--){
+				if(processQueue.get(i).getProcessState() == ProcessState.Completed){
+					ContentDBManager.getInstance().updateJobCompletion(processQueue.get(i).getDocument().getDocumentID()); 
+					processQueue.remove(i);
+				}
+			}
 			
 		}
 	}
