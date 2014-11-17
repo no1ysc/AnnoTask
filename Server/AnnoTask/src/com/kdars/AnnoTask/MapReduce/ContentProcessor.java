@@ -41,9 +41,9 @@ public class ContentProcessor extends Thread{
 	}
 
 	private void extractTermStructure(	Tokenizer tokenizer, 
-										DuplicationChecker dupChecker, 
-										StopWordRemover stopWordRemover,
-										Document document) {
+														DuplicationChecker dupChecker, 
+														StopWordRemover stopWordRemover,
+														Document document) {
 		for (int ngram = 0; ngram < this.nGram; ngram++){
 			DocByTerm docByTerm = tokenizer.termGenerate(document, ngram);
 			
