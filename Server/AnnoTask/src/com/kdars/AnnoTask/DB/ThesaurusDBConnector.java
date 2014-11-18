@@ -19,6 +19,8 @@ public class ThesaurusDBConnector {
 	}
 	
 	public Thesaurus query(String colName, String value){
+		java.sql.Statement stmt = null;
+		
 		return null;
 	}
 	

@@ -10,8 +10,10 @@ import java.util.regex.Pattern;
 
 public class Tokenizer {
 	private ArrayList<String> termList;
-	private String specialCharsPattern;
 	private String specialChars = GlobalContext.getInstance().getSpecialChars();
+	private String specialCharsPattern;
+	private String[] PostFix = GlobalContext.getInstance().getPostFix();
+	
 	public Tokenizer() {
 		/* For processing special characters faster */
 		StringTokenizer str = new StringTokenizer(GlobalContext.getInstance().getSpecialChars(), "");
@@ -23,47 +25,67 @@ public class Tokenizer {
 		patternString.append("]");
 		specialCharsPattern = patternString.toString();
 	}
+	
 
-	public DocByTerm termGenerate(Document document, int ngram) {
+	public DocByTerm[] termGenerate(Document document, int ngram) {
 		/* Getting Target String */
 		String doc = document.getBody();
-
-		/* Setting Meta Data */
-		DocByTerm ret = new DocByTerm(document.getDocumentID(), ngram, document.getCategory());
-
+		
 		/* Working Tokenize */
 		String delim = GlobalContext.getInstance().getDelim();
 
 		/* Tokenizing according to delimiter configuration */
 		termList = (ArrayList<String>) ((ArrayList) Collections.list(new StringTokenizer(doc, delim)));
 
-		/* Getting n_gram list */
-		//ArrayList<String> listOfNgrams = getNgramTerms(ngram, ret);
-		getNgramTerms(ngram,ret);
-		return ret;
-	}
-
-	//private ArrayList<String> getNgramTerms(int n, DocByTerm ret) {
-	private void getNgramTerms(int n, DocByTerm docTerm) {
-			
-		/* Making n_grams with tokens */
-		//ArrayList<String> ngramList = new ArrayList<String>();
-		for (int i = 0; i < (termList.size() - n + 1); i++) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(termList.get(i));
-			for (int j = 1; j < n; j++) {
-				sb.append(" " + termList.get(i + j));
-			}
-			String processedString = specialCharRemove(sb.toString());
-			if (processedString != null){
-				docTerm.increaseFreq(processedString);
-			//ngramList.add(processedString);
-			}
+		/* Setting Meta Data */
+		int DocID = document.getDocumentID();
+		String DocCategory = document.getCategory();
+		DocByTerm[] docByTermList = new DocByTerm[ngram];
+		for (int i = 0; i < ngram; i++){
+			docByTermList[i] = new DocByTerm(DocID, i+1, DocCategory);
 		}
-
-		//return ngramList;
+		
+		/* Getting n_gram list */
+		getNgramTerms(docByTermList);
+		return docByTermList;
 	}
 
+	private void getNgramTerms(DocByTerm[] docByTermList) {
+
+		/* Making n_grams with tokens */
+		for (int i = 0; i <  termList.size(); i++) {
+			StringBuilder sb = new StringBuilder();
+			//sb.append(termList.get(i));
+			for (int j = 0; j < docByTermList.length; j++) {
+				if (termList.size() > i + j) {
+					sb.append(" " + termList.get(i + j));
+					String processedString = specialCharRemove(sb.toString().trim());
+					if (processedString != null) {
+						String FinalString = DeletePostFix(processedString);
+						docByTermList[j].increaseFreq(FinalString);
+					}
+				}else{
+					break;
+				}
+			}
+
+		}
+	}
+
+	private String DeletePostFix(String processedString){
+		
+		for (int postFixLength = PostFix.length; postFixLength > 0; postFixLength--){
+			if (processedString.length() <= postFixLength){
+				continue;
+			}
+			if (PostFix[postFixLength - 1].contains(processedString.substring(processedString.length()-postFixLength, processedString.length()))){
+				return processedString.substring(0,processedString.length() - postFixLength);
+			}			
+		}
+		
+		return processedString;
+	}
+	
 	private String specialCharRemove(String rawstring) {
 		/*
 		 * Starts process ONLY when the string contains the special characters

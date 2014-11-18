@@ -1,5 +1,7 @@
 package com.kdars.AnnoTask;
 
+import java.util.ArrayList;
+
 public class GlobalContext {
 	private static  GlobalContext globalContext = new GlobalContext();
 	public static GlobalContext getInstance(){
@@ -25,6 +27,11 @@ public class GlobalContext {
 		return this.SpecialChars;
 	}
 	
+	private String[] PostFix = {"은 는 이 가 을 를 에",
+								"에서 에게 한테 로서 로써"};
+	public String[] getPostFix(){
+		return this.PostFix;
+	}
 	
 	/* Content DB Connect Info(Running time is not changed.)*/   
 	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.7:3306/webcrawler_v01";
