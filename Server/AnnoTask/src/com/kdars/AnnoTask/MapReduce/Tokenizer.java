@@ -14,7 +14,7 @@ public class Tokenizer {
 	private String specialCharsPattern;
 	private String[] PostFix = GlobalContext.getInstance().getPostFix();
 	private int CharLimit = 500;
-	private int DocLimit = 500;
+	private int DocLimit = 5000;
 	
 	public Tokenizer() {
 		/* For processing special characters faster */

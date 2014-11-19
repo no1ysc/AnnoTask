@@ -1,7 +1,7 @@
 package com.kdars.AnnoTask.DB;
 
 public class TermFreqDBConnector {
-	private NoSqlConnect noSqlConnect;
+	private java.sql.Connection sqlConnection;
 	
 	public boolean createTable(String tableName){
 		return false;

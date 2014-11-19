@@ -21,4 +21,7 @@ public class DeleteListDBManager {
 		// TODO : from을 날려서 to가 올라옴.
 		return deleteListDB.query(deleteTerm);
 	}
+	
+	public boolean setDeleteTermEntry(String DeleteCandidate,)
+	
 }
