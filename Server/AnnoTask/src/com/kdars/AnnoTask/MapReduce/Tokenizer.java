@@ -13,6 +13,8 @@ public class Tokenizer {
 	private String specialChars = GlobalContext.getInstance().getSpecialChars();
 	private String specialCharsPattern;
 	private String[] PostFix = GlobalContext.getInstance().getPostFix();
+	private int CharLimit = 500;
+	private int DocLimit = 500;
 	
 	public Tokenizer() {
 		/* For processing special characters faster */
@@ -34,9 +36,6 @@ public class Tokenizer {
 		/* Working Tokenize */
 		String delim = GlobalContext.getInstance().getDelim();
 
-		/* Tokenizing according to delimiter configuration */
-		termList = (ArrayList<String>) ((ArrayList) Collections.list(new StringTokenizer(doc, delim)));
-
 		/* Setting Meta Data */
 		int DocID = document.getDocumentID();
 		String DocCategory = document.getCategory();
@@ -44,34 +43,53 @@ public class Tokenizer {
 		for (int i = 0; i < ngram; i++){
 			docByTermList[i] = new DocByTerm(DocID, i+1, DocCategory);
 		}
+
+		/* checking document length */
+		ArrayList<String> checkedDoc = docAndTermLengthCheck(doc, DocLimit);	
+		for (int i = 0; i < checkedDoc.size(); i++){
+			/* Tokenizing according to delimiter configuration */
+			termList = (ArrayList<String>) ((ArrayList) Collections.list(new StringTokenizer(checkedDoc.get(i), delim)));
+			
+			/* Getting n_gram list */
+			getNgramTerms(docByTermList);
+		}
 		
-		/* Getting n_gram list */
-		getNgramTerms(docByTermList);
 		return docByTermList;
 	}
 
 	private void getNgramTerms(DocByTerm[] docByTermList) {
 
 		/* Making n_grams with tokens */
-		for (int i = 0; i <  termList.size(); i++) {
+		for (int ngramPointer = 0; ngramPointer <  termList.size(); ngramPointer++) {
 			StringBuilder sb = new StringBuilder();
-			//sb.append(termList.get(i));
-			for (int j = 0; j < docByTermList.length; j++) {
-				if (termList.size() > i + j) {
-					sb.append(" " + termList.get(i + j));
-					String processedString = specialCharRemove(sb.toString().trim());
+			for (int ngramMaker = 0; ngramMaker < docByTermList.length; ngramMaker++) {
+				if (termList.size() <= ngramPointer + ngramMaker){
+					break;
+				}
+				
+				String possibleNgram = termList.get(ngramPointer + ngramMaker);
+				if (possibleNgram.length() < CharLimit) {
+					
+					sb.append(possibleNgram + " ");
+					
+					String processedString = specialCharTrimAndTermRemove(sb.toString().trim());
 					if (processedString != null) {
 						String FinalString = DeletePostFix(processedString);
-						docByTermList[j].increaseFreq(FinalString);
+						docByTermList[ngramMaker].increaseFreq(FinalString);
 					}
-				}else{
-					break;
 				}
 			}
 
 		}
 	}
 
+	private boolean specialCharFirstLastChecker(String ngram){
+		if (specialChars.contains(String.valueOf(ngram.charAt(0))) || specialChars.contains(String.valueOf(ngram.charAt(ngram.length()-1)))){
+			return true;
+		}
+		return false;
+	}
+	
 	private String DeletePostFix(String processedString){
 		
 		for (int postFixLength = PostFix.length; postFixLength > 0; postFixLength--){
@@ -86,18 +104,22 @@ public class Tokenizer {
 		return processedString;
 	}
 	
-	private String specialCharRemove(String rawstring) {
+	private String specialCharTrimAndTermRemove(String rawstring) {
 		/*
 		 * Starts process ONLY when the string contains the special characters
 		 * defined in globalContext
 		 */
-		Pattern p = Pattern.compile(specialCharsPattern);
-		Matcher m = p.matcher(rawstring);
-		boolean b = m.find();
-		if (b == false) {
+		if (specialCharPatternMatch(rawstring) == false) {
 			return rawstring;
-		} else {
-			String processingStr = removePrePostSpecialChar(rawstring);
+		}
+		
+		String processingStr = removePrePostSpecialChar(rawstring);
+		
+		if (processingStr == null){
+			return null;
+		}
+		
+		if(specialCharPatternMatch(processingStr)){
 			for(int n = 0; n < processingStr.length(); n++){
 				if (specialChars.contains(String.valueOf(processingStr.charAt(n)))){
 					if (processingStr.charAt(n-1)== ' ' || processingStr.charAt(n+1)== ' '){
@@ -105,20 +127,29 @@ public class Tokenizer {
 					}
 				}
 			}
-			return processingStr;
 		}
-	}
+		return processingStr;
+	} 
 
+	private boolean specialCharPatternMatch(String specialCharCheck){
+		Pattern p = Pattern.compile(specialCharsPattern);
+		Matcher m = p.matcher(specialCharCheck);
+		return m.find();
+	}
+	
 	private String removePrePostSpecialChar(String processingStr) {
 		int firstIndex = 0;
 		int lastIndex = processingStr.length();
 		
-		for (int index = 0; index < processingStr.length(); index++){
-			String temp = String.valueOf(processingStr.charAt(index));
+		for (firstIndex = 0; firstIndex < processingStr.length(); firstIndex++){
+			String temp = String.valueOf(processingStr.charAt(firstIndex));
 			if (!specialChars.contains(temp)){
-				firstIndex = index;
 				break;
 			}
+		}
+		
+		if (firstIndex == lastIndex){
+			return null;
 		}
 		
 		for (int index = processingStr.length() - 1; index >= 0; index--){
@@ -132,5 +163,21 @@ public class Tokenizer {
 		return processingStr.substring(firstIndex, lastIndex);
 	}
 
+	
+	private ArrayList<String> docAndTermLengthCheck(String doc, int LengthLimit){
+		ArrayList<String> splitdoc = new ArrayList<String>();
+		int startIndex = 0;
+		int endIndex = LengthLimit;
+		
+		while (endIndex < doc.length()){
+			int adaptiveEndIndex = doc.indexOf(". ", endIndex);
+			splitdoc.add(doc.substring(startIndex, adaptiveEndIndex));
+			startIndex = adaptiveEndIndex;
+			endIndex = adaptiveEndIndex + LengthLimit;
+		}
+		splitdoc.add(doc.substring(startIndex, doc.length()));
+		
+		return splitdoc;
+	}
 	
 }

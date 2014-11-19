@@ -22,13 +22,13 @@ public class GlobalContext {
 		return this.DELIM;
 	}
 	/* Special Character Remove */
-	private String SpecialChars = "/,.\"?";
+	private String SpecialChars = "'()/,.\"?";
 	public String getSpecialChars(){
 		return this.SpecialChars;
 	}
 	
-	private String[] PostFix = {"은 는 이 가 을 를 에",
-								"에서 에게 한테 로서 로써"};
+	private String[] PostFix = {"은 는 이 가 을 를 에 의 도 만 로 와 과",
+								"에서 에게 한테 로서 로써 께서 까지 조차 부터 마저"};
 	public String[] getPostFix(){
 		return this.PostFix;
 	}
