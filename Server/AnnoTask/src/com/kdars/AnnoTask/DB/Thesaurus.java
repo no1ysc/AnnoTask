@@ -1,5 +1,9 @@
 package com.kdars.AnnoTask.DB;
 
-public class Thesaurus {
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
 
+public class Thesaurus {
+	
 }

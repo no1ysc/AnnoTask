@@ -35,9 +35,8 @@ public class TermFreqDBManager {
 	}
 	
 	public boolean addDocByTerm(DocByTerm docByTerm){
-		// DB에 체우기.
-		termFreqDB.addDoc(docByTerm);
-		return false;
+		// DB에 체우기, 채우기 실패하면 false, 성공하면 true.
+		return termFreqDB.addDoc(docByTerm);
 	}
 	
 	

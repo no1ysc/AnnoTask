@@ -47,8 +47,8 @@ public class Monitor extends Thread{
 			return !jobCandidates.isEmpty();
 	}
 	
-
-	private ContentProcessor jobAllocate(){
+	// TODO: maximum job number per thread need to be defined
+	private ContentProcessor jobAllocate(){  
 		ContentProcessor cp = new ContentProcessor(jobCandidates.get(0));
 		processQueue.add(cp);
 		jobCandidates.remove(0);
