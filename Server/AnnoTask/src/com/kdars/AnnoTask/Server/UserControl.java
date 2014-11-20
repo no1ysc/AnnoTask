@@ -54,15 +54,18 @@ public class UserControl extends Thread{
 	}
 
 	private void commandParser(String commandFromUser) {
+		// 1-1 처리.
 		if (commandFromUser.substring(0, 20).contains("startDate")){
 			System.out.println(commandFromUser);
 			RequestByDate requestByDate = new JSONDeserializer<RequestByDate>().deserialize(commandFromUser, RequestByDate.class);
 			requestByDateHandler(requestByDate);
 		}
+		//1-3 처리.
 		if (commandFromUser.substring(0, 20).contains("bTransfer")){
 			RequestTermTransfer requestTermTransfer = new JSONDeserializer<RequestTermTransfer>().deserialize(commandFromUser);
 			requestTermTransferHandler(requestTermTransfer);
 		}
+		//2-1 처리.
 		if (commandFromUser.substring(0, 20).contains("documentID")){
 			DocumentRequest documentRequest = new JSONDeserializer<DocumentRequest>().deserialize(commandFromUser);
 			documentRequestHandler(documentRequest);
