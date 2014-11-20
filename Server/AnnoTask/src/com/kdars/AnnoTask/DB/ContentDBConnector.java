@@ -59,12 +59,12 @@ public class ContentDBConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			resultSet = stmt.executeQuery("select * from " + contentTable + " where " + colName + " = " + String.valueOf(value));
-			
-			doc = new Document(resultSet.getInt(ContentDBSchema.doc_id), resultSet.getString(ContentDBSchema.url), resultSet.getString(ContentDBSchema.collect_date), 
-										resultSet.getString(ContentDBSchema.news_date), resultSet.getString(ContentDBSchema.site_name), resultSet.getString(ContentDBSchema.press_name), 
-										resultSet.getString(ContentDBSchema.category), unescape(resultSet.getString(ContentDBSchema.title)), unescape(resultSet.getString(ContentDBSchema.body)), 
-										resultSet.getString(ContentDBSchema.comments), resultSet.getString(ContentDBSchema.crawler_version));
-
+			if(resultSet.next()){
+				doc = new Document(resultSet.getInt(ContentDBSchema.doc_id), resultSet.getString(ContentDBSchema.url), resultSet.getString(ContentDBSchema.collect_date), 
+											resultSet.getString(ContentDBSchema.news_date), resultSet.getString(ContentDBSchema.site_name), resultSet.getString(ContentDBSchema.press_name), 
+											resultSet.getString(ContentDBSchema.category), unescape(resultSet.getString(ContentDBSchema.title)), unescape(resultSet.getString(ContentDBSchema.body)), 
+											resultSet.getString(ContentDBSchema.comments), resultSet.getString(ContentDBSchema.crawler_version));
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
