@@ -7,6 +7,7 @@ public class TermTransfer extends Command
 	// 텀 1개씩 전송	1-4(반복)
 	public int docID;
 	public String docCategory;
+	public String docTitle;
 	public int ngram;
 	public String termsJson;	// 추후 Map으로 다시 변환.<Term, Freq>
 }

@@ -29,12 +29,13 @@ public class TermFreqDBManager {
 		return	false;
 	}
 	
-	public DocByTerm[] getDocByTerm(int docID){
+	public DocByTerm[] getDocByTerm(int docID, String category, String title){
 		DocByTerm[] docByTerm = new DocByTerm[4];
 		
 		// 임시로 카테고리 지정안함....
 		for (int nGramIndex = 0; nGramIndex < GlobalContext.getInstance().getN_Gram(); nGramIndex++){
-			docByTerm[nGramIndex] = new DocByTerm(docID, nGramIndex + 1, "");
+			docByTerm[nGramIndex] = new DocByTerm(docID, nGramIndex + 1, category);
+			docByTerm[nGramIndex].setTitle(title);
 			termFreqDB.queryTermFreqByDocIDandNGram(docByTerm[nGramIndex]);
 		}
 		

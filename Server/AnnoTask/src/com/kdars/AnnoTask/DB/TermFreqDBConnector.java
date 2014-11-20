@@ -3,7 +3,6 @@ package com.kdars.AnnoTask.DB;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 import com.kdars.AnnoTask.GlobalContext;
 
@@ -19,7 +18,7 @@ public class TermFreqDBConnector {
 	private String colName7 = "TermStatus";
 
 	public TermFreqDBConnector(){
-		connect();
+		while(connect());
 	}
 	
 	public boolean createTable(String tableName){
@@ -165,7 +164,7 @@ public class TermFreqDBConnector {
 			stmt.close();
 		}catch(SQLException e){
 //			e.printStackTrace();
-			System.err.println("ContentDB Connection Error.");
+			System.err.println("TermDB Connection Error.");
 			return false;
 		}
 		
@@ -177,7 +176,7 @@ public class TermFreqDBConnector {
 		try {
 			sqlConnection.close();
 		} catch (SQLException e) {
-			System.err.println("ContentDB Disconnection Error.");
+			System.err.println("TermDB Disconnection Error.");
 			return	false;
 		}
 		

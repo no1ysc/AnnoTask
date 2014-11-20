@@ -2,13 +2,10 @@ package com.kdars.AnnoTask.Server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,6 +18,7 @@ import com.kdars.AnnoTask.DB.TermFreqDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestByDate;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestTermTransfer;
+import com.kdars.AnnoTask.Server.Command.Server2Client.DocumentResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.NotifyTransferEnd;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendDocumentCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.TermTransfer;
@@ -93,13 +91,28 @@ public class UserControl extends Thread{
 		}
 		//2-1 처리.
 		if (commandFromUser.contains("documentID")){
-			DocumentRequest documentRequest = new JSONDeserializer<DocumentRequest>().deserialize(commandFromUser);
+			DocumentRequest documentRequest = new JSONDeserializer<DocumentRequest>().deserialize(commandFromUser, DocumentRequest.class);
 			documentRequestHandler(documentRequest);
 		}
 	}
 
 	private void documentRequestHandler(DocumentRequest documentRequest) {
-		// TODO Doc ID가 오면 문서 원문 던져줌.
+		Document document = ContentDBManager.getInstance().getContent(documentRequest.documentID);
+		
+		DocumentResponse documentRes = new DocumentResponse();
+		documentRes.body = document.getBody();
+		documentRes.category = document.getCategory();
+		documentRes.collectDate = document.getCollectDate();
+		documentRes.comment = document.getComment();
+		documentRes.crawlerVersion = document.getCrawlerVersion();
+		documentRes.documentID = document.getDocumentID();
+		documentRes.newsDate = document.getNewsDate();
+		documentRes.pressName = document.getPressName();
+		documentRes.siteName = document.getSiteName();
+		documentRes.title = document.getTitle();
+		documentRes.url = document.getUrl();
+		
+		transferObject(documentRes);
 	}
 
 	private void requestTermTransferHandler(
@@ -118,9 +131,10 @@ public class UserControl extends Thread{
 			TermTransfer termTransfer = new TermTransfer();
 			termTransfer.docID = doc.getDocumentID();
 			termTransfer.docCategory = doc.getCategory();
+			termTransfer.docTitle = doc.getTitle();
 			
-			DocByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID());
-						
+			DocByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
+			
 			termLockInDoc(docByTerm);
 			
 			// 전송
@@ -156,6 +170,7 @@ public class UserControl extends Thread{
 			termTransfer.docCategory = docByTerm[index].getDocCategory();
 			termTransfer.docID = docByTerm[index].getDocID();
 			termTransfer.ngram = docByTerm[index].getNGram();
+			termTransfer.docTitle = docByTerm[index].getTitle();
 			termTransfer.termsJson = new JSONSerializer().exclude("*.class").serialize(docByTerm[index]);
 			
 //			System.out.println(termTransfer.termsJson);
@@ -172,8 +187,7 @@ public class UserControl extends Thread{
 			output.write(json + "\r\n");
 			output.flush();
 		} catch (IOException e) {
-//			e.printStackTrace();
-			bValidConnection = false;
+			e.printStackTrace();
 		}
 	}
 
@@ -191,13 +205,14 @@ public class UserControl extends Thread{
 	}
 
 	private String commandFromUser() {
-		String command = "";
+		String command = " ";
 		try {
 //			command = input.readUTF();
 			command = input.readLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
+			bValidConnection = false;
 		}
 		return command;
 	}

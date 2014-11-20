@@ -187,7 +187,7 @@ public class ContentDBConnector {
 //			select doc_id from content_v02 where date(news_date) >= '2014-11-20 00:00:00' && date(news_date) <= '2014-11-20 23:59:59';						
 			while (resultSet.next()){
 				if(sites.contains(resultSet.getString(ContentDBSchema.site_name))){ 
-					ret.add(new Document(resultSet.getInt(ContentDBSchema.doc_id), resultSet.getString(ContentDBSchema.category)));
+					ret.add(new Document(resultSet.getInt(ContentDBSchema.doc_id), resultSet.getString(ContentDBSchema.category), resultSet.getString(ContentDBSchema.title)));
 				}					
 			}
 		} catch (SQLException e) {

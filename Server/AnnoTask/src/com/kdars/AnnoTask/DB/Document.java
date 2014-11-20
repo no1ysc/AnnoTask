@@ -13,9 +13,10 @@ public class Document {
 	private String comment;
 	private String crawlerVersion;
 	
-	public Document(int docId, String category){
+	public Document(int docId, String category, String title){
 		this.documentID = docId;
 		this.category = category;
+		this.title = title;
 	}
 	
 	public Document(int documentID, String collectDate, String newsDate, String siteName,

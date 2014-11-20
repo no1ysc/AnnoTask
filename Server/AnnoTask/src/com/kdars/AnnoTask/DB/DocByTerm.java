@@ -6,6 +6,7 @@ import java.util.Map;
 public class DocByTerm extends HashMap<String, Integer>{
 	//Term, Freq
 	private int docID;
+	private String docTitle;
 	private String docCategory;
 	private int ngram;
 	
@@ -15,6 +16,13 @@ public class DocByTerm extends HashMap<String, Integer>{
 		this.ngram = ngram;
 	}
 
+	public String getTitle(){
+		return this.docTitle;
+	}
+	public void setTitle(String title){
+		this.docTitle = title;
+	}
+	
 	public int getDocID() {
 		return docID;
 	}
