@@ -3,6 +3,7 @@ package com.kdars.AnnoTask.DB;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import com.kdars.AnnoTask.GlobalContext;
 
@@ -69,10 +70,10 @@ public class TermFreqDBConnector {
 	 * 홀더 변경...... 아무도 안잡고 있으면 0
 	 * @param term
 	 * @param termHolder
-	 * @return
+	 * @return 락에 성공하면 true, 실패하면 False
 	 */
 	public boolean updateTermLockState(String term, int termHolder){
-		return	false;
+		return	true;
 	}
 	
 	/**
@@ -114,6 +115,30 @@ public class TermFreqDBConnector {
 			e.printStackTrace();
 		}
 		return docIDCheck;
+	}
+	
+	
+	public boolean queryTermFreqByDocIDandNGram(DocByTerm docByTerm){
+		int docID = docByTerm.getDocID();
+		int nGram = docByTerm.getNGram();
+		
+		ResultSet resultSet = null;
+		
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			resultSet = stmt.executeQuery("select * from " + termFreqTable + " where " + colName2 + " = " + docID + " AND " + colName5 + " = " + nGram + ";");
+			
+			while(resultSet.next()){
+				docByTerm.put(resultSet.getString(colName4), resultSet.getInt(colName6));
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
 	}
 	
 	

@@ -13,6 +13,11 @@ public class Document {
 	private String comment;
 	private String crawlerVersion;
 	
+	public Document(int docId, String category){
+		this.documentID = docId;
+		this.category = category;
+	}
+	
 	public Document(int documentID, String collectDate, String newsDate, String siteName,
 							String pressName, String url, String category, String title, String body,
 							String comment, String crawlerVersion){ //TODO: DB 스키마 바뀌면 수정해야함!

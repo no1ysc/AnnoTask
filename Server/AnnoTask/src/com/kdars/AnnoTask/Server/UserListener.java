@@ -12,6 +12,7 @@ public class UserListener extends Thread{
 	private DocumentAnalyzer documentAnalyzer;
 	private ArrayList<UserControl>	connectUserList = new  ArrayList<UserControl>();	// TODO : 이거 쓰레드로 변형해서 주기적 커넥션 체크.
 	private ServerSocket serverSocket = null;
+	private int userIdGenerator = 0;
 	
 	public UserListener(DocumentAnalyzer documentAnalyzer) {
 		// TODO Auto-generated constructor stub
@@ -46,7 +47,7 @@ public class UserListener extends Thread{
 				continue;
 			}
 	        
-	        UserControl user = new UserControl(socket); 
+	        UserControl user = new UserControl(socket, userIdGenerator++); 
 	        connectUserList.add(user);
 			user.start();
 		}

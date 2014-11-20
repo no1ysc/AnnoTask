@@ -29,7 +29,7 @@ public class ContentDBManager {
 		contentDB.update("complete_status", docID);
 	}
 
-	public ArrayList<Integer> getDocIDsFromDate(String startDate,
+	public ArrayList<Document> getDocIDsFromDate(String startDate,
 			String endDate, boolean bNaver, boolean bDaum, boolean bNate) {
 		return contentDB.queryFromDate(startDate, endDate, bNaver, bDaum, bNate);
 	}
