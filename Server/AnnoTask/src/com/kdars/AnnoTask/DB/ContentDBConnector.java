@@ -163,9 +163,9 @@ public class ContentDBConnector {
 		return result;
 	}
 
-	public ArrayList<Integer> queryFromDate(String startDate, String endDate,
+	public ArrayList<Document> queryFromDate(String startDate, String endDate,
 			boolean bNaver, boolean bDaum, boolean bNate) {
-		ArrayList<Integer> ret = new ArrayList<Integer>();
+		ArrayList<Document> ret = new ArrayList<Document>();
 		ArrayList<String> sites = new ArrayList<String>();
 		if (bNaver){
 			sites.add("Naver");
@@ -183,13 +183,11 @@ public class ContentDBConnector {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			//resultSet = stmt.executeQuery("select * from "+ "test_table" + " where " + colName + " = " + String.valueOf(value));
 			resultSet = stmt.executeQuery("select DocID from ContentDB where newsDate >= ('startDate') AND newsDate <= ('endDate')");
-			
-			
+						
 			while (resultSet.next()){
-				if(sites.contains(resultSet.getString(4))){
-					ret.add(resultSet.getInt(1));
+				if(sites.contains(resultSet.getString(ContentDBSchema.site_name))){ 
+					ret.add(new Document(resultSet.getInt(ContentDBSchema.doc_id), resultSet.getString(ContentDBSchema.category)));
 				}					
-			
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

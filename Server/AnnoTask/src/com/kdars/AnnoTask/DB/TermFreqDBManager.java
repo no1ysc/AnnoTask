@@ -1,5 +1,7 @@
 package com.kdars.AnnoTask.DB;
 
+import com.kdars.AnnoTask.GlobalContext;
+
 public class TermFreqDBManager {
 	private static TermFreqDBManager thisClass = new TermFreqDBManager();
 	private TermFreqDBConnector termFreqDB;
@@ -27,9 +29,14 @@ public class TermFreqDBManager {
 		return	false;
 	}
 	
-	public DocByTerm getDocByTerm(int docID){
-		DocByTerm docByTerm = new DocByTerm(docID, 1,"temp");
-		// DocByTerm 체우는 로직 필요,,,,, 
+	public DocByTerm[] getDocByTerm(int docID){
+		DocByTerm[] docByTerm = new DocByTerm[4];
+		
+		// 임시로 카테고리 지정안함....
+		for (int nGramIndex = 0; nGramIndex < GlobalContext.getInstance().getN_Gram(); nGramIndex++){
+			docByTerm[nGramIndex] = new DocByTerm(docID, nGramIndex + 1, "");
+			termFreqDB.queryTermFreqByDocIDandNGram(docByTerm[nGramIndex]);
+		}
 		
 		return	docByTerm;
 	}
@@ -46,8 +53,7 @@ public class TermFreqDBManager {
 		return false;
 	}
 	
-	private boolean termLock(String term, int termHolder){
-		termFreqDB.updateTermLockState(term, termHolder);
-		return	false;
+	public boolean termLock(String term, int termHolder){
+		return termFreqDB.updateTermLockState(term, termHolder);
 	}
 }
