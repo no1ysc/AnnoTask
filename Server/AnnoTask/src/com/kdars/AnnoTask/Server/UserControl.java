@@ -5,7 +5,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 
+import com.kdars.AnnoTask.DB.ContentDBConnector;
+import com.kdars.AnnoTask.DB.ContentDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestByDate;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestTermTransfer;
@@ -20,6 +25,7 @@ public class UserControl extends Thread{
 //	private BufferedWriter output;
 	private DataOutputStream output;
 	
+	private ArrayList<Integer> 	requestDocIDs;
 	public UserControl(Socket socket){
 		this.socket = socket;
 		try {
@@ -93,14 +99,15 @@ public class UserControl extends Thread{
 	private void requestByDateHandler(RequestByDate requestByDate) {
 		// TODO 날짜날라오면 할꺼.
 		/*
-		 * 1. Contents DB 날짜로 쿼리.(싸이트별)
+		 * 1. Contents DB 날짜로 쿼리.(싸이트별)- 싸이트별로는 어떻게?
 		 * 2. 1의 결과를 DOC ID Set으로 받아옴
 		 * 3. DOC 카운트 전송.
 		 */
-				
+		
+		this.requestDocIDs = ContentDBManager.getInstance().getDocIDsFromDate(requestByDate.startDate, requestByDate.endDate, requestByDate.bNaver, requestByDate.bDaum, requestByDate.bNate);
 		
 		SendDocumentCount sendDocumentCount = new SendDocumentCount();
-		sendDocumentCount.doucumentCount = 100;
+		sendDocumentCount.doucumentCount = requestDocIDs.size();
 		
 		String json = new JSONSerializer().exclude("*.class").serialize(sendDocumentCount);
 		System.out.println(json);
@@ -110,7 +117,8 @@ public class UserControl extends Thread{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+}
+
 
 	private String commandFromUser() {
 		String command = "";
