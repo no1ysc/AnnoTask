@@ -11,7 +11,7 @@ import com.kdars.AnnoTask.DB.TermFreqDBManager;
 
 public class ContentProcessor extends Thread{
 //	private NgramFilter ngramFilter;	// TODO: 저쪽으로 가야할듯., 유저가 가저가기 전,,,,,,에서 하는걸로,.
-	private int nGram;
+	private int nGram = GlobalContext.getInstance().getN_Gram();
 	private Document document = null;
 	
 	public enum ProcessState{
@@ -34,11 +34,7 @@ public class ContentProcessor extends Thread{
 		DuplicationChecker dupChecker = new DuplicationChecker();
 		StopWordRemover stopWordRemover = new StopWordRemover();
 	
-//		for (int docID = this.startDocIDIndex; docID <= this.endDocIDIndex; docID++){
-//			Document document = ContentDBManager.getInstance().getContent(docID);
-//			
-//			extractTermStructure(tokenizer, dupChecker, stopWordRemover, document);
-//		}
+		extractTermStructure(tokenizer, dupChecker, stopWordRemover, document);
 		
 		this.state = ProcessState.Completed;
 	}
@@ -50,11 +46,10 @@ public class ContentProcessor extends Thread{
 			
 			DocByTerm[] docByTermList = tokenizer.termGenerate(document, this.nGram);
 			for (int i = 0; i < this.nGram; i++ ){
-				
 				for (Iterator<Map.Entry<String, Integer>> iter = docByTermList[i].entrySet().iterator(); iter.hasNext();){
 					Map.Entry<String, Integer> entry = iter.next();
 					String keyCheck = entry.getKey();
-					if (stopWordRemover.isStopWord(keyCheck) || dupChecker.duplicationCheck(keyCheck)){
+					if (stopWordRemover.isStopWord(keyCheck)) { // || dupChecker.duplicationCheck(keyCheck)){
 						iter.remove();
 						continue;
 					}
