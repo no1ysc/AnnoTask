@@ -42,7 +42,7 @@ public class Monitor extends Thread{
 	//	2. Check job_table where working_status is 0, false; get doc_id
 	private boolean checkUpdates(){
 			jobCandidates = ContentDBManager.getInstance().getJobCandidates();
-			System.out.println(jobCandidates.size());
+//			System.out.println(jobCandidates.size());
 			
 			return !jobCandidates.isEmpty();
 	}

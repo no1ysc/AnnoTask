@@ -32,7 +32,7 @@ public class GlobalContext {
 
 	
 	
-	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://127.0.0.1:3306/job_database";
+	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.9:3306/contentdb";
 	public final String CONTENT_DB_NAME = "contentdb"; 
 	public final String CONTENT_DB_USER_ID = "root";
 	public final String CONTENT_DB_USER_PASS = "1qaz@WSX";
