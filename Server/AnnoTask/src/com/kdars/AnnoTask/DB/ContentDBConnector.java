@@ -162,4 +162,40 @@ public class ContentDBConnector {
 		String result = StringEscapeUtils.unescapeHtml4(text);
 		return result;
 	}
+
+	public ArrayList<Integer> queryFromDate(String startDate, String endDate,
+			boolean bNaver, boolean bDaum, boolean bNate) {
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		ArrayList<String> sites = new ArrayList<String>();
+		if (bNaver){
+			sites.add("Naver");
+		}
+		if (bDaum){
+			sites.add("Daum");
+		}
+		if (bNate){
+			sites.add("Nate");
+		}
+		
+		
+		ResultSet resultSet = null;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			//resultSet = stmt.executeQuery("select * from "+ "test_table" + " where " + colName + " = " + String.valueOf(value));
+			resultSet = stmt.executeQuery("select DocID from ContentDB where newsDate >= ('startDate') AND newsDate <= ('endDate')");
+			
+			
+			while (resultSet.next()){
+				if(sites.contains(resultSet.getString(4))){
+					ret.add(resultSet.getInt(1));
+				}					
+			
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return ret;
+	}
 }
