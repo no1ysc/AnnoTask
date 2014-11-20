@@ -33,7 +33,7 @@ public class DeleteListDBManager {
 	
 	public boolean RemoveTermFromDeleteList(String deleteTerm){
 		// TODO : term을 성공적으로 deletelistDB에서부터 remove했다면 true, 실패했다면 false
-		return deleteListDB.add(deleteTerm);
+		return deleteListDB.delete(deleteTerm);
 	}
 	
 }

@@ -21,8 +21,8 @@ public class DeleteListDBConnector {
 		
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.executeQuery("insert into "+ deleteListTable + " (" + colName + ") values (" + deleteTerm + ");");
-			
+			stmt.executeUpdate("insert into "+ deleteListTable + " (" + colName + ") values ('" + deleteTerm + "');");
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -36,7 +36,7 @@ public class DeleteListDBConnector {
 
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.executeQuery("delete from "+ deleteListTable + " where " + colName + " = " + deleteTerm +";");
+			stmt.execute("delete from "+ deleteListTable + " where " + colName + " = '" + deleteTerm +"';");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -52,7 +52,7 @@ public class DeleteListDBConnector {
 		ResultSet resultSet = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			resultSet = stmt.executeQuery("select * from " + deleteListTable + " where " + colName + " = " + deleteTerm + ";");
+			resultSet = stmt.executeQuery("select * from " + deleteListTable + " where " + colName + " = '" + deleteTerm + "';");
 			/* exist check */
 			if(!resultSet.next()){
 				return null;
