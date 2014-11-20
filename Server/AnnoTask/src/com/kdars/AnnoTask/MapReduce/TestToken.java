@@ -32,9 +32,9 @@ public class TestToken {
 			System.out.println(doctermList[i].keySet().size());
 		}
 		
-		System.out.println(TermFreqDBManager.getInstance().addDocByTerm(doctermList[0]));
+//		System.out.println(TermFreqDBManager.getInstance().addDocByTerm(doctermList[0]));
 		
-//		DeleteListDBManager.getInstance().AddTermToDelete("승철");
+		DeleteListDBManager.getInstance().AddTermToDelete("승철");
 //		DeleteListDBManager.getInstance().AddTermToDelete("기흥");
 //		System.out.println(DeleteListDBManager.getInstance().RemoveTermFromDeleteList("진규"));
 //		System.out.println(DeleteListDBManager.getInstance().CheckForDeleteTerm("진규"));

@@ -66,7 +66,7 @@ public class ThesaurusDBConnector {
 			stmt.close();
 		}catch(SQLException e){
 //			e.printStackTrace();
-			System.err.println("ContentDB Connection Error.");
+			System.err.println("ThesaurusDB Connection Error.");
 			return false;
 		}
 		
@@ -78,7 +78,7 @@ public class ThesaurusDBConnector {
 		try {
 			sqlConnection.close();
 		} catch (SQLException e) {
-			System.err.println("ContentDB Disconnection Error.");
+			System.err.println("ThesaurusDB Disconnection Error.");
 			return	false;
 		}
 		
