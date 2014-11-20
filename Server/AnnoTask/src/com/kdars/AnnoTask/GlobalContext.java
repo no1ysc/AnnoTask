@@ -1,5 +1,7 @@
 package com.kdars.AnnoTask;
 
+import java.util.ArrayList;
+
 public class GlobalContext {
 	private static  GlobalContext globalContext = new GlobalContext();
 	public static GlobalContext getInstance(){
@@ -20,8 +22,16 @@ public class GlobalContext {
 		return this.DELIM;
 	}
 	/* Special Character Remove */
+	private String SpecialChars = "'()/,.\"?";
+	public String getSpecialChars(){
+		return this.SpecialChars;
+	}
 	
-	
+	private String[] PostFix = {"은 는 이 가 을 를 에 의 도 만 로 와 과",
+								"에서 에게 한테 로서 로써 께서 까지 조차 부터 마저"};
+	public String[] getPostFix(){
+		return this.PostFix;
+	}
 	
 	/* Content DB Connect Info(Running time is not changed.)*/   
 //	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.7:3306/webcrawler_v01";
@@ -47,4 +57,30 @@ public class GlobalContext {
 	
 	
 	/* Content DB Connect Info */
+	
+	/* DeleteList DB Connect Info*/
+	public final String DeleteList_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/deletelistdb";
+	public final String DeleteList_DB_NAME = "deletelistdb"; 
+	public final String DeleteList_DB_USER_ID = "root";
+	public final String DeleteList_DB_USER_PASS = "jinqkim69";
+	public final String DeleteList_DB_TABLE_NAME = "deletelist";
+	/* DeleteList DB Connect Info*/
+
+	/* TermFreq DB Connect Info*/
+	public final String TermFreq_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/termfreqdb";
+	public final String TermFreq_DB_NAME = "termfreqdb"; 
+	public final String TermFreq_DB_USER_ID = "root";
+	public final String TermFreq_DB_USER_PASS = "jinqkim69";
+	public final String TermFreq_DB_TABLE_NAME = "tftable";
+	/* TermFreq DB Connect Info*/
+	
+	/* Thesaurus DB Connect Info*/
+	public final String Thesaurus_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/thesaurusdb";
+	public final String Thesaurus_DB_NAME = "thesaurusdb"; 
+	public final String Thesaurus_DB_USER_ID = "root";
+	public final String Thesaurus_DB_USER_PASS = "jinqkim69";
+	public final String Thesaurus_DB_TABLE_NAME1 = "conceptfromtable";
+	public final String Thesaurus_DB_TABLE_NAME2 = "concepttotable";
+	/* Thesaurus DB Connect Info*/
+	
 }

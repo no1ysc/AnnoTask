@@ -1,6 +1,7 @@
 package com.kdars.AnnoTask.DB;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class DocByTerm extends HashMap<String, Integer>{
 	//Term, Freq
@@ -24,5 +25,14 @@ public class DocByTerm extends HashMap<String, Integer>{
 	
 	public int getNGram(){
 		return	this.ngram;
+	}
+	
+	public void increaseFreq(String key){
+		Integer value = this.get(key);
+		if (value != null){
+			this.put(key, value + 1);
+		}else{
+			this.put(key, 1);
+		}
 	}
 }

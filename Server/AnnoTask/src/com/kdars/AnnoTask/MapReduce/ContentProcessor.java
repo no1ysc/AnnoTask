@@ -1,5 +1,8 @@
 package com.kdars.AnnoTask.MapReduce;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import com.kdars.AnnoTask.GlobalContext;
 import com.kdars.AnnoTask.DB.ContentDBManager;
 import com.kdars.AnnoTask.DB.DocByTerm;
@@ -44,17 +47,22 @@ public class ContentProcessor extends Thread{
 														DuplicationChecker dupChecker, 
 														StopWordRemover stopWordRemover,
 														Document document) {
-		for (int ngram = 0; ngram < this.nGram; ngram++){
-			DocByTerm docByTerm = tokenizer.termGenerate(document, ngram);
 			
-			for (String term : docByTerm.keySet()){
-//				if (stopWordRemover.isStopWord(term) || dupChecker.checkDuplication(term)){
-//					continue;
-//				}
+			DocByTerm[] docByTermList = tokenizer.termGenerate(document, this.nGram);
+			for (int i = 0; i < this.nGram; i++ ){
 				
-				TermFreqDBManager.getInstance().addDocByTerm(docByTerm);
+				for (Iterator<Map.Entry<String, Integer>> iter = docByTermList[i].entrySet().iterator(); iter.hasNext();){
+					Map.Entry<String, Integer> entry = iter.next();
+					String keyCheck = entry.getKey();
+					if (stopWordRemover.isStopWord(keyCheck) || dupChecker.duplicationCheck(keyCheck)){
+						iter.remove();
+						continue;
+					}
+					
+				}
+			TermFreqDBManager.getInstance().addDocByTerm(docByTermList[i]);
+				
 			}
-		}
 	}
 	
 	public ProcessState getProcessState(){
