@@ -8,6 +8,8 @@ public class GlobalContext {
 		return	globalContext;
 	}
 	
+	//TODO: 처음에 프로그램 시작할때, DB 전부 연결될때까지 대기하는 부분,
+	// TODO : TermDB Lock 걸린거 전부 풀어주고 초기화 하는 부분.,
 	
 	/* N-Gram Setting */
 	private int N_Gram = 4;	// 최대 N-gram

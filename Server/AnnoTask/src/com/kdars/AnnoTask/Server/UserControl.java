@@ -1,18 +1,19 @@
 package com.kdars.AnnoTask.Server;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
 import com.kdars.AnnoTask.GlobalContext;
-import com.kdars.AnnoTask.DB.ContentDBConnector;
 import com.kdars.AnnoTask.DB.ContentDBManager;
 import com.kdars.AnnoTask.DB.DocByTerm;
 import com.kdars.AnnoTask.DB.Document;
@@ -30,9 +31,11 @@ import flexjson.JSONSerializer;
 public class UserControl extends Thread{
 	private Socket	socket;
 	private BufferedReader input;
-//	private BufferedWriter output;
-	private DataOutputStream output;
+	private BufferedWriter output;
+//	private DataInputStream input;
+//	private DataOutputStream output;
 	private int userID;
+	private boolean bValidConnection = true;
 	
 	private ArrayList<Document> 	requestDocs;
 	public UserControl(Socket socket, int userID){
@@ -42,8 +45,11 @@ public class UserControl extends Thread{
 				
 		try {
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//			input = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF8"));
+//			input = new DataInputStream(socket.getInputStream());
 //			output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			output = new DataOutputStream(socket.getOutputStream());
+			output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF8"));
+//			output = new DataOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,12 +65,13 @@ public class UserControl extends Thread{
 	}
 	
 	public void run(){
-		while(true){
+		while(bValidConnection){
 			String commandFromUser = commandFromUser();
 			commandParser(commandFromUser);
 //			Command commandToUser = new Command();
 //			commandToUser(commandToUser);
 		}
+		System.out.println(socket.getInetAddress().toString() + " : 접속종료.");
 	}
 
 	private void commandToUser(Object commandToUser) {
@@ -73,18 +80,19 @@ public class UserControl extends Thread{
 
 	private void commandParser(String commandFromUser) {
 		// 1-1 처리.
-		if (commandFromUser.substring(0, 20).contains("startDate")){
-			System.out.println(commandFromUser);
+		if (commandFromUser.contains("startDate")){
+//			System.out.println(commandFromUser);
 			RequestByDate requestByDate = new JSONDeserializer<RequestByDate>().deserialize(commandFromUser, RequestByDate.class);
+//			RequestByDate requestByDate = new JSONDeserializer<RequestByDate>().use(null, RequestTermTransfer.class).deserialize(commandFromUser);
 			requestByDateHandler(requestByDate);
 		}
 		//1-3 처리.
-		if (commandFromUser.substring(0, 20).contains("bTransfer")){
+		if (commandFromUser.contains("bTransfer")){
 			RequestTermTransfer requestTermTransfer = new JSONDeserializer<RequestTermTransfer>().deserialize(commandFromUser, RequestTermTransfer.class);
 			requestTermTransferHandler(requestTermTransfer);
 		}
 		//2-1 처리.
-		if (commandFromUser.substring(0, 20).contains("documentID")){
+		if (commandFromUser.contains("documentID")){
 			DocumentRequest documentRequest = new JSONDeserializer<DocumentRequest>().deserialize(commandFromUser);
 			documentRequestHandler(documentRequest);
 		}
@@ -148,7 +156,9 @@ public class UserControl extends Thread{
 			termTransfer.docCategory = docByTerm[index].getDocCategory();
 			termTransfer.docID = docByTerm[index].getDocID();
 			termTransfer.ngram = docByTerm[index].getNGram();
-			termTransfer.termsJson = new JSONSerializer().exclude("*.class").serialize(docByTerm);
+			termTransfer.termsJson = new JSONSerializer().exclude("*.class").serialize(docByTerm[index]);
+			
+//			System.out.println(termTransfer.termsJson);
 			
 			transferObject(termTransfer);
 		}		
@@ -158,10 +168,12 @@ public class UserControl extends Thread{
 		String json = new JSONSerializer().exclude("*.class").serialize(obj);
 		
 		try {
-			output.writeBytes((json+"\r\n"));
+//			output.writeUTF(json);
+			output.write(json + "\r\n");
+			output.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
+			bValidConnection = false;
 		}
 	}
 
@@ -181,6 +193,7 @@ public class UserControl extends Thread{
 	private String commandFromUser() {
 		String command = "";
 		try {
+//			command = input.readUTF();
 			command = input.readLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
