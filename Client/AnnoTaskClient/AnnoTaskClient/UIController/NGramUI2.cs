@@ -47,7 +47,7 @@ namespace AnnoTaskClient.UIController
 
 			foreach (string category in term.Category.Keys)
 			{
-				string content = category + " (" + term.Category[category].Count.ToString() + ")";
+				string content = category + "(" + term.Category[category].Count.ToString() + ")";
 				
 				TreeNode child = root.Nodes.Add(content);
 				foreach (int docID in term.Category[category].Keys)

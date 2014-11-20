@@ -73,10 +73,13 @@ namespace AnnoTaskClient
 
 		private void btnImportDoc_Click(object sender, EventArgs e)
 		{
-			this.btnImportDoc.Enabled = false;
-			Thread worker = new Thread(new ThreadStart(btnImportHandler));
+			// TODO: 쓰레드 동작 고민할껏........
 
-			worker.Start();
+			this.btnImportDoc.Enabled = false;
+			//Thread worker = new Thread(new ThreadStart(btnImportHandler));
+
+			//worker.Start();
+			btnImportHandler();
 		}
 
 		private void wordList1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)

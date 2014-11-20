@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 
 namespace AnnoTaskClient.Logic
@@ -40,7 +41,13 @@ namespace AnnoTaskClient.Logic
 			bool daum = UIHandler.Instance.CommonUI.isDaum;
 			bool nate = UIHandler.Instance.CommonUI.isNate;
 			DocByTerm[] result = clientWormHole.ImportDoc(startDate, endDate, naver, daum, nate);
-			
+
+			if (result == null)
+			{
+				MessageBox.Show("해당 기간에 문서가 존재하지 않습니다.");
+				return;
+			}
+
 			// Doc -> Term
 			int procCount = 0;
 			int workingPercent = 40;
