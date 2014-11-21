@@ -66,8 +66,6 @@ public class UserControl extends Thread{
 		while(bValidConnection){
 			String commandFromUser = commandFromUser();
 			commandParser(commandFromUser);
-//			Command commandToUser = new Command();
-//			commandToUser(commandToUser);
 		}
 		System.out.println(socket.getInetAddress().toString() + " : 접속종료.");
 	}
