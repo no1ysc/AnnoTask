@@ -38,19 +38,12 @@ namespace AnnoTaskClient.Logic
 			}			
 		}
 
-		//private Socket m_serverPoint = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-		//IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(Configure.Instance.ServerIP), Configure.Instance.ServerPort);
-
-		//private TcpListener m_serverPoint = new TcpListener(IPAddress.Parse(Configure.Instance.ServerIP), Configure.Instance.ServerPort);
 		private TcpClient m_client;
 		private NetworkStream m_ns;
 		private StreamReader m_Reader;
 		private StreamWriter m_Writer;
 		private bool connectServer()
 		{
-			//m_serverPoint.Connect(ipEndPoint);
-
-
 			m_client = new TcpClient(Configure.Instance.ServerIP, Configure.Instance.ServerPort);
 			if (!m_client.Connected)
 			{
@@ -66,10 +59,6 @@ namespace AnnoTaskClient.Logic
 			return true;
 		}
 
-
-
-
-
 		internal DocByTerm[] ImportDoc(string startDate, string endDate, bool naver, bool daum, bool nate)
 		{
 			Command.Client2Server.RequestByDate data = new Command.Client2Server.RequestByDate();
@@ -84,10 +73,12 @@ namespace AnnoTaskClient.Logic
 			m_Writer.WriteLine(json1_1);
 			m_Writer.Flush();
 
+			// 1-2 받음.
 			string json1_2 = m_Reader.ReadLine();
 			Command.Server2Client.SendDocumentCount docCount = new JsonConverter<Command.Server2Client.SendDocumentCount>().Json2Object(json1_2);
 
-			UIHandler.Instance.CommonUI.DocCount = docCount.doucumentCount;
+			// 나중 고치자,
+			UIHandler.Instance.CommonUI.DocCount = docCount.doucumentCount / 4;
 			if (docCount.doucumentCount > Configure.Instance.LimitDocumentCount)
 			{
 				// 분석제한.
@@ -137,10 +128,12 @@ namespace AnnoTaskClient.Logic
 			Command.Client2Server.DocumentRequest docReq = new Command.Client2Server.DocumentRequest();
 			docReq.documentID = targetID;
 
+			// 2-1 보냄.
 			string json = new JsonConverter<Command.Client2Server.DocumentRequest>().Object2Json(docReq);
 			m_Writer.WriteLine(json);
 			m_Writer.Flush();
 
+			// 2-2 받음.
 			string jsonRes = m_Reader.ReadLine();
 			Command.Server2Client.DocumentResponse document = new JsonConverter<Command.Server2Client.DocumentResponse>().Json2Object(jsonRes);
 
