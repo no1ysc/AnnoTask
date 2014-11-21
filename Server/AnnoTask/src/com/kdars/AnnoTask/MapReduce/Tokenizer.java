@@ -9,26 +9,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Tokenizer {
-	private ArrayList<String> termList;
-	private String specialChars = GlobalContext.getInstance().getSpecialChars();
-	private String specialCharsPattern;
+	private int CharLimit = GlobalContext.getInstance().getCharLimit();
+	private int DocLimit = GlobalContext.getInstance().getDocLimit();
+	private String specialCharsPattern= GlobalContext.getInstance().getSpecialCharPattern();
 	private String[] PostFix = GlobalContext.getInstance().getPostFix();
-	private int CharLimit = 500;
-	private int DocLimit = 5000;
+	private ArrayList<String> termList;
+	private String specialCharProcessingString;
 	
 	public Tokenizer() {
-		/* For processing special characters faster */
-		StringTokenizer str = new StringTokenizer(GlobalContext.getInstance().getSpecialChars(), "");
-		StringBuilder patternString = new StringBuilder();
-		patternString.append("[");
-		while (str.hasMoreTokens()) {
-			patternString.append(str.nextToken() + "||");
-		}
-		patternString.append("]");
-		specialCharsPattern = patternString.toString();
 	}
 	
-
+	
 	public DocByTerm[] termGenerate(Document document, int ngram) {
 		/* Getting Target String */
 		String doc = document.getBody();
@@ -45,7 +36,8 @@ public class Tokenizer {
 		}
 
 		/* checking document length */
-		ArrayList<String> checkedDoc = docAndTermLengthCheck(doc, DocLimit);	
+		ArrayList<String> checkedDoc = docAndTermLengthCheck(doc, DocLimit);	 
+		
 		for (int i = 0; i < checkedDoc.size(); i++){
 			/* Tokenizing according to delimiter configuration */
 			termList = (ArrayList<String>) ((ArrayList) Collections.list(new StringTokenizer(checkedDoc.get(i), delim)));
@@ -82,13 +74,6 @@ public class Tokenizer {
 
 		}
 	}
-
-	private boolean specialCharFirstLastChecker(String ngram){
-		if (specialChars.contains(String.valueOf(ngram.charAt(0))) || specialChars.contains(String.valueOf(ngram.charAt(ngram.length()-1)))){
-			return true;
-		}
-		return false;
-	}
 	
 	private String DeletePostFix(String processedString){
 		
@@ -109,58 +94,60 @@ public class Tokenizer {
 		 * Starts process ONLY when the string contains the special characters
 		 * defined in globalContext
 		 */
-		if (specialCharPatternMatch(rawstring) == false) {
+		ArrayList<Integer> specialCharCheck = specialCharPatternMatch(rawstring);
+		if (specialCharCheck.isEmpty()) {
 			return rawstring;
 		}
 		
-		String processingStr = removePrePostSpecialChar(rawstring);
-		
-		if (processingStr == null){
+		if (specialCharCheck.size() == rawstring.length()){
 			return null;
 		}
 		
-		if(specialCharPatternMatch(processingStr)){
-			for(int n = 0; n < processingStr.length(); n++){
-				if (specialChars.contains(String.valueOf(processingStr.charAt(n)))){
-					if (processingStr.charAt(n-1)== ' ' || processingStr.charAt(n+1)== ' '){
-						return null;
-					}
-				}
+		ArrayList<Integer> reducedSpecialCharCheck;
+		reducedSpecialCharCheck = removePrePostSpecialChar(specialCharCheck,rawstring);
+		
+		for (int i : reducedSpecialCharCheck) {
+			if (rawstring.charAt(i - 1) == ' ' || rawstring.charAt(i + 1) == ' '){
+				return null;
 			}
 		}
-		return processingStr;
+		return specialCharProcessingString;
 	} 
 
-	private boolean specialCharPatternMatch(String specialCharCheck){
+	private ArrayList<Integer> specialCharPatternMatch(String specialCharCheck){
+		ArrayList<Integer> intArray = new ArrayList<Integer>();
 		Pattern p = Pattern.compile(specialCharsPattern);
 		Matcher m = p.matcher(specialCharCheck);
-		return m.find();
+		while(m.find()){
+			intArray.add(m.start());
+		}
+		return intArray;
 	}
 	
-	private String removePrePostSpecialChar(String processingStr) {
-		int firstIndex = 0;
-		int lastIndex = processingStr.length();
-		
-		for (firstIndex = 0; firstIndex < processingStr.length(); firstIndex++){
-			String temp = String.valueOf(processingStr.charAt(firstIndex));
-			if (!specialChars.contains(temp)){
-				break;
-			}
+	private ArrayList<Integer> removePrePostSpecialChar(ArrayList<Integer> specialCharCheck, String rawstring) {
+
+		int beginIndex = 0;
+		while (specialCharCheck.contains(beginIndex)){
+			beginIndex++;
 		}
 		
-		if (firstIndex == lastIndex){
-			return null;
+		int tempEndIndex = rawstring.length()-1;
+		while (specialCharCheck.contains(tempEndIndex)){
+			tempEndIndex--;
 		}
 		
-		for (int index = processingStr.length() - 1; index >= 0; index--){
-			String temp = String.valueOf(processingStr.charAt(index));
-			if (!specialChars.contains(temp)){
-				lastIndex = index + 1;
-				break;
-			}
-		}
 		
-		return processingStr.substring(firstIndex, lastIndex);
+		int endIndex = specialCharCheck.size()-(rawstring.length()-tempEndIndex)+1;
+		
+		if(beginIndex >= endIndex){
+			specialCharCheck.clear();
+			return specialCharCheck;
+		}
+
+		specialCharProcessingString = rawstring.substring(beginIndex, tempEndIndex+1);
+		
+	ArrayList<Integer> listToArrayList = new ArrayList<Integer>(specialCharCheck.subList(beginIndex, endIndex));
+		return listToArrayList;
 	}
 
 	

@@ -4,6 +4,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.kdars.AnnoTask.GlobalContext;
 
 public class TermFreqDBConnector {
@@ -25,7 +27,7 @@ public class TermFreqDBConnector {
 		return false;
 	}
 	
-	public boolean addDoc(DocByTerm docByTerm){
+	public boolean addDoc(DocByTerm docByTerm) {
 		String docCategory = docByTerm.getDocCategory();
 		int docID = docByTerm.getDocID();
 		int nGram = docByTerm.getNGram();
@@ -33,7 +35,9 @@ public class TermFreqDBConnector {
 		try {
 			for (String addTermCheck : docByTerm.keySet()){
 				java.sql.Statement stmt = sqlConnection.createStatement();
-				stmt.executeUpdate("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values ('" + String.valueOf(docID) + "_" + addTermCheck + "', '" + String.valueOf(docID) + "', '" + docCategory + "', '" + addTermCheck + "', '" + String.valueOf(nGram) + "', '" + String.valueOf(docByTerm.get(addTermCheck)) + "', '0');");
+				String addTerm = escape(addTermCheck);
+				stmt.executeUpdate("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values ('" + String.valueOf(docID) + "_" + addTerm + "', '" + String.valueOf(docID) + "', '" + docCategory + "', '" + addTerm + "', '" + String.valueOf(nGram) + "', '" + String.valueOf(docByTerm.get(addTermCheck)) + "', '0');");
+
 			}
 
 		} catch (SQLException e) {
@@ -53,7 +57,8 @@ public class TermFreqDBConnector {
 		try {
 			for (String deleteTermCheck : docByTerm.keySet()){
 				java.sql.Statement stmt = sqlConnection.createStatement();
-				stmt.execute("delete from "+ termFreqTable + " (" + colName4 + ") values ('" + deleteTermCheck + "');");
+				String deleteTerm = escape(deleteTermCheck);
+				stmt.execute("delete from "+ termFreqTable + " (" + colName4 + ") values ('" + deleteTerm + "');");
 			}
 
 		} catch (SQLException e) {
@@ -169,6 +174,16 @@ public class TermFreqDBConnector {
 		}
 		
 		return true;
+	}
+	
+	private String escape(String text) {
+		String result = StringEscapeUtils.escapeHtml4(text);
+		return result;
+	}
+	
+	private String unescape(String text) {
+		String result = StringEscapeUtils.unescapeHtml4(text);
+		return result;
 	}
 	
 	private boolean disconnect(){
