@@ -9,24 +9,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Tokenizer {
-	private ArrayList<String> termList;
-	private String specialChars = GlobalContext.getInstance().getSpecialChars();
-	private String specialCharsPattern= "[\\x{0021}-\\x{002f}_\\x{003a}-\\x{0040}_\\x{005b}-\\x{0060}_\\x{007b}-\\x{007e}]";
-	private String specialCharProcessingString;
+	private int CharLimit = GlobalContext.getInstance().getCharLimit();
+	private int DocLimit = GlobalContext.getInstance().getDocLimit();
+	private String specialCharsPattern= GlobalContext.getInstance().getSpecialCharPattern();
 	private String[] PostFix = GlobalContext.getInstance().getPostFix();
-	private int CharLimit = 500;
-	private int DocLimit = 5000;
+	private ArrayList<String> termList;
+	private String specialCharProcessingString;
 	
 	public Tokenizer() {
-		/* For processing special characters faster */
-//		StringTokenizer str = new StringTokenizer(GlobalContext.getInstance().getSpecialChars(), "");
-//		StringBuilder patternString = new StringBuilder();
-//		patternString.append("[");
-//		while (str.hasMoreTokens()) {
-//			patternString.append(str.nextToken() + "||");
-//		}
-//		patternString.append("]");
-//		specialCharsPattern = patternString.toString();
 	}
 	
 	
@@ -83,13 +73,6 @@ public class Tokenizer {
 			}
 
 		}
-	}
-
-	private boolean specialCharFirstLastChecker(String ngram){
-		if (specialChars.contains(String.valueOf(ngram.charAt(0))) || specialChars.contains(String.valueOf(ngram.charAt(ngram.length()-1)))){
-			return true;
-		}
-		return false;
 	}
 	
 	private String DeletePostFix(String processedString){

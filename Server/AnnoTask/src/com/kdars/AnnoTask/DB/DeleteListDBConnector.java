@@ -4,6 +4,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.kdars.AnnoTask.GlobalContext;
 
 public class DeleteListDBConnector {
@@ -21,7 +23,8 @@ public class DeleteListDBConnector {
 		
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.executeUpdate("insert into "+ deleteListTable + " (" + colName + ") values ('" + deleteTerm + "');");
+			String deleteTermEscape = escape(deleteTerm);
+			stmt.executeUpdate("insert into "+ deleteListTable + " (" + colName + ") values ('" + deleteTermEscape + "');");
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -36,7 +39,8 @@ public class DeleteListDBConnector {
 
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.execute("delete from "+ deleteListTable + " where " + colName + " = '" + deleteTerm +"';");
+			String deleteTermEscape= escape(deleteTerm);
+			stmt.execute("delete from "+ deleteListTable + " where " + colName + " = '" + deleteTermEscape +"';");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -52,7 +56,8 @@ public class DeleteListDBConnector {
 		ResultSet resultSet = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			resultSet = stmt.executeQuery("select * from " + deleteListTable + " where " + colName + " = '" + deleteTerm + "';");
+			String deleteTermEscape = escape(deleteTerm);
+			resultSet = stmt.executeQuery("select * from " + deleteListTable + " where " + colName + " = '" + deleteTermEscape + "';");
 			/* exist check */
 			if(!resultSet.next()){
 				return null;
@@ -106,4 +111,15 @@ public class DeleteListDBConnector {
 		
 		return true;
 	}
+	
+	private String escape(String text) {
+		String result = StringEscapeUtils.escapeHtml4(text);
+		return result;
+	}
+	
+	private String unescape(String text) {
+		String result = StringEscapeUtils.unescapeHtml4(text);
+		return result;
+	}
+	
 }

@@ -4,6 +4,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.kdars.AnnoTask.GlobalContext;
 import com.mysql.jdbc.Connection;
 
@@ -30,7 +32,8 @@ public class ThesaurusDBConnector {
 		ResultSet resultSet = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			resultSet = stmt.executeQuery("select * from " + conceptFromTable + " where " + colName + " = '" + value + "';");
+			String valueEscape = escape(value);
+			resultSet = stmt.executeQuery("select * from " + conceptFromTable + " where " + colName + " = '" + valueEscape + "';");
 			/* exist check */
 			if(!resultSet.next()){
 				return null;
@@ -84,4 +87,15 @@ public class ThesaurusDBConnector {
 		
 		return true;
 	}
+	
+	private String escape(String text) {
+		String result = StringEscapeUtils.escapeHtml4(text);
+		return result;
+	}
+	
+	private String unescape(String text) {
+		String result = StringEscapeUtils.unescapeHtml4(text);
+		return result;
+	}
+	
 }

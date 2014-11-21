@@ -18,22 +18,39 @@ public class GlobalContext {
 	}
 	/* N-Gram Setting */
 	
-	/* Special Character Remove */
-	private String DELIM = " \n";
+	/* Delimiter Setting */
+	private String DELIM = " \r\n";
 	public String getDelim(){
 		return this.DELIM;
 	}
-	/* Special Character Remove */
-	private String SpecialChars = "'()/,.\"?";
-	public String getSpecialChars(){
-		return this.SpecialChars;
+	/* Delimiter Setting */
+	
+	/* Special Character Setting */
+	private String specialCharsPattern= "[\\x{0021}-\\x{002f}_\\x{003a}-\\x{0040}_\\x{005b}-\\x{0060}_\\x{007b}-\\x{007e}]";
+	public String getSpecialCharPattern(){
+		return this.specialCharsPattern;
+	}
+	/* Special Character Setting */
+	
+	/* Character length and document length limit for tokenizing */
+	private int charlimit = 50;
+	public int getCharLimit(){
+		return this.charlimit;
 	}
 	
+	private int doclimit = 10000;
+	public int getDocLimit(){
+		return this.doclimit;	
+	}
+	/* Character length and document length limit for tokenizing */
+	
+	/* PostFix Setting */
 	private String[] PostFix = {"은 는 이 가 을 를 에 의 도 만 로 와 과",
 								"에서 에게 한테 로서 로써 께서 까지 조차 부터 마저"};
 	public String[] getPostFix(){
 		return this.PostFix;
 	}
+	/* PostFix Setting */
 	
 	/* Content DB Connect Info(Running time is not changed.)*/   
 //	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.7:3306/webcrawler_v01";
