@@ -29,7 +29,7 @@ public class Tokenizer {
 //		specialCharsPattern = patternString.toString();
 	}
 	
-
+	
 	public DocByTerm[] termGenerate(Document document, int ngram) {
 		/* Getting Target String */
 		String doc = document.getBody();
@@ -46,7 +46,8 @@ public class Tokenizer {
 		}
 
 		/* checking document length */
-		ArrayList<String> checkedDoc = docAndTermLengthCheck(doc, DocLimit);	
+		ArrayList<String> checkedDoc = docAndTermLengthCheck(doc, DocLimit);	 
+		
 		for (int i = 0; i < checkedDoc.size(); i++){
 			/* Tokenizing according to delimiter configuration */
 			termList = (ArrayList<String>) ((ArrayList) Collections.list(new StringTokenizer(checkedDoc.get(i), delim)));
@@ -121,7 +122,7 @@ public class Tokenizer {
 		
 		ArrayList<Integer> reducedSpecialCharCheck;
 		reducedSpecialCharCheck = removePrePostSpecialChar(specialCharCheck,rawstring);
-
+		
 		for (int i : reducedSpecialCharCheck) {
 			if (rawstring.charAt(i - 1) == ' ' || rawstring.charAt(i + 1) == ' '){
 				return null;
@@ -147,19 +148,20 @@ public class Tokenizer {
 			beginIndex++;
 		}
 		
-		int endIndex = rawstring.length()-1;
-		while (specialCharCheck.contains(endIndex)){
-			endIndex--;
+		int tempEndIndex = rawstring.length()-1;
+		while (specialCharCheck.contains(tempEndIndex)){
+			tempEndIndex--;
 		}
 		
-		specialCharProcessingString = rawstring.substring(beginIndex, endIndex+1);
 		
-		endIndex = specialCharCheck.size()-(rawstring.length()-endIndex)+1;
+		int endIndex = specialCharCheck.size()-(rawstring.length()-tempEndIndex)+1;
 		
 		if(beginIndex >= endIndex){
 			specialCharCheck.clear();
 			return specialCharCheck;
 		}
+
+		specialCharProcessingString = rawstring.substring(beginIndex, tempEndIndex+1);
 		
 	ArrayList<Integer> listToArrayList = new ArrayList<Integer>(specialCharCheck.subList(beginIndex, endIndex));
 		return listToArrayList;
