@@ -25,7 +25,7 @@ public class TermFreqDBConnector {
 		return false;
 	}
 	
-	public boolean addDoc(DocByTerm docByTerm){
+	public boolean addDoc(DocByTerm docByTerm) {
 		String docCategory = docByTerm.getDocCategory();
 		int docID = docByTerm.getDocID();
 		int nGram = docByTerm.getNGram();
@@ -34,6 +34,11 @@ public class TermFreqDBConnector {
 			for (String addTermCheck : docByTerm.keySet()){
 				java.sql.Statement stmt = sqlConnection.createStatement();
 				stmt.executeUpdate("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values ('" + String.valueOf(docID) + "_" + addTermCheck + "', '" + String.valueOf(docID) + "', '" + docCategory + "', '" + addTermCheck + "', '" + String.valueOf(nGram) + "', '" + String.valueOf(docByTerm.get(addTermCheck)) + "', '0');");
+//				try{
+//				Thread.sleep(100);
+//				} catch (Exception e) {
+//					
+//				}
 			}
 
 		} catch (SQLException e) {

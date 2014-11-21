@@ -11,21 +11,22 @@ import java.util.regex.Pattern;
 public class Tokenizer {
 	private ArrayList<String> termList;
 	private String specialChars = GlobalContext.getInstance().getSpecialChars();
-	private String specialCharsPattern;
+	private String specialCharsPattern= "[\\x{0021}-\\x{002f}_\\x{003a}-\\x{0040}_\\x{005b}-\\x{0060}_\\x{007b}-\\x{007e}]";
+	private String specialCharProcessingString;
 	private String[] PostFix = GlobalContext.getInstance().getPostFix();
 	private int CharLimit = 500;
 	private int DocLimit = 5000;
 	
 	public Tokenizer() {
 		/* For processing special characters faster */
-		StringTokenizer str = new StringTokenizer(GlobalContext.getInstance().getSpecialChars(), "");
-		StringBuilder patternString = new StringBuilder();
-		patternString.append("[");
-		while (str.hasMoreTokens()) {
-			patternString.append(str.nextToken() + "||");
-		}
-		patternString.append("]");
-		specialCharsPattern = patternString.toString();
+//		StringTokenizer str = new StringTokenizer(GlobalContext.getInstance().getSpecialChars(), "");
+//		StringBuilder patternString = new StringBuilder();
+//		patternString.append("[");
+//		while (str.hasMoreTokens()) {
+//			patternString.append(str.nextToken() + "||");
+//		}
+//		patternString.append("]");
+//		specialCharsPattern = patternString.toString();
 	}
 	
 
@@ -109,58 +110,59 @@ public class Tokenizer {
 		 * Starts process ONLY when the string contains the special characters
 		 * defined in globalContext
 		 */
-		if (specialCharPatternMatch(rawstring) == false) {
+		ArrayList<Integer> specialCharCheck = specialCharPatternMatch(rawstring);
+		if (specialCharCheck.isEmpty()) {
 			return rawstring;
 		}
 		
-		String processingStr = removePrePostSpecialChar(rawstring);
-		
-		if (processingStr == null){
+		if (specialCharCheck.size() == rawstring.length()){
 			return null;
 		}
 		
-		if(specialCharPatternMatch(processingStr)){
-			for(int n = 0; n < processingStr.length(); n++){
-				if (specialChars.contains(String.valueOf(processingStr.charAt(n)))){
-					if (processingStr.charAt(n-1)== ' ' || processingStr.charAt(n+1)== ' '){
-						return null;
-					}
-				}
+		ArrayList<Integer> reducedSpecialCharCheck;
+		reducedSpecialCharCheck = removePrePostSpecialChar(specialCharCheck,rawstring);
+
+		for (int i : reducedSpecialCharCheck) {
+			if (rawstring.charAt(i - 1) == ' ' || rawstring.charAt(i + 1) == ' '){
+				return null;
 			}
 		}
-		return processingStr;
+		return specialCharProcessingString;
 	} 
 
-	private boolean specialCharPatternMatch(String specialCharCheck){
+	private ArrayList<Integer> specialCharPatternMatch(String specialCharCheck){
+		ArrayList<Integer> intArray = new ArrayList<Integer>();
 		Pattern p = Pattern.compile(specialCharsPattern);
 		Matcher m = p.matcher(specialCharCheck);
-		return m.find();
+		while(m.find()){
+			intArray.add(m.start());
+		}
+		return intArray;
 	}
 	
-	private String removePrePostSpecialChar(String processingStr) {
-		int firstIndex = 0;
-		int lastIndex = processingStr.length();
-		
-		for (firstIndex = 0; firstIndex < processingStr.length(); firstIndex++){
-			String temp = String.valueOf(processingStr.charAt(firstIndex));
-			if (!specialChars.contains(temp)){
-				break;
-			}
+	private ArrayList<Integer> removePrePostSpecialChar(ArrayList<Integer> specialCharCheck, String rawstring) {
+
+		int beginIndex = 0;
+		while (specialCharCheck.contains(beginIndex)){
+			beginIndex++;
 		}
 		
-		if (firstIndex == lastIndex){
-			return null;
+		int endIndex = rawstring.length()-1;
+		while (specialCharCheck.contains(endIndex)){
+			endIndex--;
 		}
 		
-		for (int index = processingStr.length() - 1; index >= 0; index--){
-			String temp = String.valueOf(processingStr.charAt(index));
-			if (!specialChars.contains(temp)){
-				lastIndex = index + 1;
-				break;
-			}
+		specialCharProcessingString = rawstring.substring(beginIndex, endIndex+1);
+		
+		endIndex = specialCharCheck.size()-(rawstring.length()-endIndex)+1;
+		
+		if(beginIndex >= endIndex){
+			specialCharCheck.clear();
+			return specialCharCheck;
 		}
 		
-		return processingStr.substring(firstIndex, lastIndex);
+	ArrayList<Integer> listToArrayList = new ArrayList<Integer>(specialCharCheck.subList(beginIndex, endIndex));
+		return listToArrayList;
 	}
 
 	

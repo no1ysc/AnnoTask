@@ -19,7 +19,7 @@ public class GlobalContext {
 	/* N-Gram Setting */
 	
 	/* Special Character Remove */
-	private String DELIM = " ";
+	private String DELIM = " \n";
 	public String getDelim(){
 		return this.DELIM;
 	}
