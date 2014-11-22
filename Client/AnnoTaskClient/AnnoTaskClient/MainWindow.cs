@@ -20,11 +20,13 @@ namespace AnnoTaskClient
 
 		public MainWindow()
 		{
+			logic.doWork();
+
 			InitializeComponent();
 
-			Thread worker = new Thread(new ThreadStart(logic.doWork));
+			//Thread worker = new Thread(new ThreadStart(logic.doWork));
 
-			worker.Start();
+			//worker.Start();
 			
 			UIHandler.Instance.runUIHandler(this);
 		}

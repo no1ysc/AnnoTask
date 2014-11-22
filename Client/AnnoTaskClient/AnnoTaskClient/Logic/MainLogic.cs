@@ -24,10 +24,12 @@ namespace AnnoTaskClient.Logic
 			if (clientWormHole.Connect())
 			{
 				// 서버 연결 안내문.
+				MessageBox.Show("서버 연결완료");
 			}
 			else
 			{
 				// 서버 연결 실패, 지연됨.
+				MessageBox.Show("서버 연결실패");
 			}
 		}
 

@@ -44,12 +44,19 @@ namespace AnnoTaskClient.Logic
 		private StreamWriter m_Writer;
 		private bool connectServer()
 		{
-			m_client = new TcpClient(Configure.Instance.ServerIP, Configure.Instance.ServerPort);
-			if (!m_client.Connected)
+			try
+			{
+				m_client = new TcpClient(Configure.Instance.ServerIP, Configure.Instance.ServerPort);
+				if (!m_client.Connected)
+				{
+					return false;
+				}
+			}
+			catch (SocketException e)
 			{
 				return false;
 			}
-			
+
 			m_ns = m_client.GetStream();
 			//m_Reader = new StreamReader(m_ns);
 			m_Writer = new StreamWriter(m_ns);
