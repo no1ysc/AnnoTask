@@ -33,7 +33,7 @@ public class ThesaurusDBConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			String valueEscape = escape(value);
-			resultSet = stmt.executeQuery("select * from " + conceptFromTable + " where " + colName + " = '" + valueEscape + "';");
+			resultSet = stmt.executeQuery("select * from " + conceptFromTable + " where " + colName + " = \"" + valueEscape + "\";");
 			/* exist check */
 			if(!resultSet.next()){
 				return null;

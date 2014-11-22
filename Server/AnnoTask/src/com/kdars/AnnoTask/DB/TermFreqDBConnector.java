@@ -36,7 +36,7 @@ public class TermFreqDBConnector {
 			for (String addTermCheck : docByTerm.keySet()){
 				java.sql.Statement stmt = sqlConnection.createStatement();
 				String addTerm = escape(addTermCheck);
-				stmt.executeUpdate("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values ('" + String.valueOf(docID) + "_" + addTerm + "', '" + String.valueOf(docID) + "', '" + docCategory + "', '" + addTerm + "', '" + String.valueOf(nGram) + "', '" + String.valueOf(docByTerm.get(addTermCheck)) + "', '0');");
+				stmt.executeUpdate("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "', '" + String.valueOf(docID) + "\", '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + String.valueOf(docByTerm.get(addTermCheck)) + "', '0');");
 
 			}
 
@@ -58,7 +58,7 @@ public class TermFreqDBConnector {
 			for (String deleteTermCheck : docByTerm.keySet()){
 				java.sql.Statement stmt = sqlConnection.createStatement();
 				String deleteTerm = escape(deleteTermCheck);
-				stmt.execute("delete from "+ termFreqTable + " (" + colName4 + ") values ('" + deleteTerm + "');");
+				stmt.execute("delete from "+ termFreqTable + " (" + colName4 + ") values (\"" + deleteTerm + "\");");
 			}
 
 		} catch (SQLException e) {
