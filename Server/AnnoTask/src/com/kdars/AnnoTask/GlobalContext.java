@@ -19,7 +19,7 @@ public class GlobalContext {
 	/* N-Gram Setting */
 	
 	/* Delimiter Setting */
-	private String DELIM = " \r\n";
+	private String DELIM = "//s+";
 	public String getDelim(){
 		return this.DELIM;
 	}
