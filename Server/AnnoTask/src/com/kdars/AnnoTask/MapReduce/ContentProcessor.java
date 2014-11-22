@@ -42,7 +42,7 @@ public class ContentProcessor extends Thread{
 //		}
 		
 		this.state = ProcessState.Completed;
-		System.out.println("completed");
+//		System.out.println("completed");
 	}
 
 	private void extractTermStructure(	Tokenizer tokenizer, 

@@ -32,16 +32,18 @@ public class TermFreqDBConnector {
 		int docID = docByTerm.getDocID();
 		int nGram = docByTerm.getNGram();
 
+		String addTerm = null;
 		try {
 			for (String addTermCheck : docByTerm.keySet()){
 				java.sql.Statement stmt = sqlConnection.createStatement();
-				String addTerm = escape(addTermCheck);
-				stmt.executeUpdate("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "', '" + String.valueOf(docID) + "\", '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + String.valueOf(docByTerm.get(addTermCheck)) + "', '0');");
+				addTerm = escape(addTermCheck);
+				stmt.executeUpdate("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "\", '" + String.valueOf(docID) + "', '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + String.valueOf(docByTerm.get(addTermCheck)) + "', '0');");
 
 			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			System.out.println("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "\", '" + String.valueOf(docID) + "', '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + "1', '0');");
 			e.printStackTrace();
 			return false;
 		}
