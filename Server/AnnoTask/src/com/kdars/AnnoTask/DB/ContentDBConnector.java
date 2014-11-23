@@ -17,16 +17,7 @@ public class ContentDBConnector {
 	private String jobTable = GlobalContext.getInstance().CONTENT_DB_jobTABLE_NAME;
 	
 	// These queries for creating trigger in ContentDB
-	String Query_FOR_CREATE_TRIGGER = "CREATE TRIGGER update_trigger "
-														+ "AFTER INSERT ON "
-														+ contentTable + " "
-														+ "FOR EACH ROW "
-														+ "BEGIN "
-														+ "INSERT INTO " + jobTable 
-														+ "(doc_id, working_status, complete_status) " 
-														+ "VALUES " 
-														+ "(NEW.doc_id, 0, 0);"
-														+ "END;";
+	String Query_FOR_CREATE_TRIGGER = "CREATE TRIGGER update_trigger AFTER INSERT ON " + contentTable + " FOR EACH ROW BEGIN INSERT INTO " + jobTable + "(doc_id, working_status, complete_status) VALUES (NEW.doc_id, 0, 0);" + "END;";
 	
 	public ContentDBConnector(){
 		while (!connect());
