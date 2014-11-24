@@ -200,237 +200,237 @@
     </display>  
   </class>  
   <dependency id="23">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="15"/>  
+  </dependency>  
+  <dependency id="24">    
     <end type="SOURCE" refId="9"/>    
     <end type="TARGET" refId="5"/>  
   </dependency>  
-  <association id="24">    
-    <end type="SOURCE" refId="20" navigable="false">      
-      <attribute id="25" name="thisClass">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="26" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="20" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="27">    
-    <end type="SOURCE" refId="21"/>    
-    <end type="TARGET" refId="16"/>  
-  </dependency>  
-  <dependency id="28">    
-    <end type="SOURCE" refId="14"/>    
-    <end type="TARGET" refId="15"/>  
-  </dependency>  
-  <dependency id="29">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="20"/>  
-  </dependency>  
-  <dependency id="30">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="14"/>  
-  </dependency>  
-  <dependency id="31">    
-    <end type="SOURCE" refId="19"/>    
-    <end type="TARGET" refId="22"/>  
-  </dependency>  
-  <dependency id="32">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="33">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="15"/>  
-  </dependency>  
-  <dependency id="34">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="15"/>  
-  </dependency>  
-  <association id="35">    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="36" name="deleteListDB">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="37" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="38">    
-    <end type="SOURCE" refId="20"/>    
-    <end type="TARGET" refId="11"/>  
-  </dependency>  
-  <association id="39">    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="40" name="thisClass">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="41" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="18" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="42">    
-    <end type="SOURCE" refId="21"/>    
-    <end type="TARGET" refId="15"/>  
-  </dependency>  
-  <dependency id="43">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="19"/>  
-  </dependency>  
-  <dependency id="44">    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="11"/>  
-  </dependency>  
-  <association id="45">    
+  <association id="25">    
     <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="46" name="termFreqDB">        
+      <attribute id="26" name="termFreqDB">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="47" minimum="0" maximum="1">        
+      <multiplicity id="27" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="12" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="48">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="22"/>  
+  <dependency id="28">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
   </dependency>  
-  <dependency id="49">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="22"/>  
-  </dependency>  
-  <association id="50">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="51" name="contentDBManager">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="52" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="53">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="14"/>  
-  </dependency>  
-  <association id="54">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="55" name="annoTask">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="56" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="57">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="18"/>  
-  </dependency>  
-  <dependency id="58">    
-    <end type="SOURCE" refId="19"/>    
-    <end type="TARGET" refId="10"/>  
-  </dependency>  
-  <association id="59">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="60" name="contentMonitor">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="61" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="62">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="63" name="processQueue">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="64" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="65">    
-    <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="66" name="thisClass">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="67" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="68">    
+  <dependency id="29">    
     <end type="SOURCE" refId="12"/>    
     <end type="TARGET" refId="22"/>  
   </dependency>  
-  <dependency id="69">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="10"/>  
-  </dependency>  
-  <association id="70">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="71" name="contentDB">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="72" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="21" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="73">    
+  <association id="30">    
     <end type="SOURCE" refId="20" navigable="false">      
-      <attribute id="74" name="thesaurusDB">        
+      <attribute id="31" name="thesaurusDB">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="75" minimum="0" maximum="1">        
+      <multiplicity id="32" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="13" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="76">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="77" name="document">        
+  <association id="33">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="34" name="contentDBManager">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="78" minimum="0" maximum="1">        
+      <multiplicity id="35" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="36">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="20"/>  
+  </dependency>  
+  <dependency id="37">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <association id="38">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="39" name="contentMonitor">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="40" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="41">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="19"/>  
+  </dependency>  
+  <dependency id="42">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="43">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <association id="44">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="45" name="contentDB">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="46" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="47">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="16"/>  
+  </dependency>  
+  <dependency id="48">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <association id="49">    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="50" name="thisClass">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="51" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="52">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <association id="53">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="54" name="thisClass">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="55" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="56">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="57" name="document">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="58" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="15" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="79">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="2"/>  
+  <dependency id="59">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="15"/>  
   </dependency>  
-  <dependency id="80">    
+  <dependency id="60">    
     <end type="SOURCE" refId="9"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
+  <dependency id="61">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="15"/>  
+  </dependency>  
+  <dependency id="62">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <association id="63">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="64" name="thisClass">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="65" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="66">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <association id="67">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="68" name="deleteListDB">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="69" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="70">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="15"/>  
+  </dependency>  
+  <dependency id="71">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <association id="72">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="73" name="processQueue">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="74" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="75">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="76">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="77">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <association id="78">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="79" name="annoTask">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="80" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
