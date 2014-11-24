@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import com.kdars.AnnoTask.GlobalContext;
 
 public class TermFreqDBConnector {
-//	private java.sql.Connection sqlConnection;
+	private java.sql.Connection sqlConnection;
 	private String termFreqTable = GlobalContext.getInstance().TermFreq_DB_TABLE_NAME;
 	private String colName1 = "DocID_Term";
 	private String colName2 = "DocID";
@@ -21,11 +21,11 @@ public class TermFreqDBConnector {
 
 	public TermFreqDBConnector(){
 		//TODO: Connector 생성되면 connect 시도해서 성공하면 ok, 실패하면 표시.
-		java.sql.Connection sqlConnection;
+//		java.sql.Connection sqlConnection;
 		if ((sqlConnection = connect()) == null){
 			System.exit(2);
 		}
-		disconnect(sqlConnection);
+//		disconnect(sqlConnection);
 //		while(connect());
 	}
 	
@@ -34,7 +34,7 @@ public class TermFreqDBConnector {
 	}
 	
 	public boolean addDoc(DocByTerm docByTerm) {
-		java.sql.Connection sqlConnectionLocal = connect();
+//		java.sql.Connection sqlConnectionLocal = connect();
 		String docCategory = docByTerm.getDocCategory();
 		int docID = docByTerm.getDocID();
 		int nGram = docByTerm.getNGram();
@@ -42,17 +42,17 @@ public class TermFreqDBConnector {
 		String addTerm = null;
 		try {
 			for (String addTermCheck : docByTerm.keySet()){
-				java.sql.Statement stmt = sqlConnectionLocal.createStatement();
+				java.sql.Statement stmt = sqlConnection.createStatement();
 				addTerm = escape(addTermCheck);
 				stmt.executeUpdate("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "\", '" + String.valueOf(docID) + "', '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + String.valueOf(docByTerm.get(addTermCheck)) + "', '0');");
 				stmt.close();
 			}
-			disconnect(sqlConnectionLocal);
+//			disconnect(sqlConnectionLocal);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "\", '" + String.valueOf(docID) + "', '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + "1', '0');");
 			e.printStackTrace();
-			disconnect(sqlConnectionLocal);
+//			disconnect(sqlConnectionLocal);
 			return false;
 		}
 		
@@ -60,23 +60,23 @@ public class TermFreqDBConnector {
 	}
 	
 	public boolean deleteDoc(DocByTerm docByTerm){
-		java.sql.Connection sqlConnectionLocal = connect();
+//		java.sql.Connection sqlConnectionLocal = connect();
 		String docCategory = docByTerm.getDocCategory();
 		int docID = docByTerm.getDocID();
 		int nGram = docByTerm.getNGram();
 
 		try {
 			for (String deleteTermCheck : docByTerm.keySet()){
-				java.sql.Statement stmt = sqlConnectionLocal.createStatement();
+				java.sql.Statement stmt = sqlConnection.createStatement();
 				String deleteTerm = escape(deleteTermCheck);
 				stmt.execute("delete from "+ termFreqTable + " (" + colName4 + ") values (\"" + deleteTerm + "\");");
 				stmt.close();
 			}
-			disconnect(sqlConnectionLocal);
+//			disconnect(sqlConnectionLocal);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			disconnect(sqlConnectionLocal);
+//			disconnect(sqlConnectionLocal);
 			return false;
 		}
 		
@@ -117,11 +117,11 @@ public class TermFreqDBConnector {
 	 * @return
 	 */
 	public DocByTerm queryDoc(int docID){
-		java.sql.Connection sqlConnectionLocal = connect();
+//		java.sql.Connection sqlConnectionLocal = connect();
 		DocByTerm docIDCheck = null;
 		ResultSet resultSet = null;
 		try {
-			java.sql.Statement stmt = sqlConnectionLocal.createStatement();
+			java.sql.Statement stmt = sqlConnection.createStatement();
 			resultSet = stmt.executeQuery("select * from " + termFreqTable + " where " + colName2 + " = '" + docID + "';");
 			/* exist check */
 			if(!resultSet.next()){
@@ -130,24 +130,24 @@ public class TermFreqDBConnector {
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			disconnect(sqlConnectionLocal);
+			disconnect(sqlConnection);
 			e.printStackTrace();
 		}
-		disconnect(sqlConnectionLocal);
+		disconnect(sqlConnection);
 		
 		return docIDCheck;
 	}
 	
 	
 	public boolean queryTermFreqByDocIDandNGram(DocByTerm docByTerm){
-		java.sql.Connection sqlConnectionLocal = connect();
+//		java.sql.Connection sqlConnectionLocal = connect();
 		int docID = docByTerm.getDocID();
 		int nGram = docByTerm.getNGram();
 		
 		ResultSet resultSet = null;
 		
 		try {
-			java.sql.Statement stmt = sqlConnectionLocal.createStatement();
+			java.sql.Statement stmt = sqlConnection.createStatement();
 			resultSet = stmt.executeQuery("select * from " + termFreqTable + " where " + colName2 + " = " + docID + " AND " + colName5 + " = " + nGram + ";");
 			
 			while(resultSet.next()){
@@ -159,11 +159,11 @@ public class TermFreqDBConnector {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			disconnect(sqlConnectionLocal);
+//			disconnect(sqlConnectionLocal);
 			return false;
 		}
 		
-		disconnect(sqlConnectionLocal);
+//		disconnect(sqlConnectionLocal);
 		
 		return true;
 	}
