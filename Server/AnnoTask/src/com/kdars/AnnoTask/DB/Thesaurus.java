@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class Thesaurus {
 	private int conceptFromID;
-	private String conceptFrom;
+	private String conceptFrom = "temporary";
 	private int conceptToID;
 	private String conceptTo;
 	private String metaOntology;
@@ -21,9 +21,5 @@ public class Thesaurus {
 		return this.conceptFrom;
 	}
 	
-	public String justTestConceptFrom() {
-		this.conceptFrom = "test";
-		return this.conceptFrom;
-	}
 	
 }

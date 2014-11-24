@@ -38,7 +38,8 @@ public class ThesaurusDBConnector {
 			if(!resultSet.next()){
 				return null;
 			}
-			conceptFromTermCheck.justTestConceptFrom();
+			conceptFromTermCheck.getConceptFrom();
+			stmt.close();
 			disconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

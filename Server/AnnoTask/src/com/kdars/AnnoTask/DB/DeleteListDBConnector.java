@@ -25,6 +25,7 @@ public class DeleteListDBConnector {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			String deleteTermEscape = escape(deleteTerm);
 			stmt.executeUpdate("insert into "+ deleteListTable + " (" + colName + ") values (\"" + deleteTermEscape + "\");");
+			stmt.close();
 			disconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -42,6 +43,7 @@ public class DeleteListDBConnector {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			String deleteTermEscape= escape(deleteTerm);
 			stmt.execute("delete from "+ deleteListTable + " where " + colName + " = \"" + deleteTermEscape +"\";");
+			stmt.close();
 			disconnect();
 			
 		} catch (SQLException e) {
@@ -67,6 +69,7 @@ public class DeleteListDBConnector {
 				return null;
 			}
 			deleteTermCheck = resultSet.getString(1);
+			stmt.close();
 			disconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
