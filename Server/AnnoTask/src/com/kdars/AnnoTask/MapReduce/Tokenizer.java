@@ -57,7 +57,12 @@ public class Tokenizer {
 			StringBuilder sb = new StringBuilder();
 			while ((++gramPoint) < limitNGram){
 				// 일단 만들어.
-				sb.append(termList.get(genPoint + gramPoint));
+				String checkTerm = termList.get(genPoint + gramPoint);
+				if(checkTerm.length() <= CharLimit){
+					break;
+				}
+				
+				sb.append(checkTerm);
 				String procStr = removeSpecialChar(sb.toString()); 
 
 				if (procStr == null){
