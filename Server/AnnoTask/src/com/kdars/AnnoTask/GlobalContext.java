@@ -61,7 +61,7 @@ public class GlobalContext {
 
 	
 	
-	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.9:3306/contentdb&autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.9:3306/contentdb";
 	public final String CONTENT_DB_NAME = "contentdb"; 
 	public final String CONTENT_DB_USER_ID = "root";
 	public final String CONTENT_DB_USER_PASS = "1qaz@WSX";
@@ -78,7 +78,7 @@ public class GlobalContext {
 	/* Content DB Connect Info */
 	
 	/* DeleteList DB Connect Info*/
-	public final String DeleteList_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/deletelistdb&autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+	public final String DeleteList_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/deletelistdb";
 	public final String DeleteList_DB_NAME = "deletelistdb"; 
 	public final String DeleteList_DB_USER_ID = "root";
 	public final String DeleteList_DB_USER_PASS = "jinqkim69";
@@ -86,7 +86,7 @@ public class GlobalContext {
 	/* DeleteList DB Connect Info*/
 
 	/* TermFreq DB Connect Info*/
-	public final String TermFreq_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/termfreqdb&autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+	public final String TermFreq_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/termfreqdb";
 	public final String TermFreq_DB_NAME = "termfreqdb"; 
 	public final String TermFreq_DB_USER_ID = "root";
 	public final String TermFreq_DB_USER_PASS = "jinqkim69";
@@ -94,7 +94,7 @@ public class GlobalContext {
 	/* TermFreq DB Connect Info*/
 	
 	/* Thesaurus DB Connect Info*/
-	public final String Thesaurus_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/thesaurusdb&autoReconnect=true&failOverReadOnly=false&maxReconnects=10";
+	public final String Thesaurus_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/thesaurusdb";
 	public final String Thesaurus_DB_NAME = "thesaurusdb"; 
 	public final String Thesaurus_DB_USER_ID = "root";
 	public final String Thesaurus_DB_USER_PASS = "jinqkim69";
