@@ -81,10 +81,11 @@ public class ContentDBConnector {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			// add docID_List where working_status is equal to 0
 			resultSet = stmt.executeQuery("select * from " + jobTable + " where " + columnName + " = " + String.valueOf(value));
-			while(resultSet.next()){
+//			while(resultSet.next()){
+				resultSet.next();
 				docID_List.add(resultSet.getInt("doc_id"));
 				System.out.println(docID_List.get(docID_List.size()-1));
-			}
+//			}
 			
 			// update working_status
 			for(int i = 0; i< docID_List.size(); i++){

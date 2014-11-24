@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import com.kdars.AnnoTask.GlobalContext;
 
 public class DeleteListDBConnector {
-	private java.sql.Connection sqlConnection;
 	private String deleteListTable = GlobalContext.getInstance().DeleteList_DB_TABLE_NAME;
 	private String colName = "Stopwords";
 	
@@ -28,7 +27,7 @@ public class DeleteListDBConnector {
 	public boolean add(String deleteTerm){
 		java.sql.Connection sqlConnectionLocal = connect();
 		try {
-			java.sql.Statement stmt = sqlConnection.createStatement();
+			java.sql.Statement stmt = sqlConnectionLocal.createStatement();
 			String deleteTermEscape = escape(deleteTerm);
 			stmt.executeUpdate("insert into "+ deleteListTable + " (" + colName + ") values (\"" + deleteTermEscape + "\");");
 			stmt.close();
@@ -46,7 +45,7 @@ public class DeleteListDBConnector {
 	public boolean delete(String deleteTerm){
 		java.sql.Connection sqlConnectionLocal = connect();
 		try {
-			java.sql.Statement stmt = sqlConnection.createStatement();
+			java.sql.Statement stmt = sqlConnectionLocal.createStatement();
 			String deleteTermEscape= escape(deleteTerm);
 			stmt.execute("delete from "+ deleteListTable + " where " + colName + " = \"" + deleteTermEscape +"\";");
 			stmt.close();
@@ -67,7 +66,7 @@ public class DeleteListDBConnector {
 		String deleteTermCheck = null;
 		ResultSet resultSet = null;
 		try {
-			java.sql.Statement stmt = sqlConnection.createStatement();
+			java.sql.Statement stmt = sqlConnectionLocal.createStatement();
 			String deleteTermEscape = escape(deleteTerm);
 			resultSet = stmt.executeQuery("select * from " + deleteListTable + " where " + colName + " = \"" + deleteTermEscape + "\";");
 			/* exist check */

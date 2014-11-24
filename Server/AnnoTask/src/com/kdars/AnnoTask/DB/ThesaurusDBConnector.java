@@ -10,7 +10,6 @@ import com.kdars.AnnoTask.GlobalContext;
 import com.mysql.jdbc.Connection;
 
 public class ThesaurusDBConnector {
-	private java.sql.Connection sqlConnection;
 	private String conceptFromTable = GlobalContext.getInstance().Thesaurus_DB_TABLE_NAME1;
 	private String conceptToTable = GlobalContext.getInstance().Thesaurus_DB_TABLE_NAME2;
 	// TODO : 향후 한번에 조절하기 위해 모아야할 정보 : SQL 커넥션 정보,
@@ -38,7 +37,7 @@ public class ThesaurusDBConnector {
 		Thesaurus conceptFromTermCheck = new Thesaurus();
 		ResultSet resultSet = null;
 		try {
-			java.sql.Statement stmt = sqlConnection.createStatement();
+			java.sql.Statement stmt = sqlConnectionLocal.createStatement();
 			String valueEscape = escape(value);
 			resultSet = stmt.executeQuery("select * from " + conceptFromTable + " where " + colName + " = \"" + valueEscape + "\";");
 			/* exist check */
