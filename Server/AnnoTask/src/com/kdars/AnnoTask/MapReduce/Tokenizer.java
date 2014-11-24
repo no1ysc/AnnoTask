@@ -13,8 +13,7 @@ public class Tokenizer {
 	private int DocLimit = GlobalContext.getInstance().getDocLimit();
 	private String specialCharsPattern= GlobalContext.getInstance().getSpecialCharPattern();
 	private String[] PostFix = GlobalContext.getInstance().getPostFix();
-	private ArrayList<String> termList;
-	private String specialCharProcessingString;
+//	private String specialCharProcessingString;
 	
 	public Tokenizer() {
 	}
@@ -40,116 +39,98 @@ public class Tokenizer {
 		
 		for (int i = 0; i < checkedDoc.size(); i++){
 			/* Tokenizing according to delimiter configuration */
-			termList = (ArrayList<String>) ((ArrayList) Collections.list(new StringTokenizer(checkedDoc.get(i), delim)));
+			ArrayList<String> termList = (ArrayList<String>) ((ArrayList) Collections.list(new StringTokenizer(checkedDoc.get(i), delim)));
 			
 			/* Getting n_gram list */
-			getNgramTerms(docByTermList);
+			getNgramTerms(docByTermList, termList);
 		}
 		
 		return docByTermList;
 	}
 
-	private void getNgramTerms(DocByTerm[] docByTermList) {
-
-		/* Making n_grams with tokens */
-		for (int ngramPointer = 0; ngramPointer <  termList.size(); ngramPointer++) {
+	private void getNgramTerms(DocByTerm[] docByTermList, ArrayList<String> termList) {
+		int genPoint = -1;
+		int gramPoint = -1;
+		int limitNGram = docByTermList.length;
+				
+		while ((++genPoint) < termList.size()){
 			StringBuilder sb = new StringBuilder();
-			for (int ngramMaker = 0; ngramMaker < docByTermList.length; ngramMaker++) {
-				if (termList.size() <= ngramPointer + ngramMaker){
+			while ((++gramPoint) < limitNGram){
+				// 일단 만들어.
+				sb.append(termList.get(genPoint + gramPoint));
+				String procStr = removeSpecialChar(sb.toString()); 
+
+				if (procStr == null){
 					break;
 				}
 				
-				String possibleNgram = termList.get(ngramPointer + ngramMaker);
-				if (possibleNgram.length() < CharLimit) {
-					
-					sb.append(possibleNgram + " ");
-					
-					String processedString = specialCharTrimAndTermRemove(sb.toString().trim());
-					if (processedString != null) {
-						String FinalString = DeletePostFix(processedString);
-						docByTermList[ngramMaker].increaseFreq(FinalString);
-					}
-				}
-			}
+				// 은는이가 뜯음.
+				procStr = DeletePostFix(procStr);
+				
+				//저장
+				docByTermList[gramPoint].increaseFreq(procStr);
 
-		}
-	}
-	
-	private String DeletePostFix(String processedString){
-		
-		for (int postFixLength = PostFix.length; postFixLength > 0; postFixLength--){
-			if (processedString.length() <= postFixLength){
-				continue;
+
+				// 지금 만든게 특문으로 끝나는지 하는지.
+				if (isEndWithSpecialChar(sb.toString())){
+					// 특문이면 여기까지만 만들고 나가자.
+					break;
+				}
+				
+				// 다음놈 인덱스 Check
+				if (genPoint + gramPoint + 1 >= termList.size()){
+					break;
+				}
+				// 만들고 나서 다음놈 불러와봄. 불러와서 스페셜 캐릭터로 시작하면 나가자.
+				if (isStartWithSpecialChar(termList.get(genPoint + gramPoint + 1))){
+					// 다음놈 시작이 특문이면 가차없이 나가자.
+					break;
+				}
+								
+				// 점검 다 끝났으니, 공백 붙이고 계속하자.
+				sb.setLength(0);
+				sb.append(procStr + " ");
 			}
-			if (PostFix[postFixLength - 1].contains(processedString.substring(processedString.length()-postFixLength, processedString.length()))){
-				return processedString.substring(0,processedString.length() - postFixLength);
-			}			
+			
+			gramPoint = -1;
 		}
-		
-		return processedString;
 	}
 	
-	private String specialCharTrimAndTermRemove(String rawstring) {
-		/*
-		 * Starts process ONLY when the string contains the special characters
-		 * defined in globalContext
-		 */
-		ArrayList<Integer> specialCharCheck = specialCharPatternMatch(rawstring);
+	private boolean isStartWithSpecialChar(String string) {
+		return isSpecialChar(string.charAt(0));
+	}
+	private boolean isEndWithSpecialChar(String string) {
+		return isSpecialChar(string.charAt(string.length()-1));
+	}
+	private boolean isSpecialChar(char c){
+		if (Pattern.compile(specialCharsPattern).matcher(String.valueOf(c)).find()){
+			return	true;
+		}
+		return false;
+	}
+	private String removeSpecialChar(String str){
+		ArrayList<Integer> specialCharCheck = specialCharPatternMatch(str);
 		if (specialCharCheck.isEmpty()) {
-			return rawstring;
+			return str;
 		}
 		
-		if (specialCharCheck.size() == rawstring.length()){
+		if (specialCharCheck.size() == str.length()){
 			return null;
 		}
 		
-		ArrayList<Integer> reducedSpecialCharCheck;
-		reducedSpecialCharCheck = removePrePostSpecialChar(specialCharCheck,rawstring);
-		
-		for (int i : reducedSpecialCharCheck) {
-			if (rawstring.charAt(i - 1) == ' ' || rawstring.charAt(i + 1) == ' '){
-				return null;
-			}
-		}
-		return specialCharProcessingString;
-	} 
-
-	private ArrayList<Integer> specialCharPatternMatch(String specialCharCheck){
-		ArrayList<Integer> intArray = new ArrayList<Integer>();
-		Pattern p = Pattern.compile(specialCharsPattern);
-		Matcher m = p.matcher(specialCharCheck);
-		while(m.find()){
-			intArray.add(m.start());
-		}
-		return intArray;
-	}
-	
-	private ArrayList<Integer> removePrePostSpecialChar(ArrayList<Integer> specialCharCheck, String rawstring) {
-
 		int beginIndex = 0;
 		while (specialCharCheck.contains(beginIndex)){
 			beginIndex++;
 		}
 		
-		int tempEndIndex = rawstring.length()-1;
+		int tempEndIndex = str.length()-1;
 		while (specialCharCheck.contains(tempEndIndex)){
 			tempEndIndex--;
 		}
 		
-		
-		int endIndex = specialCharCheck.size()-(rawstring.length()-tempEndIndex)+1;
-		
-		if(beginIndex >= endIndex){
-			specialCharCheck.clear();
-			return specialCharCheck;
-		}
-
-		specialCharProcessingString = rawstring.substring(beginIndex, tempEndIndex+1);
-		
-	ArrayList<Integer> listToArrayList = new ArrayList<Integer>(specialCharCheck.subList(beginIndex, endIndex));
-		return listToArrayList;
+		return str.substring(beginIndex, tempEndIndex+1);
 	}
-
+	
 	
 	private ArrayList<String> docAndTermLengthCheck(String doc, int LengthLimit){
 		ArrayList<String> splitdoc = new ArrayList<String>();
@@ -166,5 +147,117 @@ public class Tokenizer {
 		
 		return splitdoc;
 	}
+
+
+	private ArrayList<Integer> specialCharPatternMatch(String specialCharCheck){
+		ArrayList<Integer> intArray = new ArrayList<Integer>();
+		Pattern p = Pattern.compile(specialCharsPattern);
+		Matcher m = p.matcher(specialCharCheck);
+		while(m.find()){
+			intArray.add(m.start());
+		}
+		return intArray;
+	}
+	
+	private String DeletePostFix(String processedString){
+		
+		for (int postFixLength = PostFix.length; postFixLength > 0; postFixLength--){
+			if (processedString.length() <= postFixLength){
+				continue;
+			}
+			if (PostFix[postFixLength - 1].contains(processedString.substring(processedString.length()-postFixLength, processedString.length()))){
+				return processedString.substring(0,processedString.length() - postFixLength);
+			}			
+		}
+		
+		return processedString;
+	}
+	
+	
+	
+	
+	
+	
+//	
+//	private String specialCharTrimAndTermRemove(String rawstring) {
+//		/*
+//		 * Starts process ONLY when the string contains the special characters
+//		 * defined in globalContext
+//		 */
+//		ArrayList<Integer> specialCharCheck = specialCharPatternMatch(rawstring);
+//		if (specialCharCheck.isEmpty()) {
+//			return rawstring;
+//		}
+//		
+//		if (specialCharCheck.size() == rawstring.length()){
+//			return null;
+//		}
+//		
+//		ArrayList<Integer> reducedSpecialCharCheck;
+//		reducedSpecialCharCheck = removePrePostSpecialChar(specialCharCheck,rawstring);
+//		
+//		for (int i : reducedSpecialCharCheck) {
+//			if (rawstring.charAt(i - 1) == ' ' || rawstring.charAt(i + 1) == ' '){
+//				return null;
+//			}
+//		}
+//		return specialCharProcessingString;
+//	} 
+
+	//	private ArrayList<Integer> removePrePostSpecialChar(ArrayList<Integer> specialCharCheck, String rawstring) {
+	//
+	//		int beginIndex = 0;
+	//		while (specialCharCheck.contains(beginIndex)){
+	//			beginIndex++;
+	//		}
+	//		
+	//		int tempEndIndex = rawstring.length()-1;
+	//		while (specialCharCheck.contains(tempEndIndex)){
+	//			tempEndIndex--;
+	//		}
+	//		
+	//		
+	//		int endIndex = specialCharCheck.size()-(rawstring.length()-tempEndIndex)+1;
+	//		
+	//		if(beginIndex >= endIndex){
+	//			specialCharCheck.clear();
+	//			return specialCharCheck;
+	//		}
+	//
+	//		specialCharProcessingString = rawstring.substring(beginIndex, tempEndIndex+1);
+	//		
+	//	ArrayList<Integer> listToArrayList = new ArrayList<Integer>(specialCharCheck.subList(beginIndex, endIndex));
+	//		return listToArrayList;
+	//	}
+	
+		
+
+	
+//	private ArrayList<Integer> removePrePostSpecialChar(ArrayList<Integer> specialCharCheck, String rawstring) {
+//
+//		int beginIndex = 0;
+//		while (specialCharCheck.contains(beginIndex)){
+//			beginIndex++;
+//		}
+//		
+//		int tempEndIndex = rawstring.length()-1;
+//		while (specialCharCheck.contains(tempEndIndex)){
+//			tempEndIndex--;
+//		}
+//		
+//		
+//		int endIndex = specialCharCheck.size()-(rawstring.length()-tempEndIndex)+1;
+//		
+//		if(beginIndex >= endIndex){
+//			specialCharCheck.clear();
+//			return specialCharCheck;
+//		}
+//
+//		specialCharProcessingString = rawstring.substring(beginIndex, tempEndIndex+1);
+//		
+//	ArrayList<Integer> listToArrayList = new ArrayList<Integer>(specialCharCheck.subList(beginIndex, endIndex));
+//		return listToArrayList;
+//	}
+
 	
 }
