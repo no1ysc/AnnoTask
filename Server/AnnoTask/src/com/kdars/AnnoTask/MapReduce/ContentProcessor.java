@@ -4,15 +4,15 @@ import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.kdars.AnnoTask.GlobalContext;
+import com.kdars.AnnoTask.ContextConfig;
 import com.kdars.AnnoTask.DB.ContentDBManager;
-import com.kdars.AnnoTask.DB.DocByTerm;
+import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 import com.kdars.AnnoTask.DB.Document;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 
 public class ContentProcessor extends Thread{
 //	private NgramFilter ngramFilter;	// TODO: 저쪽으로 가야할듯., 유저가 가저가기 전,,,,,,에서 하는걸로,.
-	private int nGram = GlobalContext.getInstance().getN_Gram();
+	private int nGram = ContextConfig.getInstance().getN_Gram();
 	private Document document = null;
 	
 	public enum ProcessState{
@@ -44,7 +44,7 @@ public class ContentProcessor extends Thread{
 														StopWordRemover stopWordRemover,
 														Document document) {
 			
-			DocByTerm[] docByTermList = tokenizer.termGenerate(document, this.nGram);
+			DocTermFreqByTerm[] docByTermList = tokenizer.termGenerate(document, this.nGram);
 			for (int i = 0; i < this.nGram; i++ ){
 				
 				for (Iterator<Map.Entry<String, Integer>> iter = docByTermList[i].entrySet().iterator(); iter.hasNext();){

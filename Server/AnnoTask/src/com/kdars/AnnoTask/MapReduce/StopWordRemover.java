@@ -1,7 +1,7 @@
 package com.kdars.AnnoTask.MapReduce;
 
 import com.kdars.AnnoTask.DB.DeleteListDBManager;
-import com.kdars.AnnoTask.DB.DocByTerm;
+import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 
 public class StopWordRemover {
 

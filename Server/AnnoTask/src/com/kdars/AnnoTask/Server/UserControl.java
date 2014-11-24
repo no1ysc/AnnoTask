@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.kdars.AnnoTask.GlobalContext;
+import com.kdars.AnnoTask.ContextConfig;
 import com.kdars.AnnoTask.DB.ContentDBManager;
-import com.kdars.AnnoTask.DB.DocByTerm;
+import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 import com.kdars.AnnoTask.DB.Document;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
@@ -131,7 +131,7 @@ public class UserControl extends Thread{
 			termTransfer.docCategory = doc.getCategory();
 			termTransfer.docTitle = doc.getTitle();
 			
-			DocByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
+			DocTermFreqByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
 			
 			termLockInDoc(docByTerm);
 			
@@ -157,12 +157,12 @@ public class UserControl extends Thread{
 			this.requestDocs = ContentDBManager.getInstance().getDocIDsFromDate(requestByDate.startDate, requestByDate.endDate, requestByDate.bNaver, requestByDate.bDaum, requestByDate.bNate);
 			
 			SendDocumentCount sendDocumentCount = new SendDocumentCount();
-			sendDocumentCount.doucumentCount = requestDocs.size() * GlobalContext.getInstance().getN_Gram();
+			sendDocumentCount.doucumentCount = requestDocs.size() * ContextConfig.getInstance().getN_Gram();
 			
 			transferObject(sendDocumentCount);
 	}
 
-	private void transferDocbyTerm(DocByTerm[] docByTerm) {
+	private void transferDocbyTerm(DocTermFreqByTerm[] docByTerm) {
 		for (int index = 0; index < docByTerm.length; index++){
 			TermTransfer termTransfer = new TermTransfer();
 			termTransfer.docCategory = docByTerm[index].getDocCategory();
@@ -189,7 +189,7 @@ public class UserControl extends Thread{
 		}
 	}
 
-	private void termLockInDoc(DocByTerm[] docByTerm) {
+	private void termLockInDoc(DocTermFreqByTerm[] docByTerm) {
 		for (int index = 0; index < docByTerm.length; index++){
 			
 			for (Iterator<Map.Entry<String, Integer>> iter = docByTerm[index].entrySet().iterator(); iter.hasNext();){

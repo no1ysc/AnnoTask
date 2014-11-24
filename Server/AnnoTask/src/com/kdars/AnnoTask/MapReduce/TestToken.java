@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.kdars.AnnoTask.DB.DeleteListDBManager;
-import com.kdars.AnnoTask.DB.DocByTerm;
+import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 import com.kdars.AnnoTask.DB.Document;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 
@@ -20,7 +20,7 @@ public class TestToken {
 		String body = "내가....?? 원했던,. 것은[ 바로] 이런! 것@ 난# 스페셜$ 캐릭터가% 너무^ 너무& 너무* 너무( 너무) 너무_ 너무- 너무+ 너무= 너무{ 너무} 너무| 너무~~ 좋아";
 		Tokenizer tokenize = new Tokenizer();
 		Document doc = new Document(0, null, null, null, null, null, null, null, body, null, null);
-		DocByTerm[] doctermList = tokenize.termGenerate(doc, 4);
+		DocTermFreqByTerm[] doctermList = tokenize.termGenerate(doc, 4);
 		for (int i = 0; i<4; i++){
 			System.out.println(i+1);
 			System.out.println(doctermList[i].keySet().size());
