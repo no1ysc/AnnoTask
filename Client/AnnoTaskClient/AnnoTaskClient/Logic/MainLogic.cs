@@ -19,12 +19,13 @@ namespace AnnoTaskClient.Logic
 
 		}
 
-		public  void doWork()
+		public  void ConnectServer()
 		{
 			if (clientWormHole.Connect())
 			{
 				// 서버 연결 안내문.
 				MessageBox.Show("서버 연결완료");
+				UIHandler.Instance.CommonUI.ButtonEnable = true;
 			}
 			else
 			{
@@ -129,6 +130,8 @@ namespace AnnoTaskClient.Logic
 		{
 			clear();
 			importDoc();
+
+			UIHandler.Instance.CommonUI.ButtonEnable = true;
 		}
 
 		internal void cellContentDoubleClick(string p, int tabNumber)

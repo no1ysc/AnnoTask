@@ -134,17 +134,25 @@ namespace AnnoTaskClient.Logic
 		{
 			Command.Client2Server.DocumentRequest docReq = new Command.Client2Server.DocumentRequest();
 			docReq.documentID = targetID;
+			Command.Server2Client.DocumentResponse document;
 
-			// 2-1 보냄.
-			string json = new JsonConverter<Command.Client2Server.DocumentRequest>().Object2Json(docReq);
-			m_Writer.WriteLine(json);
-			m_Writer.Flush();
+			try
+			{
+				// 2-1 보냄.
+				string json = new JsonConverter<Command.Client2Server.DocumentRequest>().Object2Json(docReq);
+				m_Writer.WriteLine(json);
+				m_Writer.Flush();
 
-			// 2-2 받음.
-			string jsonRes = m_Reader.ReadLine();
-			Command.Server2Client.DocumentResponse document = new JsonConverter<Command.Server2Client.DocumentResponse>().Json2Object(jsonRes);
-
-			return document.body;
+				// 2-2 받음.
+				string jsonRes = m_Reader.ReadLine();
+				document = new JsonConverter<Command.Server2Client.DocumentResponse>().Json2Object(jsonRes);
+				
+				return document.body;
+			}
+			catch (Exception e)
+			{
+				return null;
+			}
 		}
 	}
 }

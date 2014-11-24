@@ -20,13 +20,11 @@ namespace AnnoTaskClient
 
 		public MainWindow()
 		{
-			logic.doWork();
-
 			InitializeComponent();
 
-			//Thread worker = new Thread(new ThreadStart(logic.doWork));
+			Thread worker = new Thread(new ThreadStart(logic.ConnectServer));
 
-			//worker.Start();
+			worker.Start();
 			
 			UIHandler.Instance.runUIHandler(this);
 		}
@@ -65,49 +63,48 @@ namespace AnnoTaskClient
 		{
 			clearUIContents();
 
-			Button btnThis = this.btnImportDoc;
-			//btnThis.Enabled = false;
-
-			logic.clickedImportDoc();
-
-			btnThis.Enabled = true;
+			Thread worker = new Thread(new ThreadStart(logic.clickedImportDoc));
+			worker.Start();
 		}
 
 		private void btnImportDoc_Click(object sender, EventArgs e)
 		{
-			// TODO: 쓰레드 동작 고민할껏........
-
 			this.btnImportDoc.Enabled = false;
-			//Thread worker = new Thread(new ThreadStart(btnImportHandler));
 
-			//worker.Start();
 			btnImportHandler();
 		}
 
-		private void wordList1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+		private void cellClickHandler(string cellValue, int tabNumber)
 		{
-			DataGridView dataGridView = (sender as DataGridView);
-			logic.cellContentDoubleClick((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 1);
+			// TODO : 쓰레드는 안돌려도 된다? 작업이 짧아서?
+			logic.cellContentDoubleClick(cellValue, tabNumber);
 		}
 
-		private void wordList2_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+		private void wordList1_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
-			logic.cellContentDoubleClick((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 2);
+			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 1);
 		}
 
-		private void wordList3_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+		private void wordList2_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
-			logic.cellContentDoubleClick((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 3);
+			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 2);
 		}
 
-		private void wordList4_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+		private void wordList3_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
-			logic.cellContentDoubleClick((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 4);
+			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 3);
 		}
 
+		private void wordList4_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			DataGridView dataGridView = (sender as DataGridView);
+			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 4);
+		}
+
+		// TODO : 아래 4개 이벤트들 쓰레드 안돌려도 된다? 작업이 짧아서?
 		private void docList1_DoubleClick(object sender, EventArgs e)
 		{
 			string article = getArticle(sender);
@@ -143,7 +140,6 @@ namespace AnnoTaskClient
 				this.article4.Text = article;
 			}
 		}
-
-		
+	
 	}
 }
