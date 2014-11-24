@@ -21,7 +21,7 @@ public class ThesaurusDBConnector {
 		if ((sqlConnection = connect()) == null){
 			System.exit(2);
 		}
-		disconnect(sqlConnection);
+//		disconnect(sqlConnection);
 //		while(connect());
 	}
 	
