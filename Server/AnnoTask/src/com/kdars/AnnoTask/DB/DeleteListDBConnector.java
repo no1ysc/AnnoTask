@@ -6,10 +6,10 @@ import java.sql.SQLException;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import com.kdars.AnnoTask.GlobalContext;
+import com.kdars.AnnoTask.ContextConfig;
 
 public class DeleteListDBConnector {
-	private String deleteListTable = GlobalContext.getInstance().DeleteList_DB_TABLE_NAME;
+	private String deleteListTable = ContextConfig.getInstance().DeleteList_DB_TABLE_NAME;
 	private String colName = "Stopwords";
 	private java.sql.Connection sqlConnection;
 	// TODO : 향후 한번에 조절하기 위해 모아야할 정보 : SQL 커넥션 정보,
@@ -91,10 +91,10 @@ public class DeleteListDBConnector {
 //		sqlConnection;
 		java.sql.Connection sqlConnection = null;
 		
-		String jdbcUrl = GlobalContext.getInstance().DeleteList_DB_JDBC_URL;
-		String DBName = GlobalContext.getInstance().DeleteList_DB_NAME;
-		String userID = GlobalContext.getInstance().DeleteList_DB_USER_ID;
-		String userPass = GlobalContext.getInstance().DeleteList_DB_USER_PASS;
+		String jdbcUrl = ContextConfig.getInstance().DeleteList_DB_JDBC_URL;
+		String DBName = ContextConfig.getInstance().DeleteList_DB_NAME;
+		String userID = ContextConfig.getInstance().DeleteList_DB_USER_ID;
+		String userPass = ContextConfig.getInstance().DeleteList_DB_USER_PASS;
 		
 		try{
 			Class.forName("com.mysql.jdbc.Driver");

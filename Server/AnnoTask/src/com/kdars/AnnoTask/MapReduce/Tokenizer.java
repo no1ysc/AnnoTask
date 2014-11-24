@@ -1,7 +1,7 @@
 package com.kdars.AnnoTask.MapReduce;
 
-import com.kdars.AnnoTask.GlobalContext;
-import com.kdars.AnnoTask.DB.DocByTerm;
+import com.kdars.AnnoTask.ContextConfig;
+import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 import com.kdars.AnnoTask.DB.Document;
 
 import java.util.*;
@@ -9,29 +9,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Tokenizer {
-	private int CharLimit = GlobalContext.getInstance().getCharLimit();
-	private int DocLimit = GlobalContext.getInstance().getDocLimit();
-	private String specialCharsPattern= GlobalContext.getInstance().getSpecialCharPattern();
-	private String[] PostFix = GlobalContext.getInstance().getPostFix();
+	private int CharLimit = ContextConfig.getInstance().getCharLimit();
+	private int DocLimit = ContextConfig.getInstance().getDocLimit();
+	private String specialCharsPattern= ContextConfig.getInstance().getSpecialCharPattern();
+	private String[] PostFix = ContextConfig.getInstance().getPostFix();
 //	private String specialCharProcessingString;
 	
 	public Tokenizer() {
 	}
 	
 	
-	public DocByTerm[] termGenerate(Document document, int ngram) {
+	public DocTermFreqByTerm[] termGenerate(Document document, int ngram) {
 		/* Getting Target String */
 		String doc = document.getBody();
 		
 		/* Working Tokenize */
-		String delim = GlobalContext.getInstance().getDelim();
+		String delim = ContextConfig.getInstance().getDelim();
 
 		/* Setting Meta Data */
 		int DocID = document.getDocumentID();
 		String DocCategory = document.getCategory();
-		DocByTerm[] docByTermList = new DocByTerm[ngram];
+		DocTermFreqByTerm[] docByTermList = new DocTermFreqByTerm[ngram];
 		for (int i = 0; i < ngram; i++){
-			docByTermList[i] = new DocByTerm(DocID, i+1, DocCategory);
+			docByTermList[i] = new DocTermFreqByTerm(DocID, i+1, DocCategory);
 		}
 
 		/* checking document length */
@@ -48,7 +48,7 @@ public class Tokenizer {
 		return docByTermList;
 	}
 
-	private void getNgramTerms(DocByTerm[] docByTermList, ArrayList<String> termList) {
+	private void getNgramTerms(DocTermFreqByTerm[] docByTermList, ArrayList<String> termList) {
 		int genPoint = -1;
 		int gramPoint = -1;
 		int limitNGram = docByTermList.length;

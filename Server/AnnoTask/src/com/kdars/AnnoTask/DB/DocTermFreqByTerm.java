@@ -3,14 +3,14 @@ package com.kdars.AnnoTask.DB;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DocByTerm extends HashMap<String, Integer>{
+public class DocTermFreqByTerm extends HashMap<String, Integer>{
 	//Term, Freq
 	private int docID;
 	private String docTitle;
 	private String docCategory;
 	private int ngram;
 	
-	public DocByTerm(int docID, int ngram, String docCategory){
+	public DocTermFreqByTerm(int docID, int ngram, String docCategory){
 		this.docCategory = docCategory;
 		this.docID = docID;
 		this.ngram = ngram;

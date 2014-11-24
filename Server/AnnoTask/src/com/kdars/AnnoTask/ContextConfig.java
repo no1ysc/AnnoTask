@@ -2,9 +2,9 @@ package com.kdars.AnnoTask;
 
 import java.util.ArrayList;
 
-public class GlobalContext {
-	private static  GlobalContext globalContext = new GlobalContext();
-	public static GlobalContext getInstance(){
+public class ContextConfig {
+	private static  ContextConfig globalContext = new ContextConfig();
+	public static ContextConfig getInstance(){
 		return	globalContext;
 	}
 	

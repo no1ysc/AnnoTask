@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.kdars.AnnoTask.GlobalContext;
+import com.kdars.AnnoTask.ContextConfig;
 import com.kdars.AnnoTask.DB.ContentDBManager;
-import com.kdars.AnnoTask.DB.DocByTerm;
+import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 import com.kdars.AnnoTask.MapReduce.ContentProcessor.ProcessState;
 
@@ -24,7 +24,7 @@ public class Monitor extends Thread{
 	
 	public void run(){
 		while(true){
-			if(processQueue.size() < GlobalContext.getInstance().getMaxContentProcessor()){
+			if(processQueue.size() < ContextConfig.getInstance().getMaxContentProcessor()){
 				// create ContentProcessor and allocate job by giving doc_id for each thread and start running.
 				if(checkUpdates()){
 					jobAllocate().start();

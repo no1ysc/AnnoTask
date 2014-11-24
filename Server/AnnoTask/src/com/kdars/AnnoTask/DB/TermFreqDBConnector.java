@@ -6,11 +6,11 @@ import java.sql.SQLException;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import com.kdars.AnnoTask.GlobalContext;
+import com.kdars.AnnoTask.ContextConfig;
 
 public class TermFreqDBConnector {
 	private java.sql.Connection sqlConnection;
-	private String termFreqTable = GlobalContext.getInstance().TermFreq_DB_TABLE_NAME;
+	private String termFreqTable = ContextConfig.getInstance().TermFreq_DB_TABLE_NAME;
 	private String colName1 = "DocID_Term";
 	private String colName2 = "DocID";
 	private String colName3 = "DocCategory";
@@ -33,7 +33,7 @@ public class TermFreqDBConnector {
 		return false;
 	}
 	
-	public boolean addDoc(DocByTerm docByTerm) {
+	public boolean addDoc(DocTermFreqByTerm docByTerm) {
 //		java.sql.Connection sqlConnectionLocal = connect();
 		String docCategory = docByTerm.getDocCategory();
 		int docID = docByTerm.getDocID();
@@ -59,7 +59,7 @@ public class TermFreqDBConnector {
 		return true;
 	}
 	
-	public boolean deleteDoc(DocByTerm docByTerm){
+	public boolean deleteDoc(DocTermFreqByTerm docByTerm){
 //		java.sql.Connection sqlConnectionLocal = connect();
 		String docCategory = docByTerm.getDocCategory();
 		int docID = docByTerm.getDocID();
@@ -107,7 +107,7 @@ public class TermFreqDBConnector {
 	 * @param term
 	 * @return
 	 */
-	public TermByDoc queryTerm(String term){
+	public TermFreqByDoc queryTerm(String term){
 		return null;
 	}
 	
@@ -116,9 +116,9 @@ public class TermFreqDBConnector {
 	 * @param docID
 	 * @return
 	 */
-	public DocByTerm queryDoc(int docID){
+	public DocTermFreqByTerm queryDoc(int docID){
 //		java.sql.Connection sqlConnectionLocal = connect();
-		DocByTerm docIDCheck = null;
+		DocTermFreqByTerm docIDCheck = null;
 		ResultSet resultSet = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
@@ -139,7 +139,7 @@ public class TermFreqDBConnector {
 	}
 	
 	
-	public boolean queryTermFreqByDocIDandNGram(DocByTerm docByTerm){
+	public boolean queryTermFreqByDocIDandNGram(DocTermFreqByTerm docByTerm){
 //		java.sql.Connection sqlConnectionLocal = connect();
 		int docID = docByTerm.getDocID();
 		int nGram = docByTerm.getNGram();
@@ -173,10 +173,10 @@ public class TermFreqDBConnector {
 //		sqlConnection;
 		java.sql.Connection sqlConnection = null;
 		
-		String jdbcUrl = GlobalContext.getInstance().TermFreq_DB_JDBC_URL;
-		String DBName = GlobalContext.getInstance().TermFreq_DB_NAME;
-		String userID = GlobalContext.getInstance().TermFreq_DB_USER_ID;
-		String userPass = GlobalContext.getInstance().TermFreq_DB_USER_PASS;
+		String jdbcUrl = ContextConfig.getInstance().TermFreq_DB_JDBC_URL;
+		String DBName = ContextConfig.getInstance().TermFreq_DB_NAME;
+		String userID = ContextConfig.getInstance().TermFreq_DB_USER_ID;
+		String userPass = ContextConfig.getInstance().TermFreq_DB_USER_PASS;
 		
 		try{
 			Class.forName("com.mysql.jdbc.Driver");

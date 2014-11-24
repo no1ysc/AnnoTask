@@ -9,12 +9,12 @@ import javax.print.attribute.standard.PresentationDirection;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import com.kdars.AnnoTask.GlobalContext;
+import com.kdars.AnnoTask.ContextConfig;
 
 public class ContentDBConnector {
 	private java.sql.Connection sqlConnection;
-	private String contentTable = GlobalContext.getInstance().CONTENT_DB_contentTABLE_NAME;
-	private String jobTable = GlobalContext.getInstance().CONTENT_DB_jobTABLE_NAME;
+	private String contentTable = ContextConfig.getInstance().CONTENT_DB_contentTABLE_NAME;
+	private String jobTable = ContextConfig.getInstance().CONTENT_DB_jobTABLE_NAME;
 	
 	// These queries for creating trigger in ContentDB
 	String Query_FOR_CREATE_TRIGGER = "CREATE TRIGGER update_trigger AFTER INSERT ON " + contentTable + " FOR EACH ROW BEGIN INSERT INTO " + jobTable + "(doc_id, working_status, complete_status) VALUES (NEW.doc_id, 0, 0);" + "END;";
@@ -104,10 +104,10 @@ public class ContentDBConnector {
 	
 	
 	private boolean connect(){
-		String jdbcUrl = GlobalContext.getInstance().CONTENT_DB_JDBC_URL;
-		String DBName = GlobalContext.getInstance().CONTENT_DB_NAME;
-		String userID = GlobalContext.getInstance().CONTENT_DB_USER_ID;
-		String userPass = GlobalContext.getInstance().CONTENT_DB_USER_PASS;
+		String jdbcUrl = ContextConfig.getInstance().CONTENT_DB_JDBC_URL;
+		String DBName = ContextConfig.getInstance().CONTENT_DB_NAME;
+		String userID = ContextConfig.getInstance().CONTENT_DB_USER_ID;
+		String userPass = ContextConfig.getInstance().CONTENT_DB_USER_PASS;
 		
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
