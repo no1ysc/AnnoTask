@@ -88,8 +88,8 @@ public class Tokenizer {
 				}
 								
 				// 점검 다 끝났으니, 공백 붙이고 계속하자.
-				sb.setLength(0);
-				sb.append(procStr + " ");
+//				sb.setLength(0);
+				sb.append(" ");
 			}
 			
 			gramPoint = -1;
