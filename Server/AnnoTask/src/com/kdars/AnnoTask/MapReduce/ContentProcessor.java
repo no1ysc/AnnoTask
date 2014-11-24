@@ -18,8 +18,6 @@ public class ContentProcessor extends Thread{
 		Ready, Running, Completed 
 	}
 	private ProcessState state;
-		
-	private JobResultTable	jobResultTable;
 	
 	public ContentProcessor(int docID){
 		document = ContentDBManager.getInstance().getContent(docID);
