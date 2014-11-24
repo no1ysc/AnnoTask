@@ -40,11 +40,12 @@ public class TermFreqDBConnector {
 				stmt.executeUpdate("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "\", '" + String.valueOf(docID) + "', '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + String.valueOf(docByTerm.get(addTermCheck)) + "', '0');");
 
 			}
-
+			disconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "\", '" + String.valueOf(docID) + "', '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + "1', '0');");
 			e.printStackTrace();
+			disconnect();
 			return false;
 		}
 		
@@ -62,10 +63,11 @@ public class TermFreqDBConnector {
 				String deleteTerm = escape(deleteTermCheck);
 				stmt.execute("delete from "+ termFreqTable + " (" + colName4 + ") values (\"" + deleteTerm + "\");");
 			}
-
+			disconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			disconnect();
 			return false;
 		}
 		
@@ -113,7 +115,6 @@ public class TermFreqDBConnector {
 			resultSet = stmt.executeQuery("select * from " + termFreqTable + " where " + colName2 + " = '" + docID + "';");
 			/* exist check */
 			if(!resultSet.next()){
-				return null;
 			}
 			
 		} catch (SQLException e) {
@@ -169,8 +170,9 @@ public class TermFreqDBConnector {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			stmt.execute("use "+DBName);
 			stmt.close();
+			
 		}catch(SQLException e){
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("TermDB Connection Error.");
 			return false;
 		}
