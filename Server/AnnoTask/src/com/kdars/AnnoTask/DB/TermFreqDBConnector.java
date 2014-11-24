@@ -20,6 +20,12 @@ public class TermFreqDBConnector {
 	private String colName7 = "TermStatus";
 
 	public TermFreqDBConnector(){
+		//TODO: Connector 생성되면 connect 시도해서 성공하면 ok, 실패하면 표시.
+		java.sql.Connection sqlConnection;
+		if ((sqlConnection = connect()) == null){
+			System.exit(2);
+		}
+		disconnect(sqlConnection);
 //		while(connect());
 	}
 	
@@ -64,6 +70,7 @@ public class TermFreqDBConnector {
 				java.sql.Statement stmt = sqlConnectionLocal.createStatement();
 				String deleteTerm = escape(deleteTermCheck);
 				stmt.execute("delete from "+ termFreqTable + " (" + colName4 + ") values (\"" + deleteTerm + "\");");
+				stmt.close();
 			}
 			disconnect(sqlConnectionLocal);
 		} catch (SQLException e) {
@@ -120,6 +127,7 @@ public class TermFreqDBConnector {
 			if(!resultSet.next()){
 			}
 			
+			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			disconnect(sqlConnectionLocal);
@@ -145,6 +153,8 @@ public class TermFreqDBConnector {
 			while(resultSet.next()){
 				docByTerm.put(resultSet.getString(colName4), resultSet.getInt(colName6));
 			}
+			
+			stmt.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

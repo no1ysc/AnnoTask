@@ -16,7 +16,13 @@ public class ThesaurusDBConnector {
 	// TODO : 향후 한번에 조절하기 위해 모아야할 정보 : SQL 커넥션 정보,
 	
 	public ThesaurusDBConnector(){
-		connect(); 
+		//TODO: Connector 생성되면 connect 시도해서 성공하면 ok, 실패하면 표시.
+		java.sql.Connection sqlConnection;
+		if ((sqlConnection = connect()) == null){
+			System.exit(2);
+		}
+		disconnect(sqlConnection);
+//		while(connect());
 	}
 	
 	public boolean add(Thesaurus thes){
@@ -28,6 +34,7 @@ public class ThesaurusDBConnector {
 	}
 	
 	public Thesaurus query(String colName, String value){
+		java.sql.Connection sqlConnectionLocal = connect();
 		Thesaurus conceptFromTermCheck = new Thesaurus();
 		ResultSet resultSet = null;
 		try {
@@ -36,21 +43,25 @@ public class ThesaurusDBConnector {
 			resultSet = stmt.executeQuery("select * from " + conceptFromTable + " where " + colName + " = \"" + valueEscape + "\";");
 			/* exist check */
 			if(!resultSet.next()){
+				stmt.close();
+				disconnect(sqlConnectionLocal);
 				return null;
 			}
 			conceptFromTermCheck.getConceptFrom();
 			stmt.close();
-			disconnect();
+			disconnect(sqlConnectionLocal);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			disconnect();
 			e.printStackTrace();
+			disconnect(sqlConnectionLocal);
 		}
 		return conceptFromTermCheck;
 	}
 	
-	private boolean connect(){
+	private java.sql.Connection connect(){
 //		sqlConnection;
+		java.sql.Connection sqlConnection = null;
+		
 		String jdbcUrl = GlobalContext.getInstance().Thesaurus_DB_JDBC_URL;
 		String DBName = GlobalContext.getInstance().Thesaurus_DB_NAME;
 		String userID = GlobalContext.getInstance().Thesaurus_DB_USER_ID;
@@ -61,7 +72,7 @@ public class ThesaurusDBConnector {
 		}catch(ClassNotFoundException e){
 //			e.printStackTrace();
 			System.err.println("JDBC is not found.");
-			return false;
+			return null;
 		}
 		
 		try{
@@ -73,17 +84,21 @@ public class ThesaurusDBConnector {
 		}catch(SQLException e){
 //			e.printStackTrace();
 			System.err.println("ThesaurusDB Connection Error.");
-			return false;
+			disconnect(sqlConnection);
+			return null;
 		}
 		
-		return true;
+		return sqlConnection;
 	}
 	
-	private boolean disconnect(){
+	private boolean disconnect(java.sql.Connection sqlConnection){
 //		sqlConnection;
 		try {
 			sqlConnection.close();
 		} catch (SQLException e) {
+			System.err.println("ThesaurusDB Disconnection Error.");
+			return	false;
+		} catch (NullPointerException e) {
 			System.err.println("ThesaurusDB Disconnection Error.");
 			return	false;
 		}
