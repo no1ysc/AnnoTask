@@ -73,7 +73,12 @@ public class Tokenizer {
 				procStr = DeletePostFix(procStr);
 				
 				//저장
-				docByTermList[gramPoint].increaseFreq(procStr);
+				String finalStr = procStr.trim();
+				int spaceChecker = 0;
+				while (Pattern.compile(" ").matcher(finalStr).find()){
+					spaceChecker ++;
+				}
+				docByTermList[spaceChecker].increaseFreq(finalStr);
 
 
 				// 지금 만든게 특문으로 끝나는지 하는지.
