@@ -56,6 +56,7 @@ public class ContentDBConnector {
 											resultSet.getString(ContentDBSchema.category), unescape(resultSet.getString(ContentDBSchema.title)), unescape(resultSet.getString(ContentDBSchema.body)), 
 											resultSet.getString(ContentDBSchema.comments), resultSet.getString(ContentDBSchema.crawler_version));
 			}
+			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,10 +64,11 @@ public class ContentDBConnector {
 		return doc;
 	}
 
-	public boolean update(String columnName, int value){ //for job completion updates
+	public boolean update(String columnName, int id, int status){ //for job completion updates
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.execute("update " + jobTable + " set " + columnName + " = 1 where doc_id = " + value);
+			stmt.execute("update " + jobTable + " set " + columnName + " = " + status + " where doc_id = " + id);
+			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,23 +76,23 @@ public class ContentDBConnector {
 		return false;
 	}
 	
-	public ArrayList<Integer> checkUpdates(String columnName, int value){ 
+	public ArrayList<Integer> checkUpdates(String columnName, int id){ 
 		ResultSet resultSet = null;
 		ArrayList<Integer> docID_List = new ArrayList<Integer>();
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			// add docID_List where working_status is equal to 0
-			resultSet = stmt.executeQuery("select * from " + jobTable + " where " + columnName + " = " + String.valueOf(value));
-//			while(resultSet.next()){
-				resultSet.next();
-				docID_List.add(resultSet.getInt("doc_id"));
-				System.out.println(docID_List.get(docID_List.size()-1));
-//			}
+			resultSet = stmt.executeQuery("select * from " + jobTable + " where " + columnName + " = " + String.valueOf(id));
+			resultSet.next();
+			docID_List.add(resultSet.getInt("doc_id"));
 			
-			// update working_status
+			System.out.println(docID_List.get(docID_List.size()-1));
+			
+			// update working_status to 1
 			for(int i = 0; i< docID_List.size(); i++){
 				stmt.execute("update " + jobTable + " set working_status = 1 where doc_id = " + docID_List.get(i));
 			}
+			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -173,10 +175,7 @@ public class ContentDBConnector {
 		ResultSet resultSet = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			//resultSet = stmt.executeQuery("select * from "+ "test_table" + " where " + colName + " = " + String.valueOf(value));
-//			resultSet = stmt.executeQuery("select doc_id from content_v02 where news_date >= ('" + startDate + "') AND news_date <= ('" + endDate + "')");
 			resultSet = stmt.executeQuery("select * from content_v02 where date(news_date) >= '" + startDate + "' && date(news_date) <= '" + endDate + "'");
-//			select doc_id from content_v02 where date(news_date) >= '2014-11-20 00:00:00' && date(news_date) <= '2014-11-20 23:59:59';						
 			while (resultSet.next()){
 				if(sites.contains(resultSet.getString(ContentDBSchema.site_name))){ 
 					ret.add(new Document(resultSet.getInt(ContentDBSchema.doc_id), resultSet.getString(ContentDBSchema.category), resultSet.getString(ContentDBSchema.title)));

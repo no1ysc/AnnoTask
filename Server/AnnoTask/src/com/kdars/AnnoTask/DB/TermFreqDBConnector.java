@@ -218,9 +218,11 @@ public class TermFreqDBConnector {
 		try {
 			sqlConnection.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.err.println("TermDB Disconnection Error.");
 			return	false;
 		} catch (NullPointerException e) {
+			e.printStackTrace();
 			System.err.println("TermDB Disconnection Error.");
 			return	false;
 		}

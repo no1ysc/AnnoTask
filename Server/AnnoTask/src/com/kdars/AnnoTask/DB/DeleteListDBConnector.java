@@ -111,7 +111,7 @@ public class DeleteListDBConnector {
 			stmt.execute("use "+DBName);
 			stmt.close();
 		}catch(SQLException e){
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("DeleteListDB Connection Error.");
 			disconnect(sqlConnection);
 			return null;

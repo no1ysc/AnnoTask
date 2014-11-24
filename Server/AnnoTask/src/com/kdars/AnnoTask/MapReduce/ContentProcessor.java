@@ -1,5 +1,6 @@
 package com.kdars.AnnoTask.MapReduce;
 
+import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -33,14 +34,9 @@ public class ContentProcessor extends Thread{
 		StopWordRemover stopWordRemover = new StopWordRemover();
 	
 		extractTermStructure(tokenizer, dupChecker, stopWordRemover, document);
-//		for (int docID = this.startDocIDIndex; docID <= this.endDocIDIndex; docID++){
-//			Document document = ContentDBManager.getInstance().getContent(docID);
-//			
-//			extractTermStructure(tokenizer, dupChecker, stopWordRemover, document);
-//		}
 		
 		this.state = ProcessState.Completed;
-//		System.out.println("completed");
+		System.out.println("completed");
 	}
 
 	private void extractTermStructure(	Tokenizer tokenizer, 
@@ -61,7 +57,6 @@ public class ContentProcessor extends Thread{
 					
 				}
 			TermFreqDBManager.getInstance().addDocByTerm(docByTermList[i]);
-				
 			}
 	}
 	
@@ -71,5 +66,10 @@ public class ContentProcessor extends Thread{
 	
 	public Document getDocument(){
 		return document;
+	}
+	
+	public boolean rollbackWorkingStatus(int docID){
+		ContentDBManager.getInstance().updateWorkingStatus(docID, 0);
+		return false;
 	}
 }

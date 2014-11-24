@@ -81,7 +81,7 @@ public class ThesaurusDBConnector {
 			stmt.execute("use "+DBName);
 			stmt.close();
 		}catch(SQLException e){
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("ThesaurusDB Connection Error.");
 			disconnect(sqlConnection);
 			return null;

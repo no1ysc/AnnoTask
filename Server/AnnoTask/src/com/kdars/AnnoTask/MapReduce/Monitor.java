@@ -1,6 +1,9 @@
 package com.kdars.AnnoTask.MapReduce;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.kdars.AnnoTask.GlobalContext;
 import com.kdars.AnnoTask.DB.ContentDBManager;
@@ -11,6 +14,9 @@ import com.kdars.AnnoTask.MapReduce.ContentProcessor.ProcessState;
 public class Monitor extends Thread{
 	private ArrayList<ContentProcessor>	processQueue;
 	private ArrayList <Integer> jobCandidates = new ArrayList<Integer>();
+	
+	public long processStartTime;
+	
 	
 	public Monitor(){
 		processQueue = new ArrayList<ContentProcessor>();
@@ -30,8 +36,14 @@ public class Monitor extends Thread{
 			// 3. Check ContentProcessor's status, if complete then delete from ArrayList and set complete_status to 1 in job_table
 			for(int i = processQueue.size()-1; i >= 0 ; i--){
 				if(processQueue.get(i).getProcessState() == ProcessState.Completed){
-					ContentDBManager.getInstance().updateJobCompletion(processQueue.get(i).getDocument().getDocumentID()); 
+					ContentDBManager.getInstance().updateJobCompletion(processQueue.get(i).getDocument().getDocumentID());
 					processQueue.remove(i);
+				}
+				
+				if(((System.currentTimeMillis() - processStartTime) / (60*1000)) > 1){
+					processQueue.get(i).rollbackWorkingStatus(processQueue.get(i).getDocument().getDocumentID());
+					processQueue.remove(i);
+					System.out.println("process removed!");
 				}
 			}
 			
@@ -52,7 +64,8 @@ public class Monitor extends Thread{
 		ContentProcessor cp = new ContentProcessor(jobCandidates.get(0));
 		processQueue.add(cp);
 		jobCandidates.remove(0);
-		
+		processStartTime = System.currentTimeMillis();
+//		System.out.println(processStartTime);
 		return cp;
 	}
 	
