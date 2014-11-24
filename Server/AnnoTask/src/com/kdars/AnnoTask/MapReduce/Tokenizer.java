@@ -75,10 +75,12 @@ public class Tokenizer {
 				//저장
 				String finalStr = procStr.trim();
 				int spaceChecker = 0;
-				while (Pattern.compile(" ").matcher(finalStr).find()){
+				Matcher spaceDetector = Pattern.compile(" ").matcher(finalStr);
+				while (spaceDetector.find()){
+					spaceDetector.start();
 					spaceChecker ++;
 				}
-				docByTermList[spaceChecker].increaseFreq(finalStr);
+				docByTermList[spaceChecker].increaseFreq(finalStr.toLowerCase());
 
 
 				// 지금 만든게 특문으로 끝나는지 하는지.
