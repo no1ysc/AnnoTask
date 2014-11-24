@@ -58,7 +58,7 @@ public class Tokenizer {
 			while ((++gramPoint) < limitNGram){
 				// 일단 만들어.
 				String checkTerm = termList.get(genPoint + gramPoint);
-				if(checkTerm.length() <= CharLimit){
+				if(checkTerm.length() >= CharLimit){
 					break;
 				}
 				

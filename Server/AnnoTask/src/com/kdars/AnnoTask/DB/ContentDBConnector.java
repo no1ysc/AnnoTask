@@ -83,16 +83,17 @@ public class ContentDBConnector {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			// add docID_List where working_status is equal to 0
 			resultSet = stmt.executeQuery("select * from " + jobTable + " where " + columnName + " = " + String.valueOf(id));
-			resultSet.next();
-			docID_List.add(resultSet.getInt("doc_id"));
-			
-			System.out.println(docID_List.get(docID_List.size()-1));
-			
+			if(resultSet.next()){
+				docID_List.add(resultSet.getInt("doc_id"));
+	
+				System.out.println(docID_List.get(docID_List.size()-1));
+			}
 			// update working_status to 1
 			for(int i = 0; i< docID_List.size(); i++){
 				stmt.execute("update " + jobTable + " set working_status = 1 where doc_id = " + docID_List.get(i));
 			}
 			stmt.close();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

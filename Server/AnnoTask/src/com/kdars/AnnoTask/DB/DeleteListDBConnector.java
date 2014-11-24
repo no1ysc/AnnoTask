@@ -70,7 +70,7 @@ public class DeleteListDBConnector {
 			String deleteTermEscape = escape(deleteTerm);
 			resultSet = stmt.executeQuery("select * from " + deleteListTable + " where " + colName + " = \"" + deleteTermEscape + "\";");
 			/* exist check */
-			System.out.println(deleteTermEscape + "      " + resultSet);
+//			System.out.println(deleteTermEscape + "      " + resultSet);
 			if(!resultSet.next()){
 				stmt.close();
 				disconnect(sqlConnectionLocal);
