@@ -53,8 +53,11 @@ public class Monitor extends Thread{
 	// 	1. Check whether ContentProcessors are free or not 
 	//	2. Check job_table where working_status is 0, false; get doc_id
 	private boolean checkUpdates(){
-			jobCandidates.add(ContentDBManager.getInstance().getJobCandidates().get(0)); //TODO: 땜빵
+		ArrayList<Integer> temp = ContentDBManager.getInstance().getJobCandidates();
+		if(temp.size() != 0){
+			jobCandidates.add(ContentDBManager.getInstance().getJobCandidates().get(0));	
 //			System.out.println(jobCandidates.size());
+		}
 			
 			return !jobCandidates.isEmpty();
 	}
