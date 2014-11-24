@@ -87,7 +87,7 @@ public class TermFreqDBConnector {
 	 * @param term
 	 * @return
 	 */
-	public boolean 	deleteTerm(String term){
+	public boolean deleteTerm(String term){
 		return	false;
 	}
 	
