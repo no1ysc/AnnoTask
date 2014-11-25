@@ -9,32 +9,110 @@ using System.Windows.Forms;
 
 namespace AnnoTaskClient.Logic
 {
-	public class MainLogic
+	public class MainLogic : IDisposable
 	{
+		private bool running = true;
+
 		private ClientWormHole clientWormHole = new ClientWormHole();
 		private Dictionary<string, Frequency> termNFreq = new Dictionary<string, Frequency>(); // Term, Freq
 		
+
 		public MainLogic()
 		{
-
+			
 		}
+
+
+		#region 종료시 연결중이었던 쓰레드, 스트림 등 안끊김
+		// 종료시 연결중이었던 쓰레드, 스트림 등 안끊김, ///
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+			
+		}
+		bool disposed = false;
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+				return;
+
+			if (disposing)
+			{
+				// Free any other managed objects here.
+				//
+				running = false;
+				clientWormHole = null;
+			}
+			running = false;
+			clientWormHole = null;
+			// Free any unmanaged objects here.
+			//
+			disposed = true;
+		}
+
+		~MainLogic()
+		{
+			running = false;
+			clientWormHole = null;
+		}
+		#endregion
+
+
+
+
+
+		private LinkedList<string> commandQ = new LinkedList<string>();
 
 		public  void doWork()
 		{
 			if (clientWormHole.Connect())
 			{
 				// 서버 연결 안내문.
+				MessageBox.Show("서버 연결완료");
+				UIHandler.Instance.CommonUI.ButtonEnable = true;
 			}
 			else
 			{
 				// 서버 연결 실패, 지연됨.
+				MessageBox.Show("서버 연결실패");
+			}
+
+			while (running)
+			{
+				while(commandQ.Count != 0)
+				{
+					CommandParser();
+				}
+				Thread.Sleep(10);
 			}
 		}
 
+		private void CommandParser()
+		{
+			string command = commandQ.First.Value;
 		
+			lock (commandQ) 
+			{
+				commandQ.RemoveFirst();
+			}
+
+			switch(command)
+			{
+				case "Import":
+					importDoc();
+					UIHandler.Instance.CommonUI.ButtonEnable = true;
+					break;
+				default:
+					break;
+			}
+
+		}
 
 		private void importDoc()
 		{
+			clear();
+
 			string startDate = UIHandler.Instance.CommonUI.StartDate + " 00:00:00";
 			string endDate = UIHandler.Instance.CommonUI.EndDate + " 23:59:59";
 			bool naver = UIHandler.Instance.CommonUI.isNaver;
@@ -125,8 +203,7 @@ namespace AnnoTaskClient.Logic
 
 		internal void clickedImportDoc()
 		{
-			clear();
-			importDoc();
+			commandQ.AddLast("Import");
 		}
 
 		internal void cellContentDoubleClick(string p, int tabNumber)

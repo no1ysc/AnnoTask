@@ -63,6 +63,9 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.splitContainer3 = new System.Windows.Forms.SplitContainer();
 			this.wordList2 = new System.Windows.Forms.DataGridView();
+			this.Term2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.빈도수2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.출현문서수2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.label8 = new System.Windows.Forms.Label();
 			this.splitContainer4 = new System.Windows.Forms.SplitContainer();
 			this.docList2 = new System.Windows.Forms.TreeView();
@@ -73,6 +76,9 @@
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.splitContainer5 = new System.Windows.Forms.SplitContainer();
 			this.wordList3 = new System.Windows.Forms.DataGridView();
+			this.Term3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.빈도수3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.출현문서수3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.label11 = new System.Windows.Forms.Label();
 			this.splitContainer6 = new System.Windows.Forms.SplitContainer();
 			this.docList3 = new System.Windows.Forms.TreeView();
@@ -83,6 +89,9 @@
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.splitContainer7 = new System.Windows.Forms.SplitContainer();
 			this.wordList4 = new System.Windows.Forms.DataGridView();
+			this.Term4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.빈도수4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.출현문서수4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.label14 = new System.Windows.Forms.Label();
 			this.splitContainer8 = new System.Windows.Forms.SplitContainer();
 			this.docList4 = new System.Windows.Forms.TreeView();
@@ -90,15 +99,6 @@
 			this.article4 = new System.Windows.Forms.TextBox();
 			this.label16 = new System.Windows.Forms.Label();
 			this.vScrollBar12 = new System.Windows.Forms.VScrollBar();
-			this.Term2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.빈도수2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.출현문서수2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Term3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.빈도수3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.출현문서수3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Term4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.빈도수4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.출현문서수4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.frequencyBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.menuStrip1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
@@ -147,6 +147,7 @@
 			// 
 			// btnImportDoc
 			// 
+			this.btnImportDoc.Enabled = false;
 			this.btnImportDoc.Location = new System.Drawing.Point(553, 46);
 			this.btnImportDoc.Name = "btnImportDoc";
 			this.btnImportDoc.Size = new System.Drawing.Size(120, 23);
@@ -364,7 +365,7 @@
 			this.wordList1.Name = "wordList1";
 			this.wordList1.Size = new System.Drawing.Size(326, 385);
 			this.wordList1.TabIndex = 1;
-			this.wordList1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList1_CellContentDoubleClick);
+			this.wordList1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList1_CellClick);
 			// 
 			// Term
 			// 
@@ -512,7 +513,22 @@
 			this.wordList2.Name = "wordList2";
 			this.wordList2.Size = new System.Drawing.Size(326, 385);
 			this.wordList2.TabIndex = 1;
-			this.wordList2.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList2_CellContentDoubleClick);
+			this.wordList2.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList2_CellClick);
+			// 
+			// Term2
+			// 
+			this.Term2.HeaderText = "Term";
+			this.Term2.Name = "Term2";
+			// 
+			// 빈도수2
+			// 
+			this.빈도수2.HeaderText = "빈도수";
+			this.빈도수2.Name = "빈도수2";
+			// 
+			// 출현문서수2
+			// 
+			this.출현문서수2.HeaderText = "출현문서수";
+			this.출현문서수2.Name = "출현문서수2";
 			// 
 			// label8
 			// 
@@ -642,7 +658,22 @@
 			this.wordList3.Name = "wordList3";
 			this.wordList3.Size = new System.Drawing.Size(326, 385);
 			this.wordList3.TabIndex = 1;
-			this.wordList3.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList3_CellContentDoubleClick);
+			this.wordList3.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList3_CellClick);
+			// 
+			// Term3
+			// 
+			this.Term3.HeaderText = "Term";
+			this.Term3.Name = "Term3";
+			// 
+			// 빈도수3
+			// 
+			this.빈도수3.HeaderText = "빈도수";
+			this.빈도수3.Name = "빈도수3";
+			// 
+			// 출현문서수3
+			// 
+			this.출현문서수3.HeaderText = "출현문서수";
+			this.출현문서수3.Name = "출현문서수3";
 			// 
 			// label11
 			// 
@@ -773,7 +804,22 @@
 			this.wordList4.Name = "wordList4";
 			this.wordList4.Size = new System.Drawing.Size(326, 385);
 			this.wordList4.TabIndex = 1;
-			this.wordList4.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList4_CellContentDoubleClick);
+			this.wordList4.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList4_CellClick);
+			// 
+			// Term4
+			// 
+			this.Term4.HeaderText = "Term";
+			this.Term4.Name = "Term4";
+			// 
+			// 빈도수4
+			// 
+			this.빈도수4.HeaderText = "빈도수";
+			this.빈도수4.Name = "빈도수4";
+			// 
+			// 출현문서수4
+			// 
+			this.출현문서수4.HeaderText = "출현문서수";
+			this.출현문서수4.Name = "출현문서수4";
 			// 
 			// label14
 			// 
@@ -854,51 +900,6 @@
 			this.vScrollBar12.Name = "vScrollBar12";
 			this.vScrollBar12.Size = new System.Drawing.Size(17, 412);
 			this.vScrollBar12.TabIndex = 10;
-			// 
-			// Term2
-			// 
-			this.Term2.HeaderText = "Term";
-			this.Term2.Name = "Term2";
-			// 
-			// 빈도수2
-			// 
-			this.빈도수2.HeaderText = "빈도수";
-			this.빈도수2.Name = "빈도수2";
-			// 
-			// 출현문서수2
-			// 
-			this.출현문서수2.HeaderText = "출현문서수";
-			this.출현문서수2.Name = "출현문서수2";
-			// 
-			// Term3
-			// 
-			this.Term3.HeaderText = "Term";
-			this.Term3.Name = "Term3";
-			// 
-			// 빈도수3
-			// 
-			this.빈도수3.HeaderText = "빈도수";
-			this.빈도수3.Name = "빈도수3";
-			// 
-			// 출현문서수3
-			// 
-			this.출현문서수3.HeaderText = "출현문서수";
-			this.출현문서수3.Name = "출현문서수3";
-			// 
-			// Term4
-			// 
-			this.Term4.HeaderText = "Term";
-			this.Term4.Name = "Term4";
-			// 
-			// 빈도수4
-			// 
-			this.빈도수4.HeaderText = "빈도수";
-			this.빈도수4.Name = "빈도수4";
-			// 
-			// 출현문서수4
-			// 
-			this.출현문서수4.HeaderText = "출현문서수";
-			this.출현문서수4.Name = "출현문서수4";
 			// 
 			// frequencyBindingSource
 			// 
@@ -994,7 +995,6 @@
 
 		#endregion
 
-		private System.Windows.Forms.Button btnImportDoc;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label7;
@@ -1065,6 +1065,7 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn Term4;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 빈도수4;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 출현문서수4;
+		public System.Windows.Forms.Button btnImportDoc;
 	}
 }
 
