@@ -20,13 +20,16 @@ public class ContentDBManager {
 	
 	public ArrayList<Integer> getJobCandidates(){
 		ArrayList <Integer> jobCandidates = new ArrayList<Integer>();
-		jobCandidates = contentDB.checkUpdates("working_status", 0); // tableName, colName, value
-		
+		jobCandidates = contentDB.checkUpdates("working_status", 0); // colName, value, status
 		return jobCandidates;
 	}
 
 	public void updateJobCompletion(int docID) {
-		contentDB.update("complete_status", docID);
+		contentDB.update("complete_status", docID, 1);
+	}
+	
+	public void updateWorkingStatus(int docID, int value){
+		contentDB.update("working_status", docID, value);
 	}
 
 	public ArrayList<Document> getDocIDsFromDate(String startDate,

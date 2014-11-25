@@ -19,7 +19,7 @@ public class GlobalContext {
 	/* N-Gram Setting */
 	
 	/* Delimiter Setting */
-	private String DELIM = " \r\n";
+	private String DELIM = " \r\n\t";
 	public String getDelim(){
 		return this.DELIM;
 	}
@@ -79,6 +79,7 @@ public class GlobalContext {
 	
 	/* DeleteList DB Connect Info*/
 	public final String DeleteList_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/deletelistdb";
+//	public final String DeleteList_DB_JDBC_URL = "jdbc:mysql://localhost:3306/deletelistdb";
 	public final String DeleteList_DB_NAME = "deletelistdb"; 
 	public final String DeleteList_DB_USER_ID = "root";
 	public final String DeleteList_DB_USER_PASS = "jinqkim69";
@@ -87,6 +88,7 @@ public class GlobalContext {
 
 	/* TermFreq DB Connect Info*/
 	public final String TermFreq_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/termfreqdb";
+//	public final String TermFreq_DB_JDBC_URL = "jdbc:mysql://localhost:3306/termfreqdb";
 	public final String TermFreq_DB_NAME = "termfreqdb"; 
 	public final String TermFreq_DB_USER_ID = "root";
 	public final String TermFreq_DB_USER_PASS = "jinqkim69";
@@ -95,6 +97,7 @@ public class GlobalContext {
 	
 	/* Thesaurus DB Connect Info*/
 	public final String Thesaurus_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/thesaurusdb";
+//	public final String Thesaurus_DB_JDBC_URL = "jdbc:mysql://localhost:3306/thesaurusdb";
 	public final String Thesaurus_DB_NAME = "thesaurusdb"; 
 	public final String Thesaurus_DB_USER_ID = "root";
 	public final String Thesaurus_DB_USER_PASS = "jinqkim69";

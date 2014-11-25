@@ -1,7 +1,7 @@
 package com.kdars.AnnoTask.DB;
 
 public class ContentDBSchema {
-	final static int doc_id = 1;
+	final static int doc_id = 1; 
 	final static int url = 2;
 	final static int collect_date = 3;
 	final static int news_date = 4;

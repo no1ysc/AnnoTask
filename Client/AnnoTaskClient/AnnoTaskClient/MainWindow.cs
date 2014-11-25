@@ -17,16 +17,26 @@ namespace AnnoTaskClient
 	public partial class MainWindow : Form
 	{
 		private MainLogic logic = new MainLogic();
+		private Thread mainLogicWorker;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			Thread worker = new Thread(new ThreadStart(logic.ConnectServer));
+			this.Disposed += exitWindow;
 
-			worker.Start();
-			
+			mainLogicWorker = new Thread(new ThreadStart(logic.doWork));
+
+			mainLogicWorker.Start();
 			UIHandler.Instance.runUIHandler(this);
+		}
+
+		// 종료 이벤트 핸들러
+		private void exitWindow(object sender, EventArgs e)
+		{
+			// 메인로직 쓰레드 끊어줌. 
+			//mainLogicWorker.Abort();
+			logic = null;
 		}
 
 		private void clearUIContents()
@@ -140,6 +150,6 @@ namespace AnnoTaskClient
 				this.article4.Text = article;
 			}
 		}
-
+	
 	}
 }
