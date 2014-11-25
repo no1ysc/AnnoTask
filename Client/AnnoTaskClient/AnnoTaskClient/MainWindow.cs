@@ -61,14 +61,10 @@ namespace AnnoTaskClient
 
 		private void btnImportHandler()
 		{
+			btnImportDoc.Enabled = false;
 			clearUIContents();
 
-			Button btnThis = this.btnImportDoc;
-			//btnThis.Enabled = false;
-
 			logic.clickedImportDoc();
-
-			btnThis.Enabled = true;
 		}
 
 		private void btnImportDoc_Click(object sender, EventArgs e)

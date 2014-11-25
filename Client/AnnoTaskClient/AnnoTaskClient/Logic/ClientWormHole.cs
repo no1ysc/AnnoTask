@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AnnoTaskClient.Logic
 {
@@ -26,11 +27,13 @@ namespace AnnoTaskClient.Logic
 			{
 				if (connectServer())
 				{
+					MessageBox.Show("서버에 연결 되었습니다.");
 					return true;
 				}
 
 				if (failCount > Configure.Instance.ConnectionWaitTimeS)
 				{
+					MessageBox.Show("서버에 연결하지 못했습니다.");
 					return false;
 				}
 				Thread.Sleep(1000);
@@ -54,6 +57,8 @@ namespace AnnoTaskClient.Logic
 			//m_Reader = new StreamReader(m_ns);
 			m_Writer = new StreamWriter(m_ns);
 			m_Reader = new StreamReader(m_ns, Encoding.UTF8);
+			m_ns.ReadTimeout = 30000;
+			
 			//m_Writer = new StreamWriter(m_ns, Encoding.UTF8);
 
 			return true;
@@ -101,12 +106,21 @@ namespace AnnoTaskClient.Logic
 			DocByTerm[]	docByTerms = new DocByTerm[docCount.doucumentCount];
 			for (int transferCount = 0; transferCount < docCount.doucumentCount; transferCount++ )
 			{
-				string json1_4 = m_Reader.ReadLine();
+				string json1_4 = null;
+				json1_4 = m_Reader.ReadLine();
+				if (json1_4 == null)
+				{
+					// 타임아웃 걸리면 이쪽으로. 사용자에게 인지해 줄 필요가 있나?
+					// 후행처리 필요, 서버와의 재연결이 필요함, 시점은 언제가 좋을지?
+					UIHandler.Instance.CommonUI.DocCount = transferCount / 4;
+					goto EndOfInstance;
+				}
+
 				Command.Server2Client.TermTransfer term = new JsonConverter<Command.Server2Client.TermTransfer>().Json2Object(json1_4);
 				docByTerms[transferCount] = new DocByTerm();
 				docByTerms[transferCount].DocID = term.docID;
 				docByTerms[transferCount].Title = term.docTitle;
-				docByTerms[transferCount].DocCategory = term.docCategory;
+				docByTerms[transferCount].DocCategory = (term.docCategory != null)?term.docCategory:"null";
 				docByTerms[transferCount].Ngram = term.ngram;
 				docByTerms[transferCount].Terms = new JsonConverter<Dictionary<string, int>>().Json2Object(term.termsJson);
 
@@ -116,7 +130,7 @@ namespace AnnoTaskClient.Logic
 
 			string json1_5 = m_Reader.ReadLine();
 			Command.Server2Client.NotifyTransferEnd end = new JsonConverter<Command.Server2Client.NotifyTransferEnd>().Json2Object(json1_5);
-
+EndOfInstance:
 			UIHandler.Instance.CommonUI.ProgressBar = 50;
 			// 완료.....
 
