@@ -19,7 +19,9 @@ namespace AnnoTaskClient.Logic
 
 		}
 
-		public  void ConnectServer()
+		private LinkedList<string> commandQ = new LinkedList<string>();
+
+		public  void doWork()
 		{
 			if (clientWormHole.Connect())
 			{
@@ -32,12 +34,40 @@ namespace AnnoTaskClient.Logic
 				// 서버 연결 실패, 지연됨.
 				MessageBox.Show("서버 연결실패");
 			}
+
+			while(true)
+			{
+				while(commandQ.Count != 0)
+				{
+					CommandParser();
+				}
+		}
 		}
 
+		private void CommandParser()
+		{
+			string command = commandQ.First.Value;
 		
+			lock (commandQ) 
+			{
+				commandQ.RemoveFirst();
+			}
+
+			switch(command)
+			{
+				case "Import":
+					importDoc();
+					break;
+				default:
+					break;
+			}
+
+		}
 
 		private void importDoc()
 		{
+			clear();
+
 			string startDate = UIHandler.Instance.CommonUI.StartDate + " 00:00:00";
 			string endDate = UIHandler.Instance.CommonUI.EndDate + " 23:59:59";
 			bool naver = UIHandler.Instance.CommonUI.isNaver;
@@ -128,10 +158,7 @@ namespace AnnoTaskClient.Logic
 
 		internal void clickedImportDoc()
 		{
-			clear();
-			importDoc();
-
-			UIHandler.Instance.CommonUI.ButtonEnable = true;
+			commandQ.AddLast("Import");
 		}
 
 		internal void cellContentDoubleClick(string p, int tabNumber)

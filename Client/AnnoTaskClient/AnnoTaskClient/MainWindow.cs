@@ -61,10 +61,10 @@ namespace AnnoTaskClient
 
 		private void btnImportHandler()
 		{
+			btnImportDoc.Enabled = false;
 			clearUIContents();
 
-			Thread worker = new Thread(new ThreadStart(logic.clickedImportDoc));
-			worker.Start();
+			logic.clickedImportDoc();
 		}
 
 		private void btnImportDoc_Click(object sender, EventArgs e)
@@ -140,6 +140,6 @@ namespace AnnoTaskClient
 				this.article4.Text = article;
 			}
 		}
-	
+
 	}
 }
