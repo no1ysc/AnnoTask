@@ -19,6 +19,7 @@ namespace AnnoTaskClient.UIController
 		private delegate void SetTermCountDelegate(int value);
 		private delegate void SetDocCountDelegate(int value);
 		private delegate void SetProgressValueDelegate(int value);
+		private delegate void SetButtonEnable(bool bState);
 
 		private void setTermCount(int value)
 		{
@@ -34,6 +35,10 @@ namespace AnnoTaskClient.UIController
 		{
 			mainWindow.progressBar.Value = value;
 			mainWindow.progressLabel.Text = value.ToString() + "%";
+		}
+		private void setButtonEnableState(bool bState)
+		{
+			mainWindow.btnImportDoc.Enabled = bState;
 		}
 
 		public int TermCount
@@ -66,6 +71,14 @@ namespace AnnoTaskClient.UIController
 				mainWindow.Invoke(progress, new object[] { progressBar });
 			}
 			get { return progressBar; }
+		}
+		public bool ButtonEnable
+		{
+			set
+			{
+				SetButtonEnable sbt = new SetButtonEnable(setButtonEnableState);
+				mainWindow.Invoke(sbt, new object[] { value });
+			}
 		}
 		public string StartDate
 		{

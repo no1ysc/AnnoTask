@@ -9,11 +9,19 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AnnoTaskClient.Logic
 {
 	class ClientWormHole
 	{
+		~ClientWormHole()
+		{
+			m_ns.Close();
+			m_Reader.Close();
+			m_Writer.Close();
+			m_client.Close();
+		}
 
 		internal bool Connect()
 		{
@@ -26,11 +34,13 @@ namespace AnnoTaskClient.Logic
 			{
 				if (connectServer())
 				{
+					MessageBox.Show("서버에 연결 되었습니다.");
 					return true;
 				}
 
 				if (failCount > Configure.Instance.ConnectionWaitTimeS)
 				{
+					MessageBox.Show("서버에 연결하지 못했습니다.");
 					return false;
 				}
 				Thread.Sleep(1000);
@@ -44,16 +54,25 @@ namespace AnnoTaskClient.Logic
 		private StreamWriter m_Writer;
 		private bool connectServer()
 		{
-			m_client = new TcpClient(Configure.Instance.ServerIP, Configure.Instance.ServerPort);
-			if (!m_client.Connected)
+			try
+			{
+				m_client = new TcpClient(Configure.Instance.ServerIP, Configure.Instance.ServerPort);
+				if (!m_client.Connected)
+				{
+					return false;
+				}
+			}
+			catch (SocketException e)
 			{
 				return false;
 			}
-			
+
 			m_ns = m_client.GetStream();
 			//m_Reader = new StreamReader(m_ns);
 			m_Writer = new StreamWriter(m_ns);
 			m_Reader = new StreamReader(m_ns, Encoding.UTF8);
+			m_ns.ReadTimeout = 30000;
+			
 			//m_Writer = new StreamWriter(m_ns, Encoding.UTF8);
 
 			return true;
@@ -101,12 +120,34 @@ namespace AnnoTaskClient.Logic
 			DocByTerm[]	docByTerms = new DocByTerm[docCount.doucumentCount];
 			for (int transferCount = 0; transferCount < docCount.doucumentCount; transferCount++ )
 			{
-				string json1_4 = m_Reader.ReadLine();
+				string json1_4 = null;
+				try
+				{
+					json1_4 = m_Reader.ReadLine();
+					if (json1_4 == null)
+					{
+						// 타임아웃 걸리면 이쪽으로. 사용자에게 인지해 줄 필요가 있나?
+						// 후행처리 필요, 서버와의 재연결이 필요함, 시점은 언제가 좋을지?
+						UIHandler.Instance.CommonUI.DocCount = transferCount / 4;
+						goto EndOfInstance;
+					}
+				}
+				catch (IOException e)
+				{
+					// 서버쪽에서 어떠한 이유든 병목걸리면 이 익셉션 뱃을 수 있음.
+					// 이거 뜨면 연결 끊어진거라 보면되고, 프로그램이 종료될 익셉션임.
+					// 여기서 잡아주면 여지껏 받아온 텀들은 보여줄 수는 있음.
+					// 단, 후행작업(Thesaurus 처리 등)을 하기 위해서는 재커넥션 하는 로직이 필요함.
+					UIHandler.Instance.CommonUI.DocCount = transferCount / 4;
+					goto EndOfInstance;
+				}
+				
+
 				Command.Server2Client.TermTransfer term = new JsonConverter<Command.Server2Client.TermTransfer>().Json2Object(json1_4);
 				docByTerms[transferCount] = new DocByTerm();
 				docByTerms[transferCount].DocID = term.docID;
 				docByTerms[transferCount].Title = term.docTitle;
-				docByTerms[transferCount].DocCategory = term.docCategory;
+				docByTerms[transferCount].DocCategory = (term.docCategory != null)?term.docCategory:"null";
 				docByTerms[transferCount].Ngram = term.ngram;
 				docByTerms[transferCount].Terms = new JsonConverter<Dictionary<string, int>>().Json2Object(term.termsJson);
 
@@ -116,7 +157,7 @@ namespace AnnoTaskClient.Logic
 
 			string json1_5 = m_Reader.ReadLine();
 			Command.Server2Client.NotifyTransferEnd end = new JsonConverter<Command.Server2Client.NotifyTransferEnd>().Json2Object(json1_5);
-
+EndOfInstance:
 			UIHandler.Instance.CommonUI.ProgressBar = 50;
 			// 완료.....
 
@@ -127,17 +168,25 @@ namespace AnnoTaskClient.Logic
 		{
 			Command.Client2Server.DocumentRequest docReq = new Command.Client2Server.DocumentRequest();
 			docReq.documentID = targetID;
+			Command.Server2Client.DocumentResponse document;
 
-			// 2-1 보냄.
-			string json = new JsonConverter<Command.Client2Server.DocumentRequest>().Object2Json(docReq);
-			m_Writer.WriteLine(json);
-			m_Writer.Flush();
+			try
+			{
+				// 2-1 보냄.
+				string json = new JsonConverter<Command.Client2Server.DocumentRequest>().Object2Json(docReq);
+				m_Writer.WriteLine(json);
+				m_Writer.Flush();
 
-			// 2-2 받음.
-			string jsonRes = m_Reader.ReadLine();
-			Command.Server2Client.DocumentResponse document = new JsonConverter<Command.Server2Client.DocumentResponse>().Json2Object(jsonRes);
-
-			return document.body;
+				// 2-2 받음.
+				string jsonRes = m_Reader.ReadLine();
+				document = new JsonConverter<Command.Server2Client.DocumentResponse>().Json2Object(jsonRes);
+				
+				return document.body;
+			}
+			catch (Exception e)
+			{
+				return null;
+			}
 		}
 	}
 }
