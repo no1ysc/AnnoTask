@@ -55,7 +55,7 @@ public class Monitor extends Thread{
 	private boolean checkUpdates(){
 		ArrayList<Integer> temp = ContentDBManager.getInstance().getJobCandidates();
 		if(temp.size() != 0){
-			jobCandidates.add(ContentDBManager.getInstance().getJobCandidates().get(0));	
+			jobCandidates.add(temp.get(0));
 //			System.out.println(jobCandidates.size());
 		}
 			

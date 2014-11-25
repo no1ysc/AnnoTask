@@ -22,6 +22,7 @@ public class ContentDBConnector {
 	public ContentDBConnector(){
 		while (!connect());
 		setTrigger();
+		//생성자에서 잘못된 녀석들 정정 할 것.
 	}
 	
 	private void setTrigger() {
@@ -81,6 +82,7 @@ public class ContentDBConnector {
 		ArrayList<Integer> docID_List = new ArrayList<Integer>();
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
+			
 			// add docID_List where working_status is equal to 0
 			resultSet = stmt.executeQuery("select * from " + jobTable + " where " + columnName + " = " + String.valueOf(id));
 			if(resultSet.next()){
@@ -163,13 +165,13 @@ public class ContentDBConnector {
 		ArrayList<Document> ret = new ArrayList<Document>();
 		ArrayList<String> sites = new ArrayList<String>();
 		if (bNaver){
-			sites.add("Naver");
+			sites.add("NAVER");
 		}
 		if (bDaum){
-			sites.add("Daum");
+			sites.add("DAUM");
 		}
 		if (bNate){
-			sites.add("Nate");
+			sites.add("NATE");
 		}
 		
 		
