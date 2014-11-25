@@ -151,6 +151,9 @@ public class Tokenizer {
 		
 		while (endIndex < doc.length()){
 			int adaptiveEndIndex = doc.indexOf(". ", endIndex);
+			if (adaptiveEndIndex <= 0){
+				break;
+			}
 			splitdoc.add(doc.substring(startIndex, adaptiveEndIndex));
 			startIndex = adaptiveEndIndex;
 			endIndex = adaptiveEndIndex + LengthLimit;
