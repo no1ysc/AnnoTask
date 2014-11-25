@@ -23,6 +23,7 @@ public class ContentDBConnector {
 		while (!connect());
 		setTrigger();
 		//생성자에서 잘못된 녀석들 정정 할 것.
+		cleanJobTable();
 	}
 	
 	private void setTrigger() {
@@ -143,6 +144,17 @@ public class ContentDBConnector {
 		}
 		
 		return true;
+	}
+	
+	private void cleanJobTable(){
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute("update " + jobTable + " set working_status = 0 where complete_status = 0 and working_status = 1");
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void reConnect(){
