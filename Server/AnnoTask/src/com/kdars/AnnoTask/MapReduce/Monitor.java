@@ -28,7 +28,7 @@ public class Monitor extends Thread{
 				// create ContentProcessor and allocate job by giving doc_id for each thread and start running.
 				if(checkUpdates()){
 					jobAllocate().start();
-				}else{
+				}else{ 
 					delayMonitor(1000);
 				}
 			}
@@ -51,7 +51,7 @@ public class Monitor extends Thread{
 	}
 	
 	// 	1. Check whether ContentProcessors are free or not 
-	//	2. Check job_table where working_status is 0, false; get doc_id
+	//	2. Check job_table where working_status is 0, false; get doc_id 
 	private boolean checkUpdates(){
 		ArrayList<Integer> temp = ContentDBManager.getInstance().getJobCandidates();
 		if(temp.size() != 0){

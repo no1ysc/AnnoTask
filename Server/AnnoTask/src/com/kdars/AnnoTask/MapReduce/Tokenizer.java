@@ -27,7 +27,7 @@ public class Tokenizer {
 		String delim = ContextConfig.getInstance().getDelim();
 
 		/* Setting Meta Data */
-		int DocID = document.getDocumentID();
+		int DocID = document.getDocumentID(); 
 		String DocCategory = document.getCategory();
 		DocTermFreqByTerm[] docByTermList = new DocTermFreqByTerm[ngram];
 		for (int i = 0; i < ngram; i++){
@@ -36,7 +36,6 @@ public class Tokenizer {
 
 		/* checking document length */
 		ArrayList<String> checkedDoc = docAndTermLengthCheck(doc, DocLimit);	 
-		
 		for (int i = 0; i < checkedDoc.size(); i++){
 			/* Tokenizing according to delimiter configuration */
 			ArrayList<String> termList = (ArrayList<String>) ((ArrayList) Collections.list(new StringTokenizer(checkedDoc.get(i), delim)));
@@ -53,7 +52,7 @@ public class Tokenizer {
 		int gramPoint = -1;
 		int limitNGram = docByTermList.length;
 				
-		while ((++genPoint) < termList.size()){
+		while ((++genPoint) < termList.size()){ 
 			StringBuilder sb = new StringBuilder();
 			while ((++gramPoint) < limitNGram){
 				// 일단 만들어.
@@ -70,7 +69,7 @@ public class Tokenizer {
 				}
 				
 				// 은는이가 뜯음.
-				procStr = DeletePostFix(procStr);
+				procStr = deletePostFix(procStr);
 				
 				//저장
 				String finalStr = procStr.trim();
@@ -174,7 +173,7 @@ public class Tokenizer {
 		return intArray;
 	}
 	
-	private String DeletePostFix(String processedString){
+	private String deletePostFix(String processedString){
 		
 		for (int postFixLength = PostFix.length; postFixLength > 0; postFixLength--){
 			if (processedString.length() <= postFixLength){

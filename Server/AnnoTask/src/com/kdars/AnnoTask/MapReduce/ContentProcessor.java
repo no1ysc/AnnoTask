@@ -50,7 +50,7 @@ public class ContentProcessor extends Thread{
 				for (Iterator<Map.Entry<String, Integer>> iter = docByTermList[i].entrySet().iterator(); iter.hasNext();){
 					Map.Entry<String, Integer> entry = iter.next();
 					String keyCheck = entry.getKey();
-					if (stopWordRemover.isStopWord(keyCheck) ){//|| dupChecker.duplicationCheck(keyCheck)){
+					if (stopWordRemover.isStopWord(keyCheck) || dupChecker.duplicationCheck(keyCheck)){
 						iter.remove();
 						continue;
 					}
