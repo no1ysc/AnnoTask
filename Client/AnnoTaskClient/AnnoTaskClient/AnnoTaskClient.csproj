@@ -54,6 +54,7 @@
     <Compile Include="Logic\Frequency.cs" />
     <Compile Include="Logic\JsonConverter.cs" />
     <Compile Include="Logic\MainLogic.cs" />
+    <Compile Include="Logic\POSDefinition.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
