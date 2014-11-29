@@ -64,7 +64,7 @@
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="main.cs" />
-    <Compile Include="Logic\OnlineInformation.cs" />
+    <Compile Include="OnlineInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UIController\CommonUI.cs" />
     <Compile Include="UIController\NGramUI4.cs" />
