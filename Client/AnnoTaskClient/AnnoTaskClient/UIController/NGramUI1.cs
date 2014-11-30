@@ -55,7 +55,6 @@ namespace AnnoTaskClient.UIController
 					child.Nodes.Add(term.Category[category][docID]);
 				}
 			}
-
 			mainWindow.docList1.Nodes.Add(root);
 		}
 	}
