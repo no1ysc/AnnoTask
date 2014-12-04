@@ -99,7 +99,22 @@ public class TermFreqDBConnector {
 	 * @return
 	 */
 	public boolean deleteTerm(String term){
-		return	false;
+//		java.sql.Connection sqlConnectionLocal = connect();
+
+		try {
+				java.sql.Statement stmt = sqlConnection.createStatement();
+				String deleteTerm = escape(term);
+				stmt.execute("delete from "+ termFreqTable + " (" + colName4 + ") values (\"" + deleteTerm + "\");");
+				stmt.close();
+//			disconnect(sqlConnectionLocal);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+//			disconnect(sqlConnectionLocal);
+			return false;
+		}
+		
+		return true;
 	}
 	
 	/**
