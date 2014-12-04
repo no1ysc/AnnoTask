@@ -155,10 +155,10 @@ public class TermFreqDBConnector {
 		
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			resultSet = stmt.executeQuery("select * from " + termFreqTable + " where " + colName2 + " = " + docID + " AND " + colName5 + " = " + nGram + ";");
+			resultSet = stmt.executeQuery("select * from " + termFreqTable + " where " + colName2 + " = " + docID + " AND " + colName5 + " = " + nGram + " AND TermStatus = 0;");
 			
 			while(resultSet.next()){
-				docByTerm.put(resultSet.getString(colName4), resultSet.getInt(colName6));
+				docByTerm.put(resultSet.getString(colName4), resultSet.getInt(colName6)); //colName4는 term, colName6는 term freq.
 			}
 			
 			stmt.close();
