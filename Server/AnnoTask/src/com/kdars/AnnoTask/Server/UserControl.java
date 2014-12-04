@@ -113,7 +113,8 @@ public class UserControl extends Thread{
 		transferObject(documentRes);
 	}
 
-	private void requestTermTransferHandler(RequestTermTransfer requestTermTransfer) {
+	private void requestTermTransferHandler(
+			RequestTermTransfer requestTermTransfer) {
 		// TODO 문서전송 시작.!
 		
 		/*
