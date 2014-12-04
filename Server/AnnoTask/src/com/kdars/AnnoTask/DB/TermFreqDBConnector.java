@@ -90,6 +90,13 @@ public class TermFreqDBConnector {
 	 * @return 락에 성공하면 true, 실패하면 False
 	 */
 	public boolean updateTermLockState(String term, int termHolder){
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute("update TFtable set TermStatus = " + termHolder + " where Term = " + term);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return	true;
 	}
 	
