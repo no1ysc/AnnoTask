@@ -151,9 +151,15 @@ namespace AnnoTaskClient
 			}
 		}
 
-        private void button2_Click(object sender, EventArgs e)
+        // 불용어 추가 버튼
+        private void btnAddDeleteList_Click(object sender, EventArgs e)
         {
+            btnAddDeleteListHandler();
+        }
 
+        private void btnAddDeleteListHandler()
+        {
+            throw new NotImplementedException();
         }
 	
 	}

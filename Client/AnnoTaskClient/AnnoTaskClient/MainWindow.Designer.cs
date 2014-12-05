@@ -930,7 +930,7 @@ namespace AnnoTaskClient
             this.button2.TabIndex = 26;
             this.button2.Text = "불용어 추가";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.btnAddDeleteList_Click);
             // 
             // MainWindow
             // 

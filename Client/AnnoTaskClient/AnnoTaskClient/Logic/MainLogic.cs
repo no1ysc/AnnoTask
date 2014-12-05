@@ -103,6 +103,8 @@ namespace AnnoTaskClient.Logic
 					importDoc();
 					UIHandler.Instance.CommonUI.ButtonEnable = true;
 					break;
+                case "AddDeleteList":
+                    break;
 				default:
 					break;
 			}
