@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.kdars.AnnoTask.ContextConfig;
 import com.kdars.AnnoTask.DB.ContentDBManager;
+import com.kdars.AnnoTask.DB.DeleteListDBManager;
 import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 import com.kdars.AnnoTask.DB.Document;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
@@ -92,6 +93,19 @@ public class UserControl extends Thread{
 			DocumentRequest documentRequest = new JSONDeserializer<DocumentRequest>().deserialize(commandFromUser, DocumentRequest.class);
 			documentRequestHandler(documentRequest);
 		}
+		
+		// 불용어 추가 요청시
+		if(commandFromUser.contains("addDeleteList")){
+			ArrayList<String> requestedDeleteList = new JSONDeserializer<ArrayList<String>>().deserialize(commandFromUser, String.class); //TODO: String.class가 맞는지 확인해야함...
+			deleteListRequestHandler(requestedDeleteList);
+		}
+	}
+
+	private void deleteListRequestHandler(ArrayList<String> requestedDeleteList) {
+		for(int index = 0; index < requestedDeleteList.size(); index++){
+			DeleteListDBManager.getInstance().AddTermToDelete(requestedDeleteList.get(index));
+		}
+		
 	}
 
 	private void documentRequestHandler(DocumentRequest documentRequest) {
