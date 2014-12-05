@@ -160,7 +160,6 @@ public class TermFreqDBConnector {
 		return docIDCheck;
 	}
 	
-	
 	public boolean queryTermFreqByDocIDandNGram(DocTermFreqByTerm docByTerm){
 //		java.sql.Connection sqlConnectionLocal = connect();
 		int docID = docByTerm.getDocID();

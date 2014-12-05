@@ -30,10 +30,11 @@ public class TermFreqDBManager {
 	}
 	
 	public DocTermFreqByTerm[] getDocByTerm(int docID, String category, String title){
-		DocTermFreqByTerm[] docByTerm = new DocTermFreqByTerm[4];
+		int nGramNumber = ContextConfig.getInstance().getN_Gram();
+		DocTermFreqByTerm[] docByTerm = new DocTermFreqByTerm[nGramNumber];
 		
 		// 임시로 카테고리 지정안함....
-		for (int nGramIndex = 0; nGramIndex < ContextConfig.getInstance().getN_Gram(); nGramIndex++){
+		for (int nGramIndex = 0; nGramIndex < nGramNumber; nGramIndex++){
 			docByTerm[nGramIndex] = new DocTermFreqByTerm(docID, nGramIndex + 1, category);
 			docByTerm[nGramIndex].setTitle(title);
 			termFreqDB.queryTermFreqByDocIDandNGram(docByTerm[nGramIndex]);
