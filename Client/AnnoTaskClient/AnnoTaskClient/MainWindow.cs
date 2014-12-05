@@ -151,16 +151,19 @@ namespace AnnoTaskClient
 			}
 		}
 
-        // 불용어 추가 버튼
-        private void btnAddDeleteList_Click(object sender, EventArgs e)
+
+        private void openAddThesaurusWindowButton_Click(object sender, EventArgs e)
         {
-            btnAddDeleteListHandler();
+            AddThesaurusWindow addThesaurusWindow = new AddThesaurusWindow();
+            addThesaurusWindow.Show();
         }
 
-        private void btnAddDeleteListHandler()
+        private void addDeleteListButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            
         }
+
+ 
 	
 	}
 }

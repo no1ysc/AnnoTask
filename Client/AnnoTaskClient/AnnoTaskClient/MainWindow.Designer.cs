@@ -102,8 +102,8 @@ namespace AnnoTaskClient
             this.label16 = new System.Windows.Forms.Label();
             this.vScrollBar12 = new System.Windows.Forms.VScrollBar();
             this.frequencyBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.openAddThesaurusWindowButton = new System.Windows.Forms.Button();
+            this.addDeleteListButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -201,7 +201,7 @@ namespace AnnoTaskClient
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(193, 30);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(70, 13);
+            this.label2.Size = new System.Drawing.Size(65, 13);
             this.label2.TabIndex = 12;
             this.label2.Text = "끝나는 날짜";
             // 
@@ -210,7 +210,7 @@ namespace AnnoTaskClient
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(11, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 13);
+            this.label1.Size = new System.Drawing.Size(54, 13);
             this.label1.TabIndex = 11;
             this.label1.Text = "시작 날짜";
             // 
@@ -243,7 +243,7 @@ namespace AnnoTaskClient
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(699, 77);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(61, 13);
+            this.label7.Size = new System.Drawing.Size(57, 13);
             this.label7.TabIndex = 21;
             this.label7.Text = "총 문서수:";
             // 
@@ -261,7 +261,7 @@ namespace AnnoTaskClient
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(825, 77);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(61, 13);
+            this.label4.Size = new System.Drawing.Size(57, 13);
             this.label4.TabIndex = 19;
             this.label4.Text = "총 단어수:";
             // 
@@ -395,7 +395,7 @@ namespace AnnoTaskClient
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label3.Location = new System.Drawing.Point(4, 4);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 15);
+            this.label3.Size = new System.Drawing.Size(67, 15);
             this.label3.TabIndex = 0;
             this.label3.Text = "단어리스트";
             // 
@@ -434,7 +434,7 @@ namespace AnnoTaskClient
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label5.Location = new System.Drawing.Point(3, 4);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(72, 15);
+            this.label5.Size = new System.Drawing.Size(67, 15);
             this.label5.TabIndex = 0;
             this.label5.Text = "문서리스트";
             // 
@@ -458,7 +458,7 @@ namespace AnnoTaskClient
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label6.Location = new System.Drawing.Point(3, 4);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(59, 15);
+            this.label6.Size = new System.Drawing.Size(55, 15);
             this.label6.TabIndex = 0;
             this.label6.Text = "기사전문";
             // 
@@ -540,7 +540,7 @@ namespace AnnoTaskClient
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label8.Location = new System.Drawing.Point(4, 4);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(72, 15);
+            this.label8.Size = new System.Drawing.Size(67, 15);
             this.label8.TabIndex = 0;
             this.label8.Text = "단어리스트";
             // 
@@ -579,7 +579,7 @@ namespace AnnoTaskClient
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label9.Location = new System.Drawing.Point(3, 4);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(72, 15);
+            this.label9.Size = new System.Drawing.Size(67, 15);
             this.label9.TabIndex = 0;
             this.label9.Text = "문서리스트";
             // 
@@ -603,7 +603,7 @@ namespace AnnoTaskClient
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label10.Location = new System.Drawing.Point(3, 4);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(59, 15);
+            this.label10.Size = new System.Drawing.Size(55, 15);
             this.label10.TabIndex = 0;
             this.label10.Text = "기사전문";
             // 
@@ -685,7 +685,7 @@ namespace AnnoTaskClient
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label11.Location = new System.Drawing.Point(4, 4);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(72, 15);
+            this.label11.Size = new System.Drawing.Size(67, 15);
             this.label11.TabIndex = 0;
             this.label11.Text = "단어리스트";
             // 
@@ -724,7 +724,7 @@ namespace AnnoTaskClient
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label12.Location = new System.Drawing.Point(3, 4);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(72, 15);
+            this.label12.Size = new System.Drawing.Size(67, 15);
             this.label12.TabIndex = 0;
             this.label12.Text = "문서리스트";
             // 
@@ -748,7 +748,7 @@ namespace AnnoTaskClient
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label13.Location = new System.Drawing.Point(3, 4);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(59, 15);
+            this.label13.Size = new System.Drawing.Size(55, 15);
             this.label13.TabIndex = 0;
             this.label13.Text = "기사전문";
             // 
@@ -831,7 +831,7 @@ namespace AnnoTaskClient
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label14.Location = new System.Drawing.Point(4, 4);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(72, 15);
+            this.label14.Size = new System.Drawing.Size(67, 15);
             this.label14.TabIndex = 0;
             this.label14.Text = "단어리스트";
             // 
@@ -870,7 +870,7 @@ namespace AnnoTaskClient
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label15.Location = new System.Drawing.Point(3, 4);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(72, 15);
+            this.label15.Size = new System.Drawing.Size(67, 15);
             this.label15.TabIndex = 0;
             this.label15.Text = "문서리스트";
             // 
@@ -894,7 +894,7 @@ namespace AnnoTaskClient
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label16.Location = new System.Drawing.Point(3, 4);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(59, 15);
+            this.label16.Size = new System.Drawing.Size(55, 15);
             this.label16.TabIndex = 0;
             this.label16.Text = "기사전문";
             // 
@@ -909,36 +909,36 @@ namespace AnnoTaskClient
             // 
             this.frequencyBindingSource.DataSource = typeof(AnnoTaskClient.Logic.Frequency);
             // 
-            // button1
+            // openAddThesaurusWindowButton
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button1.Location = new System.Drawing.Point(14, 539);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(155, 37);
-            this.button1.TabIndex = 25;
-            this.button1.Text = "시소러스 추가";
-            this.button1.UseVisualStyleBackColor = true;
+            this.openAddThesaurusWindowButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.openAddThesaurusWindowButton.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.openAddThesaurusWindowButton.Location = new System.Drawing.Point(14, 539);
+            this.openAddThesaurusWindowButton.Name = "openAddThesaurusWindowButton";
+            this.openAddThesaurusWindowButton.Size = new System.Drawing.Size(155, 37);
+            this.openAddThesaurusWindowButton.TabIndex = 25;
+            this.openAddThesaurusWindowButton.Text = "시소러스 추가";
+            this.openAddThesaurusWindowButton.UseVisualStyleBackColor = true;
+            this.openAddThesaurusWindowButton.Click += new System.EventHandler(this.openAddThesaurusWindowButton_Click);
             // 
-            // button2
+            // addDeleteListButton
             // 
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.button2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button2.Location = new System.Drawing.Point(193, 539);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(156, 37);
-            this.button2.TabIndex = 26;
-            this.button2.Text = "불용어 추가";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.btnAddDeleteList_Click);
+            this.addDeleteListButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.addDeleteListButton.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.addDeleteListButton.Location = new System.Drawing.Point(193, 539);
+            this.addDeleteListButton.Name = "addDeleteListButton";
+            this.addDeleteListButton.Size = new System.Drawing.Size(156, 37);
+            this.addDeleteListButton.TabIndex = 26;
+            this.addDeleteListButton.Text = "불용어 추가";
+            this.addDeleteListButton.UseVisualStyleBackColor = true;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(968, 579);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.addDeleteListButton);
+            this.Controls.Add(this.openAddThesaurusWindowButton);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.docCount);
@@ -1095,8 +1095,8 @@ namespace AnnoTaskClient
 		private System.Windows.Forms.DataGridViewTextBoxColumn 빈도수4;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 출현문서수4;
 		public System.Windows.Forms.Button btnImportDoc;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button openAddThesaurusWindowButton;
+        private System.Windows.Forms.Button addDeleteListButton;
 	}
 }
 
