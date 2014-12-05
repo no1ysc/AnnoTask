@@ -909,20 +909,24 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(30, 544);
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button1.Location = new System.Drawing.Point(14, 539);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(104, 32);
+            this.button1.Size = new System.Drawing.Size(155, 37);
             this.button1.TabIndex = 25;
-            this.button1.Text = "button1";
+            this.button1.Text = "시소러스 추가";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(172, 544);
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.button2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button2.Location = new System.Drawing.Point(193, 539);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(101, 32);
+            this.button2.Size = new System.Drawing.Size(156, 37);
             this.button2.TabIndex = 26;
-            this.button2.Text = "button2";
+            this.button2.Text = "불용어 추가";
             this.button2.UseVisualStyleBackColor = true;
             // 
             // MainWindow
