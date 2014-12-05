@@ -911,7 +911,7 @@ namespace AnnoTaskClient
             // 
             // openAddThesaurusWindowButton
             // 
-            this.openAddThesaurusWindowButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.openAddThesaurusWindowButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.openAddThesaurusWindowButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.openAddThesaurusWindowButton.Location = new System.Drawing.Point(14, 539);
             this.openAddThesaurusWindowButton.Name = "openAddThesaurusWindowButton";
@@ -923,7 +923,7 @@ namespace AnnoTaskClient
             // 
             // addDeleteListButton
             // 
-            this.addDeleteListButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.addDeleteListButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.addDeleteListButton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.addDeleteListButton.Location = new System.Drawing.Point(193, 539);
             this.addDeleteListButton.Name = "addDeleteListButton";
