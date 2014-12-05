@@ -151,7 +151,13 @@ namespace AnnoTaskClient
 			}
 		}
 
-        private void button2_Click(object sender, EventArgs e)
+        private void openAddThesaurusWindowButton_Click(object sender, EventArgs e)
+        {
+            AddThesaurusWindow addThesaurusWindow = new AddThesaurusWindow();
+            addThesaurusWindow.Show();
+        }
+
+        private void addDeleteListButton_Click(object sender, EventArgs e)
         {
 
         }
