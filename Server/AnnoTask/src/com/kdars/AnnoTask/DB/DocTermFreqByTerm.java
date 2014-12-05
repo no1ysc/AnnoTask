@@ -15,7 +15,7 @@ public class DocTermFreqByTerm extends HashMap<String, Integer>{
 		this.docID = docID;
 		this.ngram = ngram;
 	}
-
+	
 	public String getTitle(){
 		return this.docTitle;
 	}

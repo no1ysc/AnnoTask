@@ -7,8 +7,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.kdars.AnnoTask.ContextConfig;
 import com.kdars.AnnoTask.DB.ContentDBManager;
@@ -138,19 +141,32 @@ public class UserControl extends Thread{
 		 * for........
 		 */
 		
-		for (Document doc : requestDocs){
+		ArrayList<DocTermFreqByTerm[]> filteredDocByTermList = nGramFilter(requestDocs);
+		
+		for (DocTermFreqByTerm[] docByTerm : filteredDocByTermList){
 			TermTransfer termTransfer = new TermTransfer();
-			termTransfer.docID = doc.getDocumentID();
-			termTransfer.docCategory = doc.getCategory();
-			termTransfer.docTitle = doc.getTitle();
-			
-			DocTermFreqByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
+			termTransfer.docID = docByTerm[0].getDocID();
+			termTransfer.docCategory = docByTerm[0].getDocCategory();
+			termTransfer.docTitle = docByTerm[0].getTitle();
 			
 			termLockInDoc(docByTerm);
 			
-			// 전송
 			transferDocbyTerm(docByTerm);
 		}
+		
+//		for (Document doc : requestDocs){
+//			TermTransfer termTransfer = new TermTransfer();
+//			termTransfer.docID = doc.getDocumentID();
+//			termTransfer.docCategory = doc.getCategory();
+//			termTransfer.docTitle = doc.getTitle();
+//			
+//			DocTermFreqByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
+//			
+//			termLockInDoc(docByTerm);
+//			
+//			// 전송
+//			transferDocbyTerm(docByTerm);
+//		}
 		
 		// 전송완료 알림.
 		NotifyTransferEnd notifyTransferEnd = new NotifyTransferEnd();
@@ -158,7 +174,50 @@ public class UserControl extends Thread{
 		
 		transferObject(notifyTransferEnd);
 	}
+	
+	private ArrayList<DocTermFreqByTerm[]> nGramFilter(ArrayList<Document> requestDocs){
+		int nGramNumber = ContextConfig.getInstance().getN_Gram();
+		HashMap<String, Integer> termHash = new HashMap<String, Integer>();
+		ArrayList<DocTermFreqByTerm[]> docByTermList = new ArrayList<DocTermFreqByTerm[]>();
+		ArrayList<String> filterTermList = new ArrayList<String>();
+		for (Document doc : requestDocs){
+			DocTermFreqByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
+			docByTermList.add(docByTerm);
+			for (int nGramIndex = 0; nGramIndex < nGramNumber; nGramIndex++){
+				for (String term : docByTerm[nGramIndex].keySet()){
+					
+					if (termHash.containsKey(term)){
+						termHash.put(term, termHash.get(term) + docByTerm[nGramIndex].get(term));
+					} else {
+						termHash.put(term, docByTerm[nGramIndex].get(term));
+					}
 
+					if (termHash.containsKey(term) && termHash.get(term) < 2){
+						termHash.remove(term);
+						filterTermList.add(term);
+					}
+					
+				}
+			}
+		}
+		
+		for (String filterTerm : filterTermList){
+			int whiteSpaceCount = 0;
+			Pattern p = Pattern.compile(" ");
+			Matcher m = p.matcher(filterTerm);
+			while(m.find()){
+				m.start();
+				whiteSpaceCount++;
+			}
+			for (DocTermFreqByTerm[] docTermFreqByTerm : docByTermList){
+				docTermFreqByTerm[whiteSpaceCount].remove(filterTerm);
+			}
+		}
+		
+	return docByTermList;	
+	}
+	
+	
 	private void requestByDateHandler(RequestByDate requestByDate) {
 			// TODO 날짜날라오면 할꺼.
 			/*
