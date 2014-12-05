@@ -19,6 +19,7 @@ import com.kdars.AnnoTask.DB.DeleteListDBManager;
 import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 import com.kdars.AnnoTask.DB.Document;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
+import com.kdars.AnnoTask.DB.ThesaurusDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestByDate;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestTermTransfer;
@@ -102,6 +103,13 @@ public class UserControl extends Thread{
 			ArrayList<String> requestedDeleteList = new JSONDeserializer<ArrayList<String>>().deserialize(commandFromUser, String.class); //TODO: String.class가 맞는지 확인해야함...
 			deleteListRequestHandler(requestedDeleteList);
 		}
+		
+		// 사전 추가 요청시
+		if(commandFromUser.contains("addThesaurus")){
+			ArrayList<String> requestedThesaurus = new JSONDeserializer<ArrayList<String>>().deserialize(commandFromUser, String.class); //TODO: String.class가 맞는지 확인해야함...
+			thesaurusRequestHandler(requestedThesaurus);
+		}
+		
 	}
 
 	private void deleteListRequestHandler(ArrayList<String> requestedDeleteList) {
@@ -110,7 +118,14 @@ public class UserControl extends Thread{
 		}
 		
 	}
-
+	
+	private void thesaurusRequestHandler(ArrayList<String> entryComponents) {
+		String conceptFrom = entryComponents.get(0);
+		String conceptTo = entryComponents.get(1);
+		String metaOntology = entryComponents.get(2);
+		ThesaurusDBManager.getInstance().setEntry(conceptFrom, conceptTo, metaOntology);
+	}
+	
 	private void documentRequestHandler(DocumentRequest documentRequest) {
 		Document document = ContentDBManager.getInstance().getContent(documentRequest.documentID);
 		
