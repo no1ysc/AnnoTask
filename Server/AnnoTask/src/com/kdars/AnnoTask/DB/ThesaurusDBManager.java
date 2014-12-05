@@ -29,8 +29,13 @@ public class ThesaurusDBManager {
 		return thes.getConceptFrom();
 	}
 	
-	public boolean setEntry(String from, String to){
+	public boolean setEntry(String from, String to, String metaontology){
 		// TODO : for Phase2.
-		return false;
+		// thesaurusDB에 잘 더해졌으면 true, exception이면 false.
+		Thesaurus thes = new Thesaurus();
+		thes.setConceptFrom(from);
+		thes.setConceptTo(to);
+		thes.setMetaOntology(metaontology);
+		return thesaurusDB.add(thes);
 	}
 }

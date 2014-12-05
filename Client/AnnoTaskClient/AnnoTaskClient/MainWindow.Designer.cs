@@ -1,4 +1,6 @@
-﻿namespace AnnoTaskClient
+﻿using AnnoTaskClient.Logic;
+
+namespace AnnoTaskClient
 {
 	partial class MainWindow
 	{
