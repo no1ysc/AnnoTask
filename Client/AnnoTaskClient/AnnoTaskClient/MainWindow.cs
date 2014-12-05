@@ -150,6 +150,11 @@ namespace AnnoTaskClient
 				this.article4.Text = article;
 			}
 		}
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
 	
 	}
 }
