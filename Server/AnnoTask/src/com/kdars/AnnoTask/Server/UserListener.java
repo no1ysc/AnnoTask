@@ -47,7 +47,7 @@ public class UserListener extends Thread{
 				continue;
 			}
 	        
-	        UserControl user = new UserControl(socket, userIdGenerator++); 
+	        UserControl user = new UserControl(socket, ++userIdGenerator); 
 	        connectUserList.add(user);
 			user.start();
 		}

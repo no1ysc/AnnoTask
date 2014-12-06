@@ -92,7 +92,8 @@ public class TermFreqDBConnector {
 	public boolean updateTermLockState(String term, int termHolder){
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.execute("update TFtable set TermStatus = " + termHolder + " where Term = " + term);
+			String escapedTerm = escape(term);
+			stmt.execute("update TFtable set TermStatus = " + termHolder + " where Term = \"" + escapedTerm + "\";");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
