@@ -69,7 +69,7 @@ public class TermFreqDBConnector {
 			for (String deleteTermCheck : docByTerm.keySet()){
 				java.sql.Statement stmt = sqlConnection.createStatement();
 				String deleteTerm = escape(deleteTermCheck);
-				stmt.execute("delete from "+ termFreqTable + " (" + colName4 + ") values (\"" + deleteTerm + "\");");
+				stmt.execute("delete from "+ termFreqTable + " where " + colName4 + " = \"" + deleteTerm + "\";");
 				stmt.close();
 			}
 //			disconnect(sqlConnectionLocal);
@@ -112,7 +112,7 @@ public class TermFreqDBConnector {
 		try {
 				java.sql.Statement stmt = sqlConnection.createStatement();
 				String deleteTerm = escape(term);
-				stmt.execute("delete from "+ termFreqTable + " (" + colName4 + ") values (\"" + deleteTerm + "\");");
+				stmt.execute("delete from "+ termFreqTable + " where " + colName4 + " = \"" + deleteTerm + "\";");
 				stmt.close();
 //			disconnect(sqlConnectionLocal);
 		} catch (SQLException e) {
@@ -149,14 +149,17 @@ public class TermFreqDBConnector {
 			/* exist check */
 			if(!resultSet.next()){
 			}
-			
+			while(resultSet.next()){
+				
+			}
+				
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			disconnect(sqlConnection);
+//			disconnect(sqlConnection);
 			e.printStackTrace();
 		}
-		disconnect(sqlConnection);
+//		disconnect(sqlConnection);
 		
 		return docIDCheck;
 	}
