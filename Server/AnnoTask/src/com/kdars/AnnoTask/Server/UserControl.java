@@ -45,7 +45,7 @@ public class UserControl extends Thread{
 		this.socket = socket;
 		this.userID = userID;
 //		this.userID = socket.getInetAddress().getAddress();
-		System.out.println(socket.getInetAddress().getAddress() + "은 User ID " + userID + "로 접속하였습니다.");
+		System.out.println(socket.getInetAddress().getAddress().toString() + "은 User ID " + userID + "로 접속하였습니다.");
 		try {
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 //			input = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF8"));
@@ -76,7 +76,7 @@ public class UserControl extends Thread{
 			commandParser(commandFromUser);
 		}
 		termUnlock(userID);
-		System.out.println(userID + "(" + socket.getInetAddress().toString() + ")" + " 님이  접속 종료하였습니다.");
+		System.out.println("유저 " + userID + "(" + socket.getInetAddress().toString() + ")이  접속을 종료하였습니다.");
 	}
 
 	private void commandToUser(Object commandToUser) {
@@ -89,6 +89,7 @@ public class UserControl extends Thread{
 //			System.out.println(commandFromUser);
 			RequestByDate requestByDate = new JSONDeserializer<RequestByDate>().deserialize(commandFromUser, RequestByDate.class);
 //			RequestByDate requestByDate = new JSONDeserializer<RequestByDate>().use(null, RequestTermTransfer.class).deserialize(commandFromUser);
+			termUnlock(userID);
 			requestByDateHandler(requestByDate);
 		}
 		//1-3 처리.
