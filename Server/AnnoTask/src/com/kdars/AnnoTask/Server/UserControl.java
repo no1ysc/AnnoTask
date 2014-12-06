@@ -45,7 +45,7 @@ public class UserControl extends Thread{
 		this.socket = socket;
 		this.userID = userID;
 //		this.userID = socket.getInetAddress().getAddress();
-				
+		System.out.println(socket.getInetAddress().getAddress() + "은 User ID " + userID + "로 접속하였습니다.");
 		try {
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 //			input = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF8"));
@@ -76,7 +76,7 @@ public class UserControl extends Thread{
 			commandParser(commandFromUser);
 		}
 		termUnlock(userID);
-		System.out.println(socket.getInetAddress().toString() + " : 접속종료.");
+		System.out.println(userID + "(" + socket.getInetAddress().toString() + ")" + " 님이  접속 종료하였습니다.");
 	}
 
 	private void commandToUser(Object commandToUser) {
