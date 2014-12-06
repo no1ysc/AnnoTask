@@ -101,6 +101,19 @@ public class TermFreqDBConnector {
 		return	true;
 	}
 	
+	public boolean resetTermState(int termHolder){
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute("update TFtable set TermStatus = 0 where TermStatus = " + termHolder + ";");			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * 해당 Term 모두 삭제. 
 	 * @param term

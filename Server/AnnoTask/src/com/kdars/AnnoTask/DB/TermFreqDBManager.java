@@ -49,10 +49,10 @@ public class TermFreqDBManager {
 	}
 	
 	
-	public boolean termUnlock(String term, int termHolder){
+	public boolean termUnlock(int termHolder){
 		//if (현재 쓰레드랑 똑같은 지 확인하고 확인되면,)
-		termFreqDB.updateTermLockState(term, 0);
-		return false;
+		termFreqDB.resetTermState(termHolder);
+		return true;
 	}
 	
 	public boolean termLock(String term, int termHolder){
