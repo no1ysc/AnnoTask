@@ -21,6 +21,7 @@ import com.kdars.AnnoTask.DB.Document;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 import com.kdars.AnnoTask.DB.ThesaurusDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
+import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddDeleteList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestByDate;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestTermTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.DocumentResponse;
@@ -105,7 +106,7 @@ public class UserControl extends Thread{
 		
 		// 불용어 추가 요청시
 		if(commandFromUser.contains("addDeleteList")){
-			ArrayList<String> requestedDeleteList = new JSONDeserializer<ArrayList<String>>().deserialize(commandFromUser, String.class); //TODO: String.class가 맞는지 확인해야함...
+			ArrayList<String> requestedDeleteList = new JSONDeserializer<ArrayList<String>>().deserialize(commandFromUser, RequestAddDeleteList.class);
 			deleteListRequestHandler(requestedDeleteList);
 		}
 		
@@ -118,10 +119,9 @@ public class UserControl extends Thread{
 	}
 
 	private void deleteListRequestHandler(ArrayList<String> requestedDeleteList) {
-		for(int index = 0; index < requestedDeleteList.size(); index++){
-			DeleteListDBManager.getInstance().AddTermToDelete(requestedDeleteList.get(index));
+		for (String deleteTerm : requestedDeleteList) {
+			DeleteListDBManager.getInstance().AddTermToDelete(deleteTerm);
 		}
-		
 	}
 	
 	private void thesaurusRequestHandler(ArrayList<String> entryComponents) {

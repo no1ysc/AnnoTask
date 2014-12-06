@@ -15,7 +15,7 @@ namespace AnnoTaskClient.Logic
 
 		private ClientWormHole clientWormHole = new ClientWormHole();
 		private Dictionary<string, Frequency> termNFreq = new Dictionary<string, Frequency>(); // Term, Freq
-		
+        private List<String> deleteList;
 
 		public MainLogic()
 		{
@@ -104,6 +104,7 @@ namespace AnnoTaskClient.Logic
 					UIHandler.Instance.CommonUI.ButtonEnable = true;
 					break;
                 case "AddDeleteList":
+                    addDeleteList();
                     break;
 				default:
 					break;
@@ -244,5 +245,16 @@ namespace AnnoTaskClient.Logic
 
 			return clientWormHole.getDocBodyFromID(targetID);
 		}
-	}
+
+        internal void clickedAddDeleteList(List<string> selectedTerm)
+        {
+            this.deleteList = selectedTerm;
+            commandQ.AddLast("AddDeleteList");
+        }
+
+        private void addDeleteList()
+        {
+            clientWormHole.sendDeleteList(this.deleteList);
+        }
+    }
 }

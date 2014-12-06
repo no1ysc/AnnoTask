@@ -160,7 +160,13 @@ namespace AnnoTaskClient
 
         private void addDeleteListButton_Click(object sender, EventArgs e)
         {
-            
+            // TODO: checkbox가 checked된 단어들을 List로 담아서 서버로 보내야함.
+            List<String> selectedTerm = new List<String>();
+            foreach (ListItem item in wordList.Items)
+            {
+                if (item.Selected) selectedTerm.Add(item);
+            }
+            logic.clickedAddDeleteList(selectedTerm);
         }
 
  

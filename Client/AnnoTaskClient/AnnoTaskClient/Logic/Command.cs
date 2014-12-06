@@ -74,6 +74,11 @@ namespace AnnoTaskClient.Logic
 				// 문서 원본 요청 2-1
 				public int documentID;
 			}
+
+            public class RequestAddDeleteList
+            {
+                public List<String> addDeleteList;
+            }
 		}
 	}
 }
