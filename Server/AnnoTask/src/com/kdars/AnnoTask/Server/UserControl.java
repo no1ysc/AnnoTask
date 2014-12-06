@@ -70,8 +70,12 @@ public class UserControl extends Thread{
 	public void run(){
 		while(bValidConnection){
 			String commandFromUser = commandFromUser();
+			if(commandFromUser == null){
+				break;
+			}
 			commandParser(commandFromUser);
 		}
+		termUnlock(userID);
 		System.out.println(socket.getInetAddress().toString() + " : 접속종료.");
 	}
 
@@ -288,13 +292,21 @@ public class UserControl extends Thread{
 			}
 		}
 	}
+	
+	private void termUnlock(int userID) {
+		// TODO Auto-generated method stub
+		TermFreqDBManager.getInstance().termUnlock(userID);
+	}
 
 	private String commandFromUser() {
 		String command = " ";
 		try {
 //			command = input.readUTF();
 			command = input.readLine();
-		} catch (IOException e) {
+//			if(command.isEmpty()){
+//				bValidConnection = false;
+//			}
+		} catch (NullPointerException | IOException e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
 			bValidConnection = false;
