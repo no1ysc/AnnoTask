@@ -148,8 +148,6 @@ public class TermFreqDBConnector {
 			resultSet = stmt.executeQuery("select * from " + termFreqTable + " where " + colName2 + " = '" + docID + "';");
 			/* exist check */
 			if(!resultSet.next()){
-			}
-			while(resultSet.next()){
 				
 			}
 				
