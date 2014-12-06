@@ -84,34 +84,58 @@ namespace AnnoTaskClient
 			btnImportHandler();
 		}
 
+        private void openAddThesaurusWindowButton_Click(object sender, EventArgs e)
+        {
+            AddThesaurusWindow addThesaurus = new AddThesaurusWindow();
+            addThesaurus.Show();
+        }
+
 		private void cellClickHandler(string cellValue, int tabNumber)
 		{
 			// TODO : 쓰레드는 안돌려도 된다? 작업이 짧아서?
 			logic.cellContentDoubleClick(cellValue, tabNumber);
 		}
 
-		private void wordList1_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void checkHandler(DataGridViewCellEventArgs e, int tabNumber)
+        {
+            // TODO : 쓰레드는 안돌려도 된다? 작업이 짧아서?
+            logic.cellContentCheck(e, tabNumber);
+        }
+
+      	private void wordList1_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
-			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 1);
+
+            int cellRow = e.RowIndex;
+            int cellCol = e.ColumnIndex;
+
+            if (cellCol == 1)
+            {
+                cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 1);
+            }
+            else if (cellCol == 0)
+            {
+                checkHandler(e, 1);
+            }
+			
 		}
 
 		private void wordList2_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
-			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 2);
+			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 2);
 		}
 
 		private void wordList3_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
-			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 3);
+			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 3);
 		}
 
 		private void wordList4_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
-			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[0].Value, 4);
+			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 4);
 		}
 
 		// TODO : 아래 4개 이벤트들 쓰레드 안돌려도 된다? 작업이 짧아서?
@@ -120,56 +144,94 @@ namespace AnnoTaskClient
 			string article = getArticle(sender);
 			if (article != null)
 			{
-				this.article1.Text = article;
+                getColoredArticle(article, sender, this.article1);    
 			}
 		}
-
+        
 		private void docList2_DoubleClick(object sender, EventArgs e)
 		{
-			string article = getArticle(sender);
-			if (article != null)
-			{
-				this.article2.Text = article;
-			}
+            string article = getArticle(sender);
+            if (article != null)
+            {
+                getColoredArticle(article, sender, this.article1);
+            }
 		}
 
 		private void docList3_DoubleClick(object sender, EventArgs e)
 		{
-			string article = getArticle(sender);
-			if (article != null)
-			{
-				this.article3.Text = article;
-			}
+            string article = getArticle(sender);
+            if (article != null)
+            {
+                getColoredArticle(article, sender, this.article1);
+            }
 		}
 
 		private void docList4_DoubleClick(object sender, EventArgs e)
 		{
-			string article = getArticle(sender);
-			if (article != null)
-			{
-				this.article4.Text = article;
-			}
+            string article = getArticle(sender);
+            if (article != null)
+            {
+                getColoredArticle(article, sender, this.article1);
+            }
 		}
 
-
-        private void openAddThesaurusWindowButton_Click(object sender, EventArgs e)
+        private void getColoredArticle(string article, object sender, RichTextBox articleView)
         {
-            AddThesaurusWindow addThesaurusWindow = new AddThesaurusWindow();
-            addThesaurusWindow.Show();
-        }
+            articleView.Clear();
 
-        private void addDeleteListButton_Click(object sender, EventArgs e)
-        {
-            // TODO: checkbox가 checked된 단어들을 List로 담아서 서버로 보내야함.
-            List<String> selectedTerm = new List<String>();
-            foreach (ListItem item in wordList.Items)
+            TreeNode node = (sender as TreeView).SelectedNode;
+            string term = node.Parent.Parent.Text;
+
+            articleView.SelectionStart = 1000;
+
+            string word = null;
+            bool start = false;
+            int lineCnt = 0;
+            int line = 0;
+            for (int i = 0; i < article.Length; ++i)
             {
-                if (item.Selected) selectedTerm.Add(item);
+                char charactor = article[i];
+                word += charactor;
+                
+                if (charactor.Equals(' ') || charactor.Equals('\n'))
+                {
+                    if (charactor.Equals('\n'))
+                        lineCnt++;
+
+                    if (word.Contains(term))
+                    {
+                        if (!start)
+                        {
+                            line = lineCnt;
+                            start = true;
+                        }
+                        articleView.SelectionColor = Color.Black;
+                        articleView.SelectionBackColor = Color.Red;
+                        articleView.SelectedText = word;
+                    }
+                    else
+                    {
+                        articleView.SelectionColor = Color.Black;
+                        articleView.SelectionBackColor = Color.White;
+                        articleView.SelectedText = word;
+                    }
+                    word = null;
+                }
             }
-            logic.clickedAddDeleteList(selectedTerm);
+
+            articleView.SelectionStart = line;
+            articleView.ScrollToCaret();
         }
 
- 
-	
+
+        private void addThesaurus_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void addDeleteList_Click(object sender, EventArgs e)
+        {
+
+        }	
 	}
 }

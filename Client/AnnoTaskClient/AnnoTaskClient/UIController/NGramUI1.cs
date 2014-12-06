@@ -28,9 +28,9 @@ namespace AnnoTaskClient.UIController
 		private void addTermList(Frequency termFreq)
 		{
 			mainWindow.wordList1.Rows.Add(1);
-			mainWindow.wordList1.Rows[mainWindow.wordList1.RowCount-1].Cells[0].Value = termFreq.Term;
-			mainWindow.wordList1.Rows[mainWindow.wordList1.RowCount-1].Cells[1].Value = termFreq.TotalTermFreq;
-			mainWindow.wordList1.Rows[mainWindow.wordList1.RowCount-1].Cells[2].Value = termFreq.FreqInDocument;
+			mainWindow.wordList1.Rows[mainWindow.wordList1.RowCount-1].Cells[1].Value = termFreq.Term;
+			mainWindow.wordList1.Rows[mainWindow.wordList1.RowCount-1].Cells[2].Value = termFreq.TotalTermFreq;
+			mainWindow.wordList1.Rows[mainWindow.wordList1.RowCount-1].Cells[3].Value = termFreq.FreqInDocument;
 		}
 
 		private delegate void DocListRefresh(Frequency freq);
@@ -58,5 +58,29 @@ namespace AnnoTaskClient.UIController
 
 			mainWindow.docList1.Nodes.Add(root);
 		}
+
+        private delegate void CheckboxRefresh(DataGridViewCellEventArgs e);
+        public void RefreshCheckbox(DataGridViewCellEventArgs e)
+        {
+            CheckboxRefresh checkboxRefresh = new CheckboxRefresh(refreshCheckbox);
+            mainWindow.Invoke(checkboxRefresh, new object[] { e });
+        }
+        private void refreshCheckbox(DataGridViewCellEventArgs e)
+        {
+            bool cellStatus = false;
+            if (mainWindow.wordList1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+            {
+                cellStatus = (bool)mainWindow.wordList1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+            }
+
+            if (cellStatus)
+            {
+                mainWindow.wordList1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
+            }
+            else
+            {
+                mainWindow.wordList1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = true;
+            }            
+        }
 	}
 }

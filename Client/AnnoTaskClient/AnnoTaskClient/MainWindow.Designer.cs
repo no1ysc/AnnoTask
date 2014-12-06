@@ -52,6 +52,7 @@ namespace AnnoTaskClient
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.wordList1 = new System.Windows.Forms.DataGridView();
+            this.check1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Term = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.빈도수 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.출현문서수 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -59,12 +60,13 @@ namespace AnnoTaskClient
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.docList1 = new System.Windows.Forms.TreeView();
             this.label5 = new System.Windows.Forms.Label();
-            this.article1 = new System.Windows.Forms.TextBox();
+            this.article1 = new System.Windows.Forms.RichTextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.wordList2 = new System.Windows.Forms.DataGridView();
+            this.check2 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Term2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.빈도수2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.출현문서수2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,6 +80,7 @@ namespace AnnoTaskClient
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.splitContainer5 = new System.Windows.Forms.SplitContainer();
             this.wordList3 = new System.Windows.Forms.DataGridView();
+            this.check3 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Term3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.빈도수3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.출현문서수3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -91,6 +94,7 @@ namespace AnnoTaskClient
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer7 = new System.Windows.Forms.SplitContainer();
             this.wordList4 = new System.Windows.Forms.DataGridView();
+            this.check4 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Term4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.빈도수4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.출현문서수4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -360,6 +364,7 @@ namespace AnnoTaskClient
             this.wordList1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.wordList1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.wordList1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.check1,
             this.Term,
             this.빈도수,
             this.출현문서수});
@@ -370,6 +375,12 @@ namespace AnnoTaskClient
             this.wordList1.Size = new System.Drawing.Size(326, 385);
             this.wordList1.TabIndex = 1;
             this.wordList1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList1_CellClick);
+            // 
+            // check1
+            // 
+            this.check1.HeaderText = " ";
+            this.check1.Name = "check1";
+            this.check1.Width = 40;
             // 
             // Term
             // 
@@ -440,7 +451,6 @@ namespace AnnoTaskClient
             // 
             // article1
             // 
-            this.article1.AcceptsReturn = true;
             this.article1.AcceptsTab = true;
             this.article1.BackColor = System.Drawing.SystemColors.Window;
             this.article1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -448,9 +458,10 @@ namespace AnnoTaskClient
             this.article1.Multiline = true;
             this.article1.Name = "article1";
             this.article1.ReadOnly = true;
-            this.article1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.article1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.article1.Size = new System.Drawing.Size(305, 385);
             this.article1.TabIndex = 1;
+            this.article1.Text = "";
             // 
             // label6
             // 
@@ -508,6 +519,7 @@ namespace AnnoTaskClient
             this.wordList2.BackgroundColor = System.Drawing.SystemColors.Window;
             this.wordList2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.wordList2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.check2,
             this.Term2,
             this.빈도수2,
             this.출현문서수2});
@@ -518,6 +530,12 @@ namespace AnnoTaskClient
             this.wordList2.Size = new System.Drawing.Size(326, 385);
             this.wordList2.TabIndex = 1;
             this.wordList2.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList2_CellClick);
+            // 
+            // check2
+            // 
+            this.check2.HeaderText = " ";
+            this.check2.Name = "check2";
+            this.check2.Width = 40;
             // 
             // Term2
             // 
@@ -653,6 +671,7 @@ namespace AnnoTaskClient
             this.wordList3.BackgroundColor = System.Drawing.SystemColors.Window;
             this.wordList3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.wordList3.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.check3,
             this.Term3,
             this.빈도수3,
             this.출현문서수3});
@@ -663,6 +682,12 @@ namespace AnnoTaskClient
             this.wordList3.Size = new System.Drawing.Size(326, 385);
             this.wordList3.TabIndex = 1;
             this.wordList3.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList3_CellClick);
+            // 
+            // check3
+            // 
+            this.check3.HeaderText = " ";
+            this.check3.Name = "check3";
+            this.check3.Width = 40;
             // 
             // Term3
             // 
@@ -799,6 +824,7 @@ namespace AnnoTaskClient
             this.wordList4.BackgroundColor = System.Drawing.SystemColors.Window;
             this.wordList4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.wordList4.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.check4,
             this.Term4,
             this.빈도수4,
             this.출현문서수4});
@@ -809,6 +835,12 @@ namespace AnnoTaskClient
             this.wordList4.Size = new System.Drawing.Size(326, 385);
             this.wordList4.TabIndex = 1;
             this.wordList4.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.wordList4_CellClick);
+            // 
+            // check4
+            // 
+            this.check4.HeaderText = " ";
+            this.check4.Name = "check4";
+            this.check4.Width = 40;
             // 
             // Term4
             // 
@@ -1044,7 +1076,7 @@ namespace AnnoTaskClient
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.TextBox article1;
+		private System.Windows.Forms.RichTextBox article1;
 		private System.Windows.Forms.SplitContainer splitContainer3;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.SplitContainer splitContainer4;
@@ -1069,6 +1101,7 @@ namespace AnnoTaskClient
 		public System.Windows.Forms.Label termCount;
 		public System.Windows.Forms.ProgressBar progressBar;
 		public System.Windows.Forms.DataGridView wordList1;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn check1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Term;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 빈도수;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 출현문서수;
@@ -1085,12 +1118,15 @@ namespace AnnoTaskClient
 		public System.Windows.Forms.TreeView docList4;
 		public System.Windows.Forms.TextBox article4;
 		public System.Windows.Forms.DataGridView wordList4;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn check2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Term2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 빈도수2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 출현문서수2;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn check3;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Term3;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 빈도수3;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 출현문서수3;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn check4;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Term4;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 빈도수4;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 출현문서수4;

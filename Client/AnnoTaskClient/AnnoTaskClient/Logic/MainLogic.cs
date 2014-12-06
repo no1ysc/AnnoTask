@@ -231,6 +231,28 @@ namespace AnnoTaskClient.Logic
 			}
 		}
 
+        internal void cellContentCheck(DataGridViewCellEventArgs e, int tabNumber)
+		{
+			// set checkbox
+			switch (tabNumber)
+			{
+                case 1:
+                    UIHandler.Instance.NGram1.RefreshCheckbox(e);
+					break;
+				case 2:
+                    UIHandler.Instance.NGram2.RefreshCheckbox(e);
+					break;
+				case 3:
+                    UIHandler.Instance.NGram3.RefreshCheckbox(e);
+					break;
+				case 4:
+                    UIHandler.Instance.NGram4.RefreshCheckbox(e);
+					break;
+				default:
+					break;
+			}
+		}
+
 		internal string loadArticle(string term, string category, string title)
 		{
 			// find DOC ID
