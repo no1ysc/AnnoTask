@@ -198,38 +198,35 @@ public class UserControl extends Thread{
 		int nGramNumber = ContextConfig.getInstance().getN_Gram();
 		HashMap<String, Integer> termHash = new HashMap<String, Integer>();
 		ArrayList<DocTermFreqByTerm[]> docByTermList = new ArrayList<DocTermFreqByTerm[]>();
-		ArrayList<String> filterTermList = new ArrayList<String>();
 		for (Document doc : requestDocs){
 			DocTermFreqByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
 			docByTermList.add(docByTerm);
-			for (int nGramIndex = 0; nGramIndex < nGramNumber; nGramIndex++){
+			for (int nGramIndex = 1; nGramIndex < nGramNumber; nGramIndex++){
 				for (String term : docByTerm[nGramIndex].keySet()){
 					
 					if (termHash.containsKey(term)){
-						termHash.put(term, termHash.get(term) + docByTerm[nGramIndex].get(term));
+						int priorValue = termHash.get(term);
+						termHash.replace(term, priorValue, priorValue + docByTerm[nGramIndex].get(term));
 					} else {
 						termHash.put(term, docByTerm[nGramIndex].get(term));
-					}
-
-					if (termHash.containsKey(term) && termHash.get(term) < 2){
-						termHash.remove(term);
-						filterTermList.add(term);
 					}
 					
 				}
 			}
 		}
 		
-		for (String filterTerm : filterTermList){
-			int whiteSpaceCount = 0;
-			Pattern p = Pattern.compile(" ");
-			Matcher m = p.matcher(filterTerm);
-			while(m.find()){
-				m.start();
-				whiteSpaceCount++;
-			}
-			for (DocTermFreqByTerm[] docTermFreqByTerm : docByTermList){
-				docTermFreqByTerm[whiteSpaceCount].remove(filterTerm);
+		for (String appendTerm : termHash.keySet()){
+			if (termHash.get(appendTerm) < 2){
+				int whiteSpaceCount = 0;
+				Pattern p = Pattern.compile(" ");
+				Matcher m = p.matcher(appendTerm);
+				while(m.find()){
+					m.start();
+					whiteSpaceCount++;
+				}
+				for (DocTermFreqByTerm[] docTermFreqByTerm : docByTermList){
+					docTermFreqByTerm[whiteSpaceCount].remove(appendTerm);
+				}
 			}
 		}
 		
