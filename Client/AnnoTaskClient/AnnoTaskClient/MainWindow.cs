@@ -266,10 +266,14 @@ namespace AnnoTaskClient
             List<string> selectedTerms = new List<string>();
             if (this.tabControl1.SelectedTab == this.tabPage1)
             {
-                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList1.SelectedRows;
+                DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList1.Rows;
+
                 foreach (DataGridViewRow selectedRow in dataGridViewSelection)
                 {
-                    selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    if (Convert.ToBoolean(selectedRow.Cells[0].Value))
+                    {
+                        selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    }
                 }
             }
             else if (this.tabControl1.SelectedTab == this.tabPage2)
