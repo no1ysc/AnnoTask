@@ -123,19 +123,51 @@ namespace AnnoTaskClient
 		private void wordList2_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
-			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 2);
+
+            int cellRow = e.RowIndex;
+            int cellCol = e.ColumnIndex;
+
+            if (cellCol == 1)
+            {
+                cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 2);
+            }
+            else if (cellCol == 0)
+            {
+                checkHandler(e, 2);
+            }
 		}
 
 		private void wordList3_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
-			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 3);
+
+            int cellRow = e.RowIndex;
+            int cellCol = e.ColumnIndex;
+
+            if (cellCol == 1)
+            {
+                cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 3);
+            }
+            else if (cellCol == 0)
+            {
+                checkHandler(e, 3);
+            }
 		}
 
 		private void wordList4_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
-			cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 4);
+            int cellRow = e.RowIndex;
+            int cellCol = e.ColumnIndex;
+
+            if (cellCol == 1)
+            {
+                cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 4);
+            }
+            else if (cellCol == 0)
+            {
+                checkHandler(e, 4);
+            }
 		}
 
 		// TODO : 아래 4개 이벤트들 쓰레드 안돌려도 된다? 작업이 짧아서?
