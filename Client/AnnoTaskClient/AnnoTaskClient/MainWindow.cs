@@ -261,7 +261,7 @@ namespace AnnoTaskClient
 
         }
 
-        private void addDeleteList_Click(object sender, EventArgs e)
+        private void addDeleteListButton_Click(object sender, EventArgs e)
         {
             List<string> selectedTerms = new List<string>();
             if (this.tabControl1.SelectedTab == this.tabPage1)
@@ -274,7 +274,7 @@ namespace AnnoTaskClient
             }
             else if (this.tabControl1.SelectedTab == this.tabPage2)
             {
-                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList2.SelectedRows;
+                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram2.getMainWindow().wordList2.SelectedRows;
                 foreach (DataGridViewRow selectedRow in dataGridViewSelection)
                 {
                     selectedTerms.Add((string)selectedRow.Cells[1].Value);
@@ -282,7 +282,7 @@ namespace AnnoTaskClient
             }
             else if (this.tabControl1.SelectedTab == this.tabPage3)
             {
-                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList3.SelectedRows;
+                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram3.getMainWindow().wordList3.SelectedRows;
                 foreach (DataGridViewRow selectedRow in dataGridViewSelection)
                 {
                     selectedTerms.Add((string)selectedRow.Cells[1].Value);
@@ -290,7 +290,7 @@ namespace AnnoTaskClient
             }
             else if (this.tabControl1.SelectedTab == this.tabPage4)
             {
-                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList4.SelectedRows;
+                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram4.getMainWindow().wordList4.SelectedRows;
                 foreach (DataGridViewRow selectedRow in dataGridViewSelection)
                 {
                     selectedTerms.Add((string)selectedRow.Cells[1].Value);
