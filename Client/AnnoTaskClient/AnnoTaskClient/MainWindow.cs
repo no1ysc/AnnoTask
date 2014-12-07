@@ -278,26 +278,38 @@ namespace AnnoTaskClient
             }
             else if (this.tabControl1.SelectedTab == this.tabPage2)
             {
-                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram2.getMainWindow().wordList2.SelectedRows;
+                DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram2.getMainWindow().wordList2.Rows;
+
                 foreach (DataGridViewRow selectedRow in dataGridViewSelection)
                 {
-                    selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    if (Convert.ToBoolean(selectedRow.Cells[0].Value))
+                    {
+                        selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    }
                 }
             }
             else if (this.tabControl1.SelectedTab == this.tabPage3)
             {
-                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram3.getMainWindow().wordList3.SelectedRows;
+                DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram3.getMainWindow().wordList3.Rows;
+
                 foreach (DataGridViewRow selectedRow in dataGridViewSelection)
                 {
-                    selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    if (Convert.ToBoolean(selectedRow.Cells[0].Value))
+                    {
+                        selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    }
                 }
             }
             else if (this.tabControl1.SelectedTab == this.tabPage4)
             {
-                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram4.getMainWindow().wordList4.SelectedRows;
+                DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram4.getMainWindow().wordList4.Rows;
+
                 foreach (DataGridViewRow selectedRow in dataGridViewSelection)
                 {
-                    selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    if (Convert.ToBoolean(selectedRow.Cells[0].Value))
+                    {
+                        selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    }
                 }
             }
 
