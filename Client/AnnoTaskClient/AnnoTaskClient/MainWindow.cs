@@ -231,7 +231,12 @@ namespace AnnoTaskClient
 
         private void addDeleteList_Click(object sender, EventArgs e)
         {
+            List<string> selectedTerm = new List<string>();
+            foreach()
+            {
 
+            }
+            logic.clickedAddDeleteList(selectedTerm);
         }	
 	}
 }
