@@ -106,7 +106,7 @@ public class UserControl extends Thread{
 		
 		// 불용어 추가 요청시
 		if(commandFromUser.contains("addDeleteList")){
-			ArrayList<String> requestedDeleteList = new JSONDeserializer<ArrayList<String>>().deserialize(commandFromUser, RequestAddDeleteList.class);
+			RequestAddDeleteList requestedDeleteList = new JSONDeserializer<RequestAddDeleteList>().deserialize(commandFromUser, RequestAddDeleteList.class);
 			deleteListRequestHandler(requestedDeleteList);
 		}
 		
@@ -118,8 +118,8 @@ public class UserControl extends Thread{
 		
 	}
 
-	private void deleteListRequestHandler(ArrayList<String> requestedDeleteList) {
-		for (String deleteTerm : requestedDeleteList) {
+	private void deleteListRequestHandler(RequestAddDeleteList requestedDeleteList) {
+		for (String deleteTerm : requestedDeleteList.addDeleteList) {
 			DeleteListDBManager.getInstance().AddTermToDelete(deleteTerm);
 		}
 	}

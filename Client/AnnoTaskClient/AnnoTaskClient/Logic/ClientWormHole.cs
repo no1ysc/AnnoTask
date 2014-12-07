@@ -192,6 +192,7 @@ EndOfInstance:
         internal void sendDeleteList(List<string> list)
         {
             Command.Client2Server.RequestAddDeleteList deleteListReq = new Command.Client2Server.RequestAddDeleteList();
+            deleteListReq.addDeleteList = list;
             string json_addDeleteList = new JsonConverter<Command.Client2Server.RequestAddDeleteList>().Object2Json(deleteListReq);
             m_Writer.WriteLine(json_addDeleteList);
             m_Writer.Flush();
