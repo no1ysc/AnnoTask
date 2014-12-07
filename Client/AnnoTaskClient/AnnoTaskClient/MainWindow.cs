@@ -231,12 +231,42 @@ namespace AnnoTaskClient
 
         private void addDeleteList_Click(object sender, EventArgs e)
         {
-            List<string> selectedTerm = new List<string>();
-            foreach()
+            List<string> selectedTerms = new List<string>();
+            if (this.tabControl1.SelectedTab == this.tabPage1)
             {
-
+                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList1.SelectedRows;
+                foreach (DataGridViewRow selectedRow in dataGridViewSelection)
+                {
+                    selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                }
             }
-            logic.clickedAddDeleteList(selectedTerm);
-        }	
+            else if (this.tabControl1.SelectedTab == this.tabPage2)
+            {
+                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList2.SelectedRows;
+                foreach (DataGridViewRow selectedRow in dataGridViewSelection)
+                {
+                    selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                }
+            }
+            else if (this.tabControl1.SelectedTab == this.tabPage3)
+            {
+                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList3.SelectedRows;
+                foreach (DataGridViewRow selectedRow in dataGridViewSelection)
+                {
+                    selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                }
+            }
+            else if (this.tabControl1.SelectedTab == this.tabPage4)
+            {
+                DataGridViewSelectedRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList4.SelectedRows;
+                foreach (DataGridViewRow selectedRow in dataGridViewSelection)
+                {
+                    selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                }
+            }
+
+
+            logic.clickedAddDeleteList(selectedTerms);
+        }
 	}
 }

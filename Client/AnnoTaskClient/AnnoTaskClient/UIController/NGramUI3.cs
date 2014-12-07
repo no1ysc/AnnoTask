@@ -11,6 +11,11 @@ namespace AnnoTaskClient.UIController
 	{
 		private MainWindow mainWindow;
 
+        public MainWindow getMainWindow()
+        {
+            return this.mainWindow;
+        }
+
 		public NGramUI3(MainWindow mainWindow)
 		{
 			this.mainWindow = mainWindow;
