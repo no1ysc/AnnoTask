@@ -272,6 +272,7 @@ namespace AnnoTaskClient.Logic
         {
             this.deleteList = selectedTerm;
             commandQ.AddLast("AddDeleteList");
+            MessageBox.Show("불용어 추가를 진행합니다.");
         }
 
         private void addDeleteList()
