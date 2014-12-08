@@ -16,17 +16,17 @@ namespace AnnoTaskClient.UIController
 
         public String conceptFrom
         {
-            get { return (String)addThesaurusWindow.ConceptFromComboBox.SelectedValue; }
+            get { return (String)addThesaurusWindow.ConceptFromComboBox.Text; }
         }
 
         public String conceptTo
         {
-            get { return (String)addThesaurusWindow.ConceptToComboBox.SelectedValue; }
+            get { return (String)addThesaurusWindow.ConceptToComboBox.Text; }
         }
 
         public String metaOntology
         {
-            get { return (String)addThesaurusWindow.MetaOntologyComboBox.SelectedValue; }
+            get { return (String)addThesaurusWindow.MetaOntologyComboBox.Text; }
         }
 
     }
