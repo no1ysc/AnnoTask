@@ -1,5 +1,6 @@
 ﻿using AnnoTaskClient.UIController;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,9 @@ namespace AnnoTaskClient.Logic
 		private ClientWormHole clientWormHole = new ClientWormHole();
 		private Dictionary<string, Frequency> termNFreq = new Dictionary<string, Frequency>(); // Term, Freq
         private List<String> deleteList;
-
+        private List<string> termList = new List<string>();
+        private ConceptTo[] conceptList;
+        
 		public MainLogic()
 		{
 			
@@ -194,14 +197,29 @@ namespace AnnoTaskClient.Logic
 
         private void importConceptToList()
         {
-            ConceptTo[] result = clientWormHole.ImportConceptToList();
+            
+            conceptList = clientWormHole.ImportConceptToList();
 
-            if (result == null)
+            List<String> list = new List<string>();
+
+            if (termList == null && termList.Count == 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < conceptList.Count(); ++i)
+            {
+                string temp = conceptList[i].conceptToTerms;
+                list.Add(temp);                
+            }
+            list.Sort();
+            UIHandler.Instance.ThesaurusUI.RefreshConceptToCombo(list);
+
+            if (conceptList == null)
             {
                 MessageBox.Show("ConcepTo list가 없습니다.");
                 return;
             }
-              
         }
 
 		private void clear()
@@ -225,7 +243,7 @@ namespace AnnoTaskClient.Logic
 		}
 
         internal void getConceptToList()
-        {
+        {     
             commandQ.AddLast("GetConceptToList");
         }
 
@@ -308,5 +326,173 @@ namespace AnnoTaskClient.Logic
 
             clientWormHole.AddThesaurus(conceptFrom, conceptTo, metaOntology);
         }
+
+        internal void getTermList(List<string> selectedTerm)
+        {
+            if (selectedTerm != null && selectedTerm.Count != 0)
+            {
+                for (int i = 0; i < selectedTerm.Count; ++i)
+                    termList.Add(selectedTerm[i]);
+
+                selectedTerm.Sort();
+
+                UIHandler.Instance.ThesaurusUI.RefreshConceptFromCombo(termList);
+                return;
+            }
+
+            MessageBox.Show("단어를 선택해 주세요.");
+        }
+
+        internal void thesaurusWindowTermChanged(string term)
+        {
+            termList.Remove(term);
+            termList.Insert(0, term);
+
+            UIHandler.Instance.ThesaurusUI.RefreshConceptFromCombo(termList);
+        }
+
+        internal void conceptToFind(string term)
+        {
+            if (term.Equals(""))
+            {
+                return;
+            }
+
+            List<String> list = new List<string>();
+            list.Add(term);
+
+            if (termList == null && termList.Count == 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < conceptList.Count(); ++i)
+            {
+                string temp = conceptList[i].conceptToTerms;
+                if (temp.Contains(term))
+                {
+                    list.Add(temp);
+                }
+            }
+
+            UIHandler.Instance.ThesaurusUI.RefreshConceptToCombo(list);
+        }
+
+        internal void treeViewForThesaurusWindow(string p)
+        {
+            UIHandler.Instance.ThesaurusUI.RefreshDocList(termNFreq[p]);         
+        }
+
+        internal void getColoredArticle(String article, object sender, RichTextBox articleView)
+        {
+            articleView.Clear();
+
+            TreeNode node = (sender as TreeView).SelectedNode;
+            string term = node.Parent.Parent.Text;
+
+            int Ncnt = 1;
+            int line = 0;
+            bool lineF = false;
+            for (int i = 0; i < term.Length; ++i)
+            {
+                char temp = term[i];
+                if (temp.Equals(' '))
+                {
+                    Ncnt++;
+                }
+            }
+
+            String[] lineTokenList = article.Split('\n');
+            string word = "";
+            string word1 = "";
+            string word2 = "";
+            ArrayList list = new ArrayList();
+            foreach (string lineToken in lineTokenList)
+            {
+                String[] wordtokenList = lineToken.Split(' ');
+
+                foreach (string wordToken in wordtokenList)
+                {
+                    if (word.Contains(term))
+                    {
+                        if (!lineF)
+                        {
+                            String[] lineList = word.Split('\n');
+                            line = lineList.Count();
+                            lineF = true;
+                        }
+                        
+                        String[] result = word.Split(' ');
+
+                        for (int i = 0; i < (result.Count() - Ncnt); ++i)
+                        {
+                            word1 += result[i] + " ";
+                        }
+
+                        for (int j = (result.Count() - Ncnt); j < result.Count(); ++j)
+                        {
+                            word2 += result[j] + " ";
+                        }
+
+                        articleView.SelectionColor = System.Drawing.Color.Black;
+                        articleView.SelectionBackColor = System.Drawing.Color.White;
+                        articleView.SelectedText = word1;
+                        
+                        articleView.SelectionColor = System.Drawing.Color.Black;
+                        articleView.SelectionBackColor = System.Drawing.Color.Red;
+                        articleView.SelectedText = word2;
+
+                        word = "";
+                        word1 = "";
+                        word2 = "";
+                    }
+                    word += " " + wordToken;
+                }
+                word += "\n";
+            }
+
+            if (word.Contains(term))
+            {
+                if (!lineF)
+                {
+                    String[] lineList = word.Split('\n');
+                    line = lineList.Count();
+                    lineF = true;
+                }
+                word1 = "";
+                word2 = "";
+
+                String[] result = word.Split(' ');
+                for (int i = 0; i < (result.Count() - Ncnt); ++i)
+                {
+                    word1 += result[i] + " ";
+                }
+
+                for (int j = (result.Count() - Ncnt); j < result.Count(); ++j)
+                {
+                    word2 += result[j] + " ";
+                }
+
+                articleView.SelectionColor = System.Drawing.Color.Black;
+                articleView.SelectionBackColor = System.Drawing.Color.White;
+                articleView.SelectedText = word1;
+
+                articleView.SelectionColor = System.Drawing.Color.Black;
+                articleView.SelectionBackColor = System.Drawing.Color.Red;
+                articleView.SelectedText = word2;
+
+                articleView.SelectionStart = line;
+                articleView.ScrollToCaret();
+
+                return;           
+            }
+
+            articleView.SelectionColor = System.Drawing.Color.Black;
+            articleView.SelectionBackColor = System.Drawing.Color.White;
+            articleView.SelectedText = word;
+
+            articleView.SelectionStart = line;
+            articleView.ScrollToCaret();
+        }        
     }
 }

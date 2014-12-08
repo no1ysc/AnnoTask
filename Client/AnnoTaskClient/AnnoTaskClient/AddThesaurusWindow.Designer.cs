@@ -32,7 +32,7 @@
             this.ConceptToComboBox = new System.Windows.Forms.ComboBox();
             this.MetaOntologyComboBox = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.linkedList = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
@@ -49,7 +49,6 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
-      
             // 
             // ConceptFromComboBox
             // 
@@ -58,14 +57,18 @@
             this.ConceptFromComboBox.Name = "ConceptFromComboBox";
             this.ConceptFromComboBox.Size = new System.Drawing.Size(206, 21);
             this.ConceptFromComboBox.TabIndex = 0;
+            this.ConceptFromComboBox.SelectedIndexChanged += new System.EventHandler(this.ConceptFromComboBox_SelectedIndexChanged);
             // 
             // ConceptToComboBox
             // 
+            this.ConceptToComboBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.ConceptToComboBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.ConceptToComboBox.FormattingEnabled = true;
             this.ConceptToComboBox.Location = new System.Drawing.Point(38, 123);
             this.ConceptToComboBox.Name = "ConceptToComboBox";
             this.ConceptToComboBox.Size = new System.Drawing.Size(206, 21);
             this.ConceptToComboBox.TabIndex = 1;
+            this.ConceptToComboBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ConceptToComboBox_KeyDown);
             // 
             // MetaOntologyComboBox
             // 
@@ -88,19 +91,19 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.linkedList);
             this.panel1.Location = new System.Drawing.Point(38, 192);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(206, 210);
             this.panel1.TabIndex = 3;
             // 
-            // textBox1
+            // linkedList
             // 
-            this.textBox1.Location = new System.Drawing.Point(0, 4);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(203, 203);
-            this.textBox1.TabIndex = 0;
+            this.linkedList.Location = new System.Drawing.Point(0, 4);
+            this.linkedList.Multiline = true;
+            this.linkedList.Name = "linkedList";
+            this.linkedList.Size = new System.Drawing.Size(203, 203);
+            this.linkedList.TabIndex = 0;
             // 
             // splitContainer1
             // 
@@ -126,6 +129,7 @@
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(196, 203);
             this.treeView1.TabIndex = 0;
+            this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_DoubleClick);
             // 
             // richTextBox1
             // 
@@ -193,7 +197,7 @@
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label5.Location = new System.Drawing.Point(263, 173);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(67, 15);
+            this.label5.Size = new System.Drawing.Size(72, 15);
             this.label5.TabIndex = 10;
             this.label5.Text = "문서리스트";
             // 
@@ -203,7 +207,7 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label6.Location = new System.Drawing.Point(470, 173);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(55, 15);
+            this.label6.Size = new System.Drawing.Size(59, 15);
             this.label6.TabIndex = 11;
             this.label6.Text = "기사전문";
             // 
@@ -245,10 +249,10 @@
         public System.Windows.Forms.ComboBox ConceptToComboBox;
         public System.Windows.Forms.ComboBox MetaOntologyComboBox;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.TextBox linkedList;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        public System.Windows.Forms.TreeView treeView1;
+        public System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button addThesaurusButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;

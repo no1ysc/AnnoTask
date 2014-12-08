@@ -10,13 +10,14 @@ namespace AnnoTaskClient.UIController
 	class UIHandler
 	{
 		private static UIHandler thisClass = new UIHandler();
-		public static UIHandler Instance
+        public static UIHandler Instance
 		{
 			get { return thisClass; }
 		}
 
 		private MainWindow mainWindow;
-		public void runUIHandler(MainWindow value)
+
+        public void runUIHandler(MainWindow value)
 		{
 			mainWindow = value;
 
@@ -39,7 +40,7 @@ namespace AnnoTaskClient.UIController
 		public NGramUI3 NGram3 { get{return ngram3;}	}
 		public NGramUI4 NGram4 { get{return ngram4;} }
 
-        private AddThesaurusWindow addThesaurusWindow;
+        public AddThesaurusWindow addThesaurusWindow;
         public void runUIHandler_Thesaurus(AddThesaurusWindow value)
         {
             addThesaurusWindow = value;
@@ -50,6 +51,11 @@ namespace AnnoTaskClient.UIController
         private ThesaurusUI thesaurusUI;
 
         public ThesaurusUI ThesaurusUI { get { return thesaurusUI;  } }
+
+
+
+
+        public MainLogic logic = new MainLogic();
 
 	}
 }

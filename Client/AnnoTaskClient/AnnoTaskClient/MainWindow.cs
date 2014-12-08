@@ -15,10 +15,10 @@ using AnnoTaskClient.Logic;
 namespace AnnoTaskClient
 {
 	public partial class MainWindow : Form
-	{
-		private MainLogic logic = new MainLogic();
+	{        
 		private Thread mainLogicWorker;
-
+     
+        private MainLogic logic = UIHandler.Instance.logic;
         public MainLogic getMainLogic()
         {
             return this.logic;
@@ -91,8 +91,61 @@ namespace AnnoTaskClient
 
         private void openAddThesaurusWindowButton_Click(object sender, EventArgs e)
         {
+            List<string> selectedTerms = new List<string>();
+            if (this.tabControl1.SelectedTab == this.tabPage1)
+            {
+                DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList1.Rows;
+
+                foreach (DataGridViewRow selectedRow in dataGridViewSelection)
+                {
+                    if (Convert.ToBoolean(selectedRow.Cells[0].Value))
+                    {
+                        selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    }
+                }
+            }
+            else if (this.tabControl1.SelectedTab == this.tabPage2)
+            {
+                DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram2.getMainWindow().wordList2.Rows;
+
+                foreach (DataGridViewRow selectedRow in dataGridViewSelection)
+                {
+                    if (Convert.ToBoolean(selectedRow.Cells[0].Value))
+                    {
+                        selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    }
+                }
+            }
+            else if (this.tabControl1.SelectedTab == this.tabPage3)
+            {
+                DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram3.getMainWindow().wordList3.Rows;
+
+                foreach (DataGridViewRow selectedRow in dataGridViewSelection)
+                {
+                    if (Convert.ToBoolean(selectedRow.Cells[0].Value))
+                    {
+                        selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    }
+                }
+            }
+            else if (this.tabControl1.SelectedTab == this.tabPage4)
+            {
+                DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram4.getMainWindow().wordList4.Rows;
+
+                foreach (DataGridViewRow selectedRow in dataGridViewSelection)
+                {
+                    if (Convert.ToBoolean(selectedRow.Cells[0].Value))
+                    {
+                        selectedTerms.Add((string)selectedRow.Cells[1].Value);
+                    }
+                }
+            }
+          
             AddThesaurusWindow addThesaurus = new AddThesaurusWindow();
             addThesaurus.Show();
+
+            logic.getConceptToList();
+            logic.getTermList(selectedTerms);
         }
 
 		private void cellClickHandler(string cellValue, int tabNumber)
@@ -181,7 +234,7 @@ namespace AnnoTaskClient
 			string article = getArticle(sender);
 			if (article != null)
 			{
-                getColoredArticle(article, sender, this.article1);    
+                logic.getColoredArticle(article, sender, this.article1);    
 			}
 		}
         
@@ -190,7 +243,7 @@ namespace AnnoTaskClient
             string article = getArticle(sender);
             if (article != null)
             {
-                getColoredArticle(article, sender, this.article1);
+                logic.getColoredArticle(article, sender, this.article2);
             }
 		}
 
@@ -199,7 +252,7 @@ namespace AnnoTaskClient
             string article = getArticle(sender);
             if (article != null)
             {
-                getColoredArticle(article, sender, this.article1);
+                logic.getColoredArticle(article, sender, this.article3);
             }
 		}
 
@@ -208,58 +261,9 @@ namespace AnnoTaskClient
             string article = getArticle(sender);
             if (article != null)
             {
-                getColoredArticle(article, sender, this.article1);
+                logic.getColoredArticle(article, sender, this.article4);
             }
 		}
-
-        private void getColoredArticle(string article, object sender, RichTextBox articleView)
-        {
-            articleView.Clear();
-
-            TreeNode node = (sender as TreeView).SelectedNode;
-            string term = node.Parent.Parent.Text;
-
-            articleView.SelectionStart = 1000;
-
-            string word = null;
-            bool start = false;
-            int lineCnt = 0;
-            int line = 0;
-            for (int i = 0; i < article.Length; ++i)
-            {
-                char charactor = article[i];
-                word += charactor;
-                
-                if (charactor.Equals(' ') || charactor.Equals('\n'))
-                {
-                    if (charactor.Equals('\n'))
-                        lineCnt++;
-
-                    if (word.Contains(term))
-                    {
-                        if (!start)
-                        {
-                            line = lineCnt;
-                            start = true;
-                        }
-                        articleView.SelectionColor = Color.Black;
-                        articleView.SelectionBackColor = Color.Red;
-                        articleView.SelectedText = word;
-                    }
-                    else
-                    {
-                        articleView.SelectionColor = Color.Black;
-                        articleView.SelectionBackColor = Color.White;
-                        articleView.SelectedText = word;
-                    }
-                    word = null;
-                }
-            }
-
-            articleView.SelectionStart = line;
-            articleView.ScrollToCaret();
-        }
-
 
         private void addDeleteListButton_Click(object sender, EventArgs e)
         {

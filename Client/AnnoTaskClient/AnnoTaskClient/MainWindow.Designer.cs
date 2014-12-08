@@ -74,7 +74,7 @@ namespace AnnoTaskClient
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.docList2 = new System.Windows.Forms.TreeView();
             this.label9 = new System.Windows.Forms.Label();
-            this.article2 = new System.Windows.Forms.TextBox();
+            this.article2 = new System.Windows.Forms.RichTextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.vScrollBar5 = new System.Windows.Forms.VScrollBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -88,7 +88,7 @@ namespace AnnoTaskClient
             this.splitContainer6 = new System.Windows.Forms.SplitContainer();
             this.docList3 = new System.Windows.Forms.TreeView();
             this.label12 = new System.Windows.Forms.Label();
-            this.article3 = new System.Windows.Forms.TextBox();
+            this.article3 = new System.Windows.Forms.RichTextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.vScrollBar9 = new System.Windows.Forms.VScrollBar();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -102,7 +102,7 @@ namespace AnnoTaskClient
             this.splitContainer8 = new System.Windows.Forms.SplitContainer();
             this.docList4 = new System.Windows.Forms.TreeView();
             this.label15 = new System.Windows.Forms.Label();
-            this.article4 = new System.Windows.Forms.TextBox();
+            this.article4 = new System.Windows.Forms.RichTextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.vScrollBar12 = new System.Windows.Forms.VScrollBar();
             this.openAddThesaurusWindowButton = new System.Windows.Forms.Button();
@@ -602,7 +602,6 @@ namespace AnnoTaskClient
             // 
             // article2
             // 
-            this.article2.AcceptsReturn = true;
             this.article2.AcceptsTab = true;
             this.article2.BackColor = System.Drawing.SystemColors.Window;
             this.article2.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -610,7 +609,7 @@ namespace AnnoTaskClient
             this.article2.Multiline = true;
             this.article2.Name = "article2";
             this.article2.ReadOnly = true;
-            this.article2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.article2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.article2.Size = new System.Drawing.Size(305, 385);
             this.article2.TabIndex = 1;
             // 
@@ -754,7 +753,6 @@ namespace AnnoTaskClient
             // 
             // article3
             // 
-            this.article3.AcceptsReturn = true;
             this.article3.AcceptsTab = true;
             this.article3.BackColor = System.Drawing.SystemColors.Window;
             this.article3.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -762,7 +760,7 @@ namespace AnnoTaskClient
             this.article3.Multiline = true;
             this.article3.Name = "article3";
             this.article3.ReadOnly = true;
-            this.article3.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.article3.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.article3.Size = new System.Drawing.Size(305, 385);
             this.article3.TabIndex = 1;
             // 
@@ -907,7 +905,6 @@ namespace AnnoTaskClient
             // 
             // article4
             // 
-            this.article4.AcceptsReturn = true;
             this.article4.AcceptsTab = true;
             this.article4.BackColor = System.Drawing.SystemColors.Window;
             this.article4.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -915,7 +912,7 @@ namespace AnnoTaskClient
             this.article4.Multiline = true;
             this.article4.Name = "article4";
             this.article4.ReadOnly = true;
-            this.article4.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.article4.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.article4.Size = new System.Drawing.Size(305, 385);
             this.article4.TabIndex = 1;
             // 
@@ -1063,13 +1060,13 @@ namespace AnnoTaskClient
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem 불러오기ToolStripMenuItem;
-		private System.Windows.Forms.TabPage tabPage2;
+		public System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.VScrollBar vScrollBar5;
-		private System.Windows.Forms.TabPage tabPage3;
+        public System.Windows.Forms.TabPage tabPage3;
 		private System.Windows.Forms.VScrollBar vScrollBar9;
-		private System.Windows.Forms.TabPage tabPage4;
+        public System.Windows.Forms.TabPage tabPage4;
 		private System.Windows.Forms.VScrollBar vScrollBar12;
-		private System.Windows.Forms.TabPage tabPage1;
+        public System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private System.Windows.Forms.VScrollBar vScrollBar1;
 		private System.Windows.Forms.SplitContainer splitContainer2;
@@ -1110,13 +1107,13 @@ namespace AnnoTaskClient
 		public System.Windows.Forms.Label progressLabel;
 		public System.Windows.Forms.DataGridView wordList2;
 		public System.Windows.Forms.TreeView docList2;
-		public System.Windows.Forms.TextBox article2;
+        public System.Windows.Forms.RichTextBox article2;
 		public System.Windows.Forms.DataGridView wordList3;
 		public System.Windows.Forms.TreeView docList3;
-		public System.Windows.Forms.TextBox article3;
+        public System.Windows.Forms.RichTextBox article3;
 		public System.Windows.Forms.TabControl tabControl1;
 		public System.Windows.Forms.TreeView docList4;
-		public System.Windows.Forms.TextBox article4;
+        public System.Windows.Forms.RichTextBox article4;
 		public System.Windows.Forms.DataGridView wordList4;
         private System.Windows.Forms.DataGridViewCheckBoxColumn check2;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Term2;
