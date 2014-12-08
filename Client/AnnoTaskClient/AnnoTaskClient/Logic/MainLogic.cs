@@ -106,6 +106,9 @@ namespace AnnoTaskClient.Logic
                 case "AddDeleteList":
                     addDeleteList();
                     break;
+                case "GetConceptToList":
+                    importConceptToList();
+                    break;
 				default:
 					break;
 			}
@@ -189,6 +192,18 @@ namespace AnnoTaskClient.Logic
 			UIHandler.Instance.CommonUI.ProgressBar = 100;
 		}
 
+        private void importConceptToList()
+        {
+            ConceptTo[] result = clientWormHole.ImportConceptToList();
+
+            if (result == null)
+            {
+                MessageBox.Show("ConcepTo list가 없습니다.");
+                return;
+            }
+              
+        }
+
 		private void clear()
 		{
 			// TODO : 메모리 누수 가능성 점검해야함.
@@ -208,6 +223,11 @@ namespace AnnoTaskClient.Logic
 		{
 			commandQ.AddLast("Import");
 		}
+
+        internal void getConceptToList()
+        {
+            commandQ.AddLast("GetConceptToList");
+        }
 
 		internal void cellContentDoubleClick(string p, int tabNumber)
 		{

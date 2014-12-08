@@ -56,6 +56,7 @@
     <Compile Include="Configure.cs" />
     <Compile Include="Logic\ClientWormHole.cs" />
     <Compile Include="Logic\Command.cs" />
+    <Compile Include="Logic\ConceptToList.cs" />
     <Compile Include="Logic\DocByTerm.cs" />
     <Compile Include="Logic\Frequency.cs" />
     <Compile Include="Logic\JsonConverter.cs" />

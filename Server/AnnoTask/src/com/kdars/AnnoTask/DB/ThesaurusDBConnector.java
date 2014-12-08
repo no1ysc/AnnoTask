@@ -3,6 +3,7 @@ package com.kdars.AnnoTask.DB;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -167,6 +168,24 @@ public class ThesaurusDBConnector {
 	private String unescape(String text) {
 		String result = StringEscapeUtils.unescapeHtml4(text);
 		return result;
+	}
+	
+	public ArrayList<ConceptToList> queryConceptList() {
+		ArrayList<ConceptToList> ret = new ArrayList<ConceptToList>();
+		
+		ResultSet resultSet = null;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			resultSet = stmt.executeQuery("select * from " + conceptToTable);
+			while (resultSet.next()){
+				ret.add(new ConceptToList(resultSet.getInt(foreignKeyColName), resultSet.getString(toColName1)));	
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return ret;
 	}
 	
 }

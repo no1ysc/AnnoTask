@@ -47,6 +47,18 @@ namespace AnnoTaskClient.Logic
 				public string comment;
 				public string crawlerVersion;
 			}
+
+            public class ConceptToCount
+            {
+                public int conceptToCount;
+            }
+
+
+            public class ConceptToListResponse
+            {   
+                public string conceptToId;
+                public string ConceptToTerm;
+            }
 		}
 
 		public class Client2Server
@@ -85,6 +97,11 @@ namespace AnnoTaskClient.Logic
                 public String conceptFrom;
                 public String conceptTo;
                 public String metaOntology;
+            }
+			
+			public class RequestConcetpToList
+            {
+                public string cmd = "RequestConceptToList";
             }
 		}
 	}

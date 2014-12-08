@@ -1,5 +1,7 @@
 package com.kdars.AnnoTask.DB;
 
+import java.util.ArrayList;
+
 public class ThesaurusDBManager {
 	private static ThesaurusDBManager thisClass = new ThesaurusDBManager();
 	private ThesaurusDBConnector thesaurusDB;
@@ -38,4 +40,8 @@ public class ThesaurusDBManager {
 		thes.setMetaOntology(metaontology);
 		return thesaurusDB.add(thes);
 	}
+	
+	public ArrayList<ConceptToList> getConceptToLost(){
+		return thesaurusDB.queryConceptList();
+	}	
 }

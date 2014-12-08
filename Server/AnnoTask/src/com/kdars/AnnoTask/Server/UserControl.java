@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.kdars.AnnoTask.ContextConfig;
+import com.kdars.AnnoTask.DB.ConceptToList;
 import com.kdars.AnnoTask.DB.ContentDBManager;
 import com.kdars.AnnoTask.DB.DeleteListDBManager;
 import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
@@ -25,8 +26,10 @@ import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddDeleteList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddThesaurus;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestByDate;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestTermTransfer;
+import com.kdars.AnnoTask.Server.Command.Server2Client.ConceptListResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.DocumentResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.NotifyTransferEnd;
+import com.kdars.AnnoTask.Server.Command.Server2Client.SendConceptToCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendDocumentCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.TermTransfer;
 
@@ -43,6 +46,7 @@ public class UserControl extends Thread{
 	private boolean bValidConnection = true;
 	
 	private ArrayList<Document> 	requestDocs;
+	private ArrayList<ConceptToList> 		conceptLists;
 	public UserControl(Socket socket, int userID){
 		this.socket = socket;
 		this.userID = userID;
@@ -115,6 +119,11 @@ public class UserControl extends Thread{
 		if(commandFromUser.contains("addThesaurus")){
 			RequestAddThesaurus requestedThesaurus = new JSONDeserializer<RequestAddThesaurus>().deserialize(commandFromUser, RequestAddThesaurus.class); //TODO: String.class가 맞는지 확인해야함...
 			thesaurusRequestHandler(requestedThesaurus);
+		}
+		
+		// concept to list 요청시
+		if(commandFromUser.contains("RequestConceptToList")){
+			requestConceptToList();
 		}
 		
 	}
@@ -254,6 +263,24 @@ public class UserControl extends Thread{
 			
 			transferObject(sendDocumentCount);
 	}
+	
+	private void requestConceptToList() {
+
+		this.conceptLists = ThesaurusDBManager.getInstance().getConceptToLost();
+
+		SendConceptToCount sendConceptToCount = new SendConceptToCount();
+		sendConceptToCount.conceptToCount = conceptLists.size();
+		transferObject(sendConceptToCount);
+		
+		
+		for(int idx = 0; idx <sendConceptToCount.conceptToCount; ++idx){
+			ConceptToList conceptTo = conceptLists.get(idx);		
+			ConceptListResponse temp = new ConceptListResponse(conceptTo.conceptToId, conceptTo.conceptToTerm);
+			transferObject(temp);
+		}
+		
+		
+}
 
 	private void transferDocbyTerm(DocTermFreqByTerm[] docByTerm) {
 		for (int index = 0; index < docByTerm.length; index++){
