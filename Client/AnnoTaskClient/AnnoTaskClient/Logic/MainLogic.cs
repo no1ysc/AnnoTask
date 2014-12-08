@@ -19,6 +19,7 @@ namespace AnnoTaskClient.Logic
         private List<String> deleteList;
         private List<string> termList = new List<string>();
         private ConceptTo[] conceptList;
+        private LinkedList[] linkedList;
         
 		public MainLogic()
 		{
@@ -111,6 +112,9 @@ namespace AnnoTaskClient.Logic
                     break;
                 case "GetConceptToList":
                     importConceptToList();
+                    break;
+                case "GetLinkedList":
+                    importGetLinkedList();
                     break;
 				default:
 					break;
@@ -222,6 +226,29 @@ namespace AnnoTaskClient.Logic
             }
         }
 
+        private void importGetLinkedList()
+        {
+            string term = UIHandler.Instance.ThesaurusUI.conceptToTerms;
+            string conceptToId = "";
+            for (int i = 0; i < conceptList.Count(); ++i)
+            {
+                ConceptTo temp = conceptList[i];
+                if (temp.conceptToTerms.Equals(term))
+                {
+                    conceptToId = temp.conceptToIds;
+                }
+            }
+
+            if (conceptToId.Equals(""))
+            {
+                return;
+            }
+
+
+            linkedList = clientWormHole.ImportGetLinkedList(conceptToId);
+            UIHandler.Instance.ThesaurusUI.RefreshMeta(linkedList);
+        }
+
 		private void clear()
 		{
 			// TODO : 메모리 누수 가능성 점검해야함.
@@ -245,6 +272,12 @@ namespace AnnoTaskClient.Logic
         internal void getConceptToList()
         {     
             commandQ.AddLast("GetConceptToList");
+        }
+                
+        internal void getLinkedList(String term)
+        {
+            UIHandler.Instance.ThesaurusUI.conceptToTerms = term;
+            commandQ.AddLast("GetLinkedList");
         }
 
 		internal void cellContentDoubleClick(string p, int tabNumber)

@@ -19,19 +19,24 @@ import com.kdars.AnnoTask.DB.ContentDBManager;
 import com.kdars.AnnoTask.DB.DeleteListDBManager;
 import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 import com.kdars.AnnoTask.DB.Document;
+import com.kdars.AnnoTask.DB.LinkedList;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 import com.kdars.AnnoTask.DB.ThesaurusDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddDeleteList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddThesaurus;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestByDate;
+import com.kdars.AnnoTask.Server.Command.Client2Server.RequestGetLinkedList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestTermTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.ConceptListResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.DocumentResponse;
+import com.kdars.AnnoTask.Server.Command.Server2Client.MetaResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.NotifyTransferEnd;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendConceptToCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendDocumentCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.TermTransfer;
+import com.kdars.AnnoTask.Server.Command.Server2Client.SendLinkedListCount;
+import com.kdars.AnnoTask.Server.Command.Server2Client.LinkedListResponse;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
@@ -45,8 +50,9 @@ public class UserControl extends Thread{
 	private int userID;
 	private boolean bValidConnection = true;
 	
-	private ArrayList<Document> 	requestDocs;
-	private ArrayList<ConceptToList> 		conceptLists;
+	private ArrayList<Document> 		requestDocs;
+	private ArrayList<ConceptToList>	conceptLists;
+	private ArrayList<LinkedList> 		linkedLists;
 	public UserControl(Socket socket, int userID){
 		this.socket = socket;
 		this.userID = userID;
@@ -124,6 +130,12 @@ public class UserControl extends Thread{
 		// concept to list 요청시
 		if(commandFromUser.contains("RequestConceptToList")){
 			requestConceptToList();
+		}
+		
+		// linked list 요청시
+		if(commandFromUser.contains("RequestLinkedList")){
+			RequestGetLinkedList requestedLinkedList = new JSONDeserializer<RequestGetLinkedList>().deserialize(commandFromUser, RequestGetLinkedList.class); //TODO: String.class가 맞는지 확인해야함...
+			requestLinkedList(requestedLinkedList);
 		}
 		
 	}
@@ -266,7 +278,7 @@ public class UserControl extends Thread{
 	
 	private void requestConceptToList() {
 
-		this.conceptLists = ThesaurusDBManager.getInstance().getConceptToLost();
+		this.conceptLists = ThesaurusDBManager.getInstance().getConceptToList();
 
 		SendConceptToCount sendConceptToCount = new SendConceptToCount();
 		sendConceptToCount.conceptToCount = conceptLists.size();
@@ -278,9 +290,30 @@ public class UserControl extends Thread{
 			ConceptListResponse temp = new ConceptListResponse(conceptTo.conceptToId, conceptTo.conceptToTerm);
 			transferObject(temp);
 		}
+	}
+	
+	private void requestLinkedList(RequestGetLinkedList requestedLinkedList) {
+
+		String id = requestedLinkedList.conceptToId;
+		this.linkedLists = ThesaurusDBManager.getInstance().getLinkedList(id);
+		
+		SendLinkedListCount sendLinkedListCount = new SendLinkedListCount();
+		sendLinkedListCount.linkedListCount = linkedLists.size();
+		transferObject(sendLinkedListCount);
 		
 		
-}
+		for(int idx = 0; idx <linkedLists.size(); ++idx){
+			LinkedList linkedList = linkedLists.get(idx);		
+			LinkedListResponse temp = new LinkedListResponse(linkedList.linkedTerm);
+			transferObject(temp);
+		}	
+		
+		String metaInfo = ThesaurusDBManager.getInstance().getMetaInfo(id);
+		
+		MetaResponse meta = new MetaResponse(metaInfo);
+		transferObject(meta);
+	}
+	
 
 	private void transferDocbyTerm(DocTermFreqByTerm[] docByTerm) {
 		for (int index = 0; index < docByTerm.length; index++){

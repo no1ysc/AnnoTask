@@ -16,6 +16,9 @@ namespace AnnoTaskClient
     public partial class AddThesaurusWindow : Form
     {
         private MainLogic logic = UIHandler.Instance.logic;
+
+       
+
         public MainLogic getMainLogic()
         {
             return this.logic;
@@ -42,9 +45,12 @@ namespace AnnoTaskClient
 
         private void ConceptToComboBox_KeyDown(object sender, KeyEventArgs e)
         {
+            ComboBox comb = (ComboBox)sender;
+            string text = comb.Text;
+
             if (e.KeyCode == Keys.Enter)
             {
-                int a = 0;
+                logic.getLinkedList(text);
             }
         }
 
@@ -71,6 +77,14 @@ namespace AnnoTaskClient
             string term = node.Parent.Parent.Text;
 
             return logic.loadArticle(term, category, title);
+        }
+
+        private void ConceptToComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox comb = (ComboBox)sender;
+            string text = comb.Text;
+
+            logic.getLinkedList(text);
         }
 
     }

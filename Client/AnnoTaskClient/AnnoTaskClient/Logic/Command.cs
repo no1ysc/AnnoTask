@@ -53,11 +53,22 @@ namespace AnnoTaskClient.Logic
                 public int conceptToCount;
             }
 
+            public class LinkedListCount
+            {
+                public int linkedListCount=0;
+            }
+
 
             public class ConceptToListResponse
             {   
                 public string conceptToId;
                 public string ConceptToTerm;
+            }
+
+            public class LinkedListResponse
+            {
+                public string linkedListTerm;
+                public string metaInfo;
             }
 		}
 
@@ -102,6 +113,12 @@ namespace AnnoTaskClient.Logic
 			public class RequestConcetpToList
             {
                 public string cmd = "RequestConceptToList";
+            }
+
+            public class RequestLinkedList
+            {
+                public string cmd = "RequestLinkedList";
+                public string conceptToId;
             }
 		}
 	}

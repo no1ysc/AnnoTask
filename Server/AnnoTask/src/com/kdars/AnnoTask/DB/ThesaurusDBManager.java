@@ -41,7 +41,15 @@ public class ThesaurusDBManager {
 		return thesaurusDB.add(thes);
 	}
 	
-	public ArrayList<ConceptToList> getConceptToLost(){
+	public ArrayList<ConceptToList> getConceptToList(){
 		return thesaurusDB.queryConceptList();
 	}	
+	
+	public ArrayList<LinkedList> getLinkedList(String id){
+		return thesaurusDB.queryLinkedList(id);
+	}	
+	
+	public String getMetaInfo(String id){
+		return thesaurusDB.queryMetaInfo(id);
+	}		
 }

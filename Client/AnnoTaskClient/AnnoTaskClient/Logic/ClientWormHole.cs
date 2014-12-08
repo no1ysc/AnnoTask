@@ -166,19 +166,20 @@ EndOfInstance:
 
 
 
-        internal ConceptTo[] ImportConceptToList()
+        internal LinkedList[] ImportGetLinkedList(string conceptToId)
 		{
-            Command.Client2Server.RequestConcetpToList data = new Command.Client2Server.RequestConcetpToList();
-            string json1_1 = new JsonConverter<Command.Client2Server.RequestConcetpToList>().Object2Json(data);
+            Command.Client2Server.RequestLinkedList data = new Command.Client2Server.RequestLinkedList();
+            data.conceptToId = conceptToId;
+            string json1_1 = new JsonConverter<Command.Client2Server.RequestLinkedList>().Object2Json(data);
             
             m_Writer.WriteLine(json1_1);
             m_Writer.Flush();
             
             string json1_2 = m_Reader.ReadLine();
-            Command.Server2Client.ConceptToCount conceptToCount = new JsonConverter<Command.Server2Client.ConceptToCount>().Json2Object(json1_2);
-         
-            ConceptTo[] conceptToList = new ConceptTo[conceptToCount.conceptToCount];     
-            for (int transferCount = 0; transferCount < conceptToCount.conceptToCount; transferCount++)
+            Command.Server2Client.LinkedListCount linkedCount = new JsonConverter<Command.Server2Client.LinkedListCount>().Json2Object(json1_2);
+
+            LinkedList[] linkedList = new LinkedList[linkedCount.linkedListCount];
+            for (int transferCount = 0; transferCount < linkedCount.linkedListCount; transferCount++)
             {
                 string json1_4 = null;
                 try
@@ -200,16 +201,70 @@ EndOfInstance:
                    // goto EndOfInstance;
                 }
 
+                Command.Server2Client.LinkedListResponse linked = new JsonConverter<Command.Server2Client.LinkedListResponse>().Json2Object(json1_4);
+
+                linkedList[transferCount] = new LinkedList();
+                linkedList[transferCount].linkedTerms = linked.linkedListTerm;
+              }
+
+            string json1_5 = m_Reader.ReadLine();
+            Command.Server2Client.LinkedListResponse temp = new JsonConverter<Command.Server2Client.LinkedListResponse>().Json2Object(json1_5);
+
+            if (temp.metaInfo == null || linkedCount.linkedListCount == 0)
+            {
+                return linkedList;
+            }
+
+            linkedList[0].metaInfos = temp.metaInfo;
+
+            return linkedList;
+		}
+
+
+        internal ConceptTo[] ImportConceptToList()
+        {
+            Command.Client2Server.RequestConcetpToList data = new Command.Client2Server.RequestConcetpToList();
+            string json1_1 = new JsonConverter<Command.Client2Server.RequestConcetpToList>().Object2Json(data);
+
+            m_Writer.WriteLine(json1_1);
+            m_Writer.Flush();
+
+            string json1_2 = m_Reader.ReadLine();
+            Command.Server2Client.ConceptToCount conceptToCount = new JsonConverter<Command.Server2Client.ConceptToCount>().Json2Object(json1_2);
+
+            ConceptTo[] conceptToList = new ConceptTo[conceptToCount.conceptToCount];
+            for (int transferCount = 0; transferCount < conceptToCount.conceptToCount; transferCount++)
+            {
+                string json1_4 = null;
+                try
+                {
+                    json1_4 = m_Reader.ReadLine();
+                    if (json1_4 == null)
+                    {
+                        // 타임아웃 걸리면 이쪽으로. 사용자에게 인지해 줄 필요가 있나?
+                        // 후행처리 필요, 서버와의 재연결이 필요함, 시점은 언제가 좋을지?
+                        // goto EndOfInstance;
+                    }
+                }
+                catch (IOException e)
+                {
+                    // 서버쪽에서 어떠한 이유든 병목걸리면 이 익셉션 뱃을 수 있음.
+                    // 이거 뜨면 연결 끊어진거라 보면되고, 프로그램이 종료될 익셉션임.
+                    // 여기서 잡아주면 여지껏 받아온 텀들은 보여줄 수는 있음.
+                    // 단, 후행작업(Thesaurus 처리 등)을 하기 위해서는 재커넥션 하는 로직이 필요함.
+                    // goto EndOfInstance;
+                }
+
                 Command.Server2Client.ConceptToListResponse conceptTo = new JsonConverter<Command.Server2Client.ConceptToListResponse>().Json2Object(json1_4);
- 
+
                 conceptToList[transferCount] = new ConceptTo();
                 conceptToList[transferCount].conceptToIds = conceptTo.conceptToId;
                 conceptToList[transferCount].conceptToTerms = conceptTo.ConceptToTerm;
-              }
+            }
 
 
             return conceptToList;
-		}
+        }
 
 		internal string getDocBodyFromID(int targetID)
 		{

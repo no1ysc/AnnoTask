@@ -188,4 +188,39 @@ public class ThesaurusDBConnector {
 		return ret;
 	}
 	
+	public ArrayList<LinkedList> queryLinkedList(String id) {
+		ArrayList<LinkedList> ret = new ArrayList<LinkedList>();
+		
+		ResultSet resultSet = null;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			resultSet = stmt.executeQuery("select * from " + conceptFromTable +" where "+ foreignKeyColName+" = "+id);
+			while (resultSet.next()){
+				ret.add(new LinkedList(resultSet.getString(fromColName2)));	
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return ret;
+	}
+	
+	public String queryMetaInfo(String id) {
+		String ret = "";
+		
+		ResultSet resultSet = null;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			resultSet = stmt.executeQuery("select * from " + conceptToTable +" where "+ foreignKeyColName+" = "+id);
+			while (resultSet.next()){
+				ret = resultSet.getString(toColName2);	
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return ret;
+	}
 }

@@ -11,11 +11,20 @@ namespace AnnoTaskClient.UIController
     class ThesaurusUI
     {
         private static AddThesaurusWindow addThesaurusWindow;
+        
 
         public ThesaurusUI(AddThesaurusWindow addThesaurusWindow)
         {
             //this.addThesaurusWindow = addThesaurusWindow;
             ThesaurusUI.addThesaurusWindow = addThesaurusWindow;
+        }
+
+
+        private string conceptToTerm;
+        public string conceptToTerms
+        {
+            get { return conceptToTerm; }
+            set { conceptToTerm = value; }
         }
 
         public String conceptFrom
@@ -26,7 +35,7 @@ namespace AnnoTaskClient.UIController
         
         public String conceptTo
         {
-            get { return (String)addThesaurusWindow.ConceptToComboBox.Text; }
+            get { return (String)addThesaurusWindow.ConceptToComboBox.SelectedItem; }
         }
 
         public String metaOntology
@@ -97,6 +106,27 @@ namespace AnnoTaskClient.UIController
                 }
             }
             addThesaurusWindow.treeView1.Nodes.Add(root);
+        }
+
+        private delegate void MetaRefresh(LinkedList[] LinkedList);
+        public void RefreshMeta(LinkedList[] LinkedList)
+        {
+            MetaRefresh metaRefresh = new MetaRefresh(refreshMeta);
+            addThesaurusWindow.Invoke(metaRefresh, new object[] { LinkedList });
+        }
+        private void refreshMeta(LinkedList[] LinkedList)
+        {
+            addThesaurusWindow.MetaOntologyComboBox.Text = "";
+            if (LinkedList.Count() != 0)
+            { 
+                addThesaurusWindow.MetaOntologyComboBox.Text = LinkedList[0].metaInfos;
+            }
+            addThesaurusWindow.linkedList.Clear();
+
+            foreach (LinkedList temp in LinkedList)
+            {
+                addThesaurusWindow.linkedList.Text += temp.linkedTerms+Environment.NewLine;
+            }
         }
     }
 }
