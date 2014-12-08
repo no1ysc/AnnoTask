@@ -10,9 +10,9 @@ namespace AnnoTaskClient.UIController
         private AddThesaurusWindow addThesaurusWindow;
 
         public ThesaurusUI(AddThesaurusWindow addThesaurusWindow)
-		{
+        {
             this.addThesaurusWindow = addThesaurusWindow;
-		}
+        }
 
         public String conceptFrom
         {
