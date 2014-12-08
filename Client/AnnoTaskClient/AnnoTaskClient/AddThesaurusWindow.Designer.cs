@@ -28,10 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-<<<<<<< HEAD
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.ConceptFromComboBox = new System.Windows.Forms.ComboBox();
+            this.ConceptToComboBox = new System.Windows.Forms.ComboBox();
+            this.MetaOntologyComboBox = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -53,27 +52,27 @@
             // 
             // comboBox1
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(38, 45);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(206, 21);
-            this.comboBox1.TabIndex = 0;
+            this.ConceptFromComboBox.FormattingEnabled = true;
+            this.ConceptFromComboBox.Location = new System.Drawing.Point(38, 45);
+            this.ConceptFromComboBox.Name = "comboBox1";
+            this.ConceptFromComboBox.Size = new System.Drawing.Size(206, 21);
+            this.ConceptFromComboBox.TabIndex = 0;
             // 
             // comboBox2
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(38, 123);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(206, 21);
-            this.comboBox2.TabIndex = 1;
+            this.ConceptToComboBox.FormattingEnabled = true;
+            this.ConceptToComboBox.Location = new System.Drawing.Point(38, 123);
+            this.ConceptToComboBox.Name = "comboBox2";
+            this.ConceptToComboBox.Size = new System.Drawing.Size(206, 21);
+            this.ConceptToComboBox.TabIndex = 1;
             // 
             // comboBox3
             // 
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(263, 122);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(200, 21);
-            this.comboBox3.TabIndex = 2;
+            this.MetaOntologyComboBox.FormattingEnabled = true;
+            this.MetaOntologyComboBox.Location = new System.Drawing.Point(263, 122);
+            this.MetaOntologyComboBox.Name = "comboBox3";
+            this.MetaOntologyComboBox.Size = new System.Drawing.Size(200, 21);
+            this.MetaOntologyComboBox.TabIndex = 2;
             // 
             // panel1
             // 
@@ -210,12 +209,11 @@
             this.Controls.Add(this.addThesaurusButton);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.comboBox3);
-            this.Controls.Add(this.comboBox2);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.MetaOntologyComboBox);
+            this.Controls.Add(this.ConceptToComboBox);
+            this.Controls.Add(this.ConceptFromComboBox);
             this.Name = "AddThesaurusWindow";
             this.Text = "AddThesaurusWindow";
-=======
             this.ConceptFromComboBox = new System.Windows.Forms.ComboBox();
             this.ConceptToComboBox = new System.Windows.Forms.ComboBox();
             this.MetaOntologyComboBox = new System.Windows.Forms.ComboBox();
@@ -415,7 +413,6 @@
             this.MaximizeBox = false;
             this.Name = "AddThesaurusWindow";
             this.Text = "Add Thesaurus Window";
->>>>>>> refs/heads/phase2_KBAddItemsOnComboBox
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -427,19 +424,11 @@
 
         }
 
-<<<<<<< HEAD
         #endregion
 
-        public System.Windows.Forms.ComboBox comboBox1;
-        public System.Windows.Forms.ComboBox comboBox2;
-        public System.Windows.Forms.ComboBox comboBox3;
-=======
-        #endregion
-
-        private System.Windows.Forms.ComboBox ConceptFromComboBox;
-        private System.Windows.Forms.ComboBox ConceptToComboBox;
-        private System.Windows.Forms.ComboBox MetaOntologyComboBox;
->>>>>>> refs/heads/phase2_KBAddItemsOnComboBox
+        public System.Windows.Forms.ComboBox ConceptFromComboBox;
+        public System.Windows.Forms.ComboBox ConceptToComboBox;
+        public System.Windows.Forms.ComboBox MetaOntologyComboBox;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.SplitContainer splitContainer1;
