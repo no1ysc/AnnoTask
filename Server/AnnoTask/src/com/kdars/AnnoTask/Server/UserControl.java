@@ -122,7 +122,7 @@ public class UserControl extends Thread{
 		}
 		
 		// 사전 추가 요청시
-		if(commandFromUser.contains("addThesaurus")){
+		if(commandFromUser.contains("conceptFrom")){
 			RequestAddThesaurus requestedThesaurus = new JSONDeserializer<RequestAddThesaurus>().deserialize(commandFromUser, RequestAddThesaurus.class); //TODO: String.class가 맞는지 확인해야함...
 			thesaurusRequestHandler(requestedThesaurus);
 		}
