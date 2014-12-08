@@ -308,20 +308,20 @@ EndOfInstance:
             entry.metaOntology = metaOntology;
             try
             {
-                string json_AddThesaurus = new JsonConverter<Command.Client2Server.RequestAddThesaurus>().Object2Json(entry);
+                string json_addThesaurus = new JsonConverter<Command.Client2Server.RequestAddThesaurus>().Object2Json(entry);
 
-                System.Diagnostics.Debug.WriteLine(json_AddThesaurus);
+                System.Diagnostics.Debug.WriteLine(json_addThesaurus);
 
                 m_client = new TcpClient(Configure.Instance.ServerIP, Configure.Instance.ServerPort);
                 m_ns = m_client.GetStream();
                 m_Writer = new StreamWriter(m_ns);
 
-                Console.WriteLine(json_AddThesaurus);
-                Console.WriteLine(json_AddThesaurus.Length);
+                Console.WriteLine(json_addThesaurus);
+                Console.WriteLine(json_addThesaurus.Length);
 
-                if (json_AddThesaurus != null)
+                if (json_addThesaurus != null)
                 {
-                    m_Writer.WriteLine(json_AddThesaurus);
+                    m_Writer.WriteLine(json_addThesaurus);
                     m_Writer.Flush();
                 }
                 return true;
