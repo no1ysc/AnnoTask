@@ -387,18 +387,21 @@ namespace AnnoTaskClient
             this.Term.HeaderText = "Term";
             this.Term.Name = "Term";
             this.Term.ReadOnly = true;
+            this.Term.Width = 60;
             // 
             // 빈도수
             // 
             this.빈도수.HeaderText = "빈도수";
             this.빈도수.Name = "빈도수";
             this.빈도수.ReadOnly = true;
+            this.빈도수.Width = 90;
             // 
             // 출현문서수
             // 
             this.출현문서수.HeaderText = "출현문서수";
             this.출현문서수.Name = "출현문서수";
             this.출현문서수.ReadOnly = true;
+            this.출현문서수.Width = 90;
             // 
             // label3
             // 
@@ -540,16 +543,19 @@ namespace AnnoTaskClient
             // 
             this.Term2.HeaderText = "Term";
             this.Term2.Name = "Term2";
+            this.Term2.Width = 60;
             // 
             // 빈도수2
             // 
             this.빈도수2.HeaderText = "빈도수";
             this.빈도수2.Name = "빈도수2";
+            this.빈도수2.Width = 90;
             // 
             // 출현문서수2
             // 
             this.출현문서수2.HeaderText = "출현문서수";
             this.출현문서수2.Name = "출현문서수2";
+            this.출현문서수2.Width = 90;
             // 
             // label8
             // 
@@ -691,16 +697,19 @@ namespace AnnoTaskClient
             // 
             this.Term3.HeaderText = "Term";
             this.Term3.Name = "Term3";
+            this.Term3.Width = 60;
             // 
             // 빈도수3
             // 
             this.빈도수3.HeaderText = "빈도수";
             this.빈도수3.Name = "빈도수3";
+            this.빈도수3.Width = 90;
             // 
             // 출현문서수3
             // 
             this.출현문서수3.HeaderText = "출현문서수";
             this.출현문서수3.Name = "출현문서수3";
+            this.출현문서수3.Width = 90;
             // 
             // label11
             // 
@@ -843,16 +852,19 @@ namespace AnnoTaskClient
             // 
             this.Term4.HeaderText = "Term";
             this.Term4.Name = "Term4";
+            this.Term4.Width = 60;
             // 
             // 빈도수4
             // 
             this.빈도수4.HeaderText = "빈도수";
             this.빈도수4.Name = "빈도수4";
+            this.Term4.Width = 90;
             // 
             // 출현문서수4
             // 
             this.출현문서수4.HeaderText = "출현문서수";
             this.출현문서수4.Name = "출현문서수4";
+            this.출현문서수4.Width = 90;
             // 
             // label14
             // 

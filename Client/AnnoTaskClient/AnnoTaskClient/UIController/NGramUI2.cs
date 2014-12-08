@@ -50,6 +50,8 @@ namespace AnnoTaskClient.UIController
 
 			TreeNode root = new TreeNode(term.Term);
 
+            root.ExpandAll();
+
 			foreach (string category in term.Category.Keys)
 			{
 				string content = category + "(" + term.Category[category].Count.ToString() + ")";
