@@ -22,6 +22,7 @@ import com.kdars.AnnoTask.DB.TermFreqDBManager;
 import com.kdars.AnnoTask.DB.ThesaurusDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddDeleteList;
+import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddThesaurus;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestByDate;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestTermTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.DocumentResponse;
@@ -112,7 +113,7 @@ public class UserControl extends Thread{
 		
 		// 사전 추가 요청시
 		if(commandFromUser.contains("addThesaurus")){
-			ArrayList<String> requestedThesaurus = new JSONDeserializer<ArrayList<String>>().deserialize(commandFromUser, String.class); //TODO: String.class가 맞는지 확인해야함...
+			RequestAddThesaurus requestedThesaurus = new JSONDeserializer<RequestAddThesaurus>().deserialize(commandFromUser, RequestAddThesaurus.class); //TODO: String.class가 맞는지 확인해야함...
 			thesaurusRequestHandler(requestedThesaurus);
 		}
 		
@@ -121,14 +122,17 @@ public class UserControl extends Thread{
 	private void deleteListRequestHandler(RequestAddDeleteList requestedDeleteList) {
 		for (String deleteTerm : requestedDeleteList.addDeleteList) {
 			DeleteListDBManager.getInstance().AddTermToDelete(deleteTerm);
+			TermFreqDBManager.getInstance().deleteTerm(deleteTerm, userID);
 		}
+		
 	}
 	
-	private void thesaurusRequestHandler(ArrayList<String> entryComponents) {
-		String conceptFrom = entryComponents.get(0);
-		String conceptTo = entryComponents.get(1);
-		String metaOntology = entryComponents.get(2);
+	private void thesaurusRequestHandler(RequestAddThesaurus entryComponents) {
+		String conceptFrom = entryComponents.conceptFrom;
+		String conceptTo = entryComponents.conceptTo;
+		String metaOntology = entryComponents.metaOntology;
 		ThesaurusDBManager.getInstance().setEntry(conceptFrom, conceptTo, metaOntology);
+		TermFreqDBManager.getInstance().deleteTerm(conceptFrom, userID);
 	}
 	
 	private void documentRequestHandler(DocumentRequest documentRequest) {

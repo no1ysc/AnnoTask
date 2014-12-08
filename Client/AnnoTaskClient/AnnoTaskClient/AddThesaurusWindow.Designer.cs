@@ -32,7 +32,10 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.addThesaurusButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -40,9 +43,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.treeView1 = new System.Windows.Forms.TreeView();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -83,6 +83,14 @@
             this.panel1.Size = new System.Drawing.Size(206, 210);
             this.panel1.TabIndex = 3;
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(0, 4);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(203, 203);
+            this.textBox1.TabIndex = 0;
+            // 
             // splitContainer1
             // 
             this.splitContainer1.Location = new System.Drawing.Point(263, 192);
@@ -101,6 +109,21 @@
             this.splitContainer1.SplitterDistance = 203;
             this.splitContainer1.TabIndex = 4;
             // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(4, 4);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(196, 203);
+            this.treeView1.TabIndex = 0;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(3, 4);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(264, 203);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "";
+            // 
             // addThesaurusButton
             // 
             this.addThesaurusButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -110,6 +133,7 @@
             this.addThesaurusButton.TabIndex = 5;
             this.addThesaurusButton.Text = "시소러스 추가하기";
             this.addThesaurusButton.UseVisualStyleBackColor = true;
+            this.addThesaurusButton.Click += new System.EventHandler(this.addThesaurusButton_Click);
             // 
             // label1
             // 
@@ -157,7 +181,7 @@
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label5.Location = new System.Drawing.Point(263, 173);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(67, 15);
+            this.label5.Size = new System.Drawing.Size(72, 15);
             this.label5.TabIndex = 10;
             this.label5.Text = "문서리스트";
             // 
@@ -167,32 +191,9 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label6.Location = new System.Drawing.Point(470, 173);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(55, 15);
+            this.label6.Size = new System.Drawing.Size(59, 15);
             this.label6.TabIndex = 11;
             this.label6.Text = "기사전문";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(0, 4);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(203, 203);
-            this.textBox1.TabIndex = 0;
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Location = new System.Drawing.Point(3, 4);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(264, 203);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
-            // 
-            // treeView1
-            // 
-            this.treeView1.Location = new System.Drawing.Point(4, 4);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(196, 203);
-            this.treeView1.TabIndex = 0;
             // 
             // AddThesaurusWindow
             // 
@@ -226,9 +227,9 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox3;
+        public System.Windows.Forms.ComboBox comboBox1;
+        public System.Windows.Forms.ComboBox comboBox2;
+        public System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.SplitContainer splitContainer1;

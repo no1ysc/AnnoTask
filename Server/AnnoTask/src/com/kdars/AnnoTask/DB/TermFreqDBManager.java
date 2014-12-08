@@ -26,7 +26,7 @@ public class TermFreqDBManager {
 	public boolean deleteTerm(String term, int termHolder){
 		// 소유자 확인해서 일치할때만 삭제.
 		
-		return	false;
+		return	termFreqDB.deleteTerm(term, termHolder);
 	}
 	
 	public DocTermFreqByTerm[] getDocByTerm(int docID, String category, String title){

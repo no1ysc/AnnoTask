@@ -73,6 +73,7 @@
     <Compile Include="UIController\NGramUI3.cs" />
     <Compile Include="UIController\NGramUI2.cs" />
     <Compile Include="UIController\NGramUI1.cs" />
+    <Compile Include="UIController\ThesaurusUI_2.cs" />
     <Compile Include="UIController\UIHandler.cs" />
     <EmbeddedResource Include="AddThesaurusWindow.resx">
       <DependentUpon>AddThesaurusWindow.cs</DependentUpon>

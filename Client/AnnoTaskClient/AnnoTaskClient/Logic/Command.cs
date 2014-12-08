@@ -79,6 +79,13 @@ namespace AnnoTaskClient.Logic
             {
                 public List<String> addDeleteList;
             }
+
+            public class RequestAddThesaurus
+            {
+                public String conceptFrom;
+                public String conceptTo;
+                public String metaOntology;
+            }
 		}
 	}
 }

@@ -279,5 +279,14 @@ namespace AnnoTaskClient.Logic
         {
             clientWormHole.sendDeleteList(this.deleteList);
         }
+
+        internal void clickedAddThesaurus()
+        {
+            String conceptFrom = UIHandler.Instance.ThesaurusUI.conceptFrom;
+            String conceptTo = UIHandler.Instance.ThesaurusUI.conceptTo;
+            String metaOntology = UIHandler.Instance.ThesaurusUI.metaOntology;
+
+            clientWormHole.AddThesaurus(conceptFrom, conceptTo, metaOntology);
+        }
     }
 }

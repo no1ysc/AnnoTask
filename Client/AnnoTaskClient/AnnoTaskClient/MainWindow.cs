@@ -19,6 +19,11 @@ namespace AnnoTaskClient
 		private MainLogic logic = new MainLogic();
 		private Thread mainLogicWorker;
 
+        public MainLogic getMainLogic()
+        {
+            return this.logic;
+        }
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -255,11 +260,6 @@ namespace AnnoTaskClient
             articleView.ScrollToCaret();
         }
 
-
-        private void addThesaurus_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void addDeleteListButton_Click(object sender, EventArgs e)
         {

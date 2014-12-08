@@ -197,5 +197,17 @@ EndOfInstance:
             m_Writer.WriteLine(json_addDeleteList);
             m_Writer.Flush();
         }
+
+        internal void AddThesaurus(string conceptFrom, string conceptTo, string metaOntology)
+        {
+            Command.Client2Server.RequestAddThesaurus entry = new Command.Client2Server.RequestAddThesaurus();
+            entry.conceptFrom = conceptFrom;
+            entry.conceptTo = conceptTo;
+            entry.metaOntology = metaOntology;
+
+            string json_AddThesaurus = new JsonConverter<Command.Client2Server.RequestAddThesaurus>().Object2Json(entry);
+            m_Writer.WriteLine(json_AddThesaurus);
+            m_Writer.Flush();
+        }
     }
 }

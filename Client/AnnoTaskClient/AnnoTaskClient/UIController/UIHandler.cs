@@ -39,5 +39,17 @@ namespace AnnoTaskClient.UIController
 		public NGramUI3 NGram3 { get{return ngram3;}	}
 		public NGramUI4 NGram4 { get{return ngram4;} }
 
+        private AddThesaurusWindow addThesaurusWindow;
+        public void runUIHandler_Thesaurus(AddThesaurusWindow value)
+        {
+            addThesaurusWindow = value;
+
+            thesaurusUI = new ThesaurusUI(addThesaurusWindow);
+        }
+
+        private ThesaurusUI thesaurusUI;
+
+        public ThesaurusUI ThesaurusUI { get { return thesaurusUI;  } }
+
 	}
 }

@@ -119,13 +119,13 @@ public class TermFreqDBConnector {
 	 * @param term
 	 * @return
 	 */
-	public boolean deleteTerm(String term){
+	public boolean deleteTerm(String term, int termHolder){
 //		java.sql.Connection sqlConnectionLocal = connect();
 
 		try {
 				java.sql.Statement stmt = sqlConnection.createStatement();
 				String deleteTerm = escape(term);
-				stmt.execute("delete from "+ termFreqTable + " where " + colName4 + " = \"" + deleteTerm + "\";");
+				stmt.execute("delete from "+ termFreqTable + " where " + colName4 + " = \"" + deleteTerm + "\" AND " + colName7 + " = '" + String.valueOf(termHolder) + "';");
 				stmt.close();
 //			disconnect(sqlConnectionLocal);
 		} catch (SQLException e) {
