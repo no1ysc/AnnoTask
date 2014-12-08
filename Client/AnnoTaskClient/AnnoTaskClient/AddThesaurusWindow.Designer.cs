@@ -151,6 +151,7 @@
             this.addThesaurusButton.TabIndex = 5;
             this.addThesaurusButton.Text = "시소러스 추가하기";
             this.addThesaurusButton.UseVisualStyleBackColor = true;
+            this.addThesaurusButton.Click += new System.EventHandler(this.addThesaurusButton_Click_1);
             // 
             // label1
             // 

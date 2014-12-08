@@ -20,6 +20,7 @@ namespace AnnoTaskClient.Logic
         private List<string> termList = new List<string>();
         private ConceptTo[] conceptList;
         private LinkedList[] linkedList;
+        private String conceptToTerm;
         
 		public MainLogic()
 		{
@@ -109,6 +110,9 @@ namespace AnnoTaskClient.Logic
 					break;
                 case "AddDeleteList":
                     addDeleteList();
+                    break;
+                case "AddThesaurus":
+                    addThesaurus();
                     break;
                 case "GetConceptToList":
                     importConceptToList();
@@ -228,7 +232,7 @@ namespace AnnoTaskClient.Logic
 
         private void importGetLinkedList()
         {
-            string term = UIHandler.Instance.ThesaurusUI.conceptToTerms;
+            string term = conceptToTerm;
             string conceptToId = "";
             for (int i = 0; i < conceptList.Count(); ++i)
             {
@@ -275,8 +279,9 @@ namespace AnnoTaskClient.Logic
         }
                 
         internal void getLinkedList(String term)
-        {
-            UIHandler.Instance.ThesaurusUI.conceptToTerms = term;
+       {
+           conceptToTerm = term;
+            UIHandler.Instance.ThesaurusUI.conceptTo = term;
             commandQ.AddLast("GetLinkedList");
         }
 
@@ -353,12 +358,19 @@ namespace AnnoTaskClient.Logic
 
         internal void clickedAddThesaurus()
         {
-            String conceptFrom = UIHandler.Instance.ThesaurusUI.conceptFrom;
-            String conceptTo = UIHandler.Instance.ThesaurusUI.conceptTo;
-            String metaOntology = UIHandler.Instance.ThesaurusUI.metaOntology;
-
-            clientWormHole.AddThesaurus(conceptFrom, conceptTo, metaOntology);
+            commandQ.AddLast("AddThesaurus");
+            MessageBox.Show("시소러스에 단어 추가를 진행합니다.");
         }
+
+        private void addThesaurus()
+        {
+            String conceptFrom = UIHandler.Instance.ThesaurusUI.GetConceptFrom();
+            String metaOntology = UIHandler.Instance.ThesaurusUI.GetMetaOntology();
+
+            clientWormHole.AddThesaurus(conceptFrom, conceptToTerm, metaOntology);
+        }
+
+
 
         internal void getTermList(List<string> selectedTerm)
         {

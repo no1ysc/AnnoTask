@@ -300,16 +300,38 @@ EndOfInstance:
             m_Writer.Flush();
         }
 
-        internal void AddThesaurus(string conceptFrom, string conceptTo, string metaOntology)
+        internal bool AddThesaurus(string conceptFrom, string conceptTo, string metaOntology)
         {
             Command.Client2Server.RequestAddThesaurus entry = new Command.Client2Server.RequestAddThesaurus();
             entry.conceptFrom = conceptFrom;
             entry.conceptTo = conceptTo;
             entry.metaOntology = metaOntology;
+            try
+            {
+                string json_AddThesaurus = new JsonConverter<Command.Client2Server.RequestAddThesaurus>().Object2Json(entry);
 
-            string json_AddThesaurus = new JsonConverter<Command.Client2Server.RequestAddThesaurus>().Object2Json(entry);
-            m_Writer.WriteLine(json_AddThesaurus);
-            m_Writer.Flush();
+                System.Diagnostics.Debug.WriteLine(json_AddThesaurus);
+
+                m_client = new TcpClient(Configure.Instance.ServerIP, Configure.Instance.ServerPort);
+                m_ns = m_client.GetStream();
+                m_Writer = new StreamWriter(m_ns);
+
+                Console.WriteLine(json_AddThesaurus);
+                Console.WriteLine(json_AddThesaurus.Length);
+
+                if (json_AddThesaurus != null)
+                {
+                    m_Writer.WriteLine(json_AddThesaurus);
+                    m_Writer.Flush();
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
         }
     }
 }

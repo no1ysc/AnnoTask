@@ -23,24 +23,26 @@ namespace AnnoTaskClient.UIController
         private string conceptToTerm;
         public string conceptToTerms
         {
-            get { return conceptToTerm; }
+            get { return (String)addThesaurusWindow.ConceptToComboBox.SelectedItem; ; }
             set { conceptToTerm = value; }
         }
 
         public String conceptFrom
         {
-            get { return (String)addThesaurusWindow.ConceptFromComboBox.Text; }
+            get { return (String)addThesaurusWindow.ConceptFromComboBox.SelectedItem; }
             set {addThesaurusWindow.ConceptFromComboBox.Text = value;}
         }
         
         public String conceptTo
         {
             get { return (String)addThesaurusWindow.ConceptToComboBox.SelectedItem; }
+            set { addThesaurusWindow.ConceptToComboBox.Text = value; }
         }
 
         public String metaOntology
         {
-            get { return (String)addThesaurusWindow.MetaOntologyComboBox.Text; }
+            get { return (String)addThesaurusWindow.MetaOntologyComboBox.SelectedItem; }
+            set { addThesaurusWindow.MetaOntologyComboBox.Text = value; }
         }
 
         private delegate void ThesaurusWindowConceptFromRefresh(List<String> termList);
@@ -72,7 +74,7 @@ namespace AnnoTaskClient.UIController
         private void refreshThesaurusWindowConceptTo(List<String> termList)
         {
             addThesaurusWindow.ConceptToComboBox.Items.Clear();
-            //addThesaurusWindow.ConceptToComboBox.Text = termList[0];
+            addThesaurusWindow.ConceptToComboBox.Text = termList[0];
 
             for (int i = 0; i < termList.Count; ++i)
             {
@@ -130,5 +132,29 @@ namespace AnnoTaskClient.UIController
                 addThesaurusWindow.linkedList.Text += temp.linkedTerms+Environment.NewLine;
             }
         }
+
+        private delegate String ConceptFromGet();
+        public String GetConceptFrom()
+        {
+            ConceptFromGet conceptFromGet = new ConceptFromGet(getConceptFrom);
+            return (String) addThesaurusWindow.Invoke(conceptFromGet, new object[] { });
+        }
+        private String getConceptFrom()
+        {
+            return addThesaurusWindow.ConceptFromComboBox.Text;
+        }
+
+        private delegate String MetaOntologyGet();
+        public String GetMetaOntology()
+        {
+            MetaOntologyGet metaOntologyGet = new MetaOntologyGet(getMetaOntology);
+            return (String)addThesaurusWindow.Invoke(metaOntologyGet, new object[] { });
+        }
+        private String getMetaOntology()
+        {
+            return addThesaurusWindow.MetaOntologyComboBox.Text;
+        }
+
+        
     }
 }

@@ -30,7 +30,7 @@ namespace AnnoTaskClient
             UIHandler.Instance.runUIHandler_Thesaurus(this);
         }
 
-        private void addThesaurusButton_Click(object sender, EventArgs e)
+        private void addThesaurusButton_Click_1(object sender, EventArgs e)
         {
             logic.clickedAddThesaurus();
         }
