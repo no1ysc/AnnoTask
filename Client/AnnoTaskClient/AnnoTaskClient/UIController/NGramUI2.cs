@@ -102,6 +102,7 @@ namespace AnnoTaskClient.UIController
                     }
                 }
             }
+            mainWindow.wordList2.Refresh();
         }
 	}
 }

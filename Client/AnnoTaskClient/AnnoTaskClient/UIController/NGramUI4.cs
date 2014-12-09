@@ -103,6 +103,7 @@ namespace AnnoTaskClient.UIController
                     }
                 }
             }
+            mainWindow.wordList4.Refresh();
         }
 	}
 }
