@@ -41,6 +41,11 @@ namespace AnnoTaskClient.UIController
 			mainWindow.btnImportDoc.Enabled = bState;
 		}
 
+        public void setAddThesaurusWindowButtonEnable()
+        {
+            mainWindow.openAddThesaurusWindowButton.Enabled = true;
+        }
+
 		public int TermCount
 		{
 			set

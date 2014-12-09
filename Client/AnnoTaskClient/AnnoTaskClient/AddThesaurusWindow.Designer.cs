@@ -234,6 +234,7 @@
             this.MaximizeBox = false;
             this.Name = "AddThesaurusWindow";
             this.Text = "Add Thesaurus Window";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AddThesaurusWindow_FormClosed);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);

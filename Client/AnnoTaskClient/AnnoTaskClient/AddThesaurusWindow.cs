@@ -87,5 +87,10 @@ namespace AnnoTaskClient
             logic.getLinkedList(text);
         }
 
+        private void AddThesaurusWindow_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            UIHandler.Instance.CommonUI.setAddThesaurusWindowButtonEnable();
+        }
+
     }
 }

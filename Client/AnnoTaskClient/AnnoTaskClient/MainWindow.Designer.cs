@@ -1140,7 +1140,7 @@ namespace AnnoTaskClient
 		private System.Windows.Forms.DataGridViewTextBoxColumn 빈도수4;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 출현문서수4;
 		public System.Windows.Forms.Button btnImportDoc;
-        private System.Windows.Forms.Button openAddThesaurusWindowButton;
+        public System.Windows.Forms.Button openAddThesaurusWindowButton;
         private System.Windows.Forms.Button addDeleteListButton;
 	}
 }

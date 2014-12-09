@@ -146,6 +146,7 @@ namespace AnnoTaskClient
 
             logic.getConceptToList();
             logic.getTermList(selectedTerms);
+            this.openAddThesaurusWindowButton.Enabled = false;
         }
 
 		private void cellClickHandler(string cellValue, int tabNumber)
