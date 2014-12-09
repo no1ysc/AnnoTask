@@ -106,7 +106,7 @@ namespace AnnoTaskClient.UIController
                 {
                     foreach (String term in updateList)
                     {
-                        if (mainWindow.wordList3.Rows[indexOfWordList].Cells[1].ToString() == term)
+                        if ((String)mainWindow.wordList3.Rows[indexOfWordList].Cells[1].Value == term)
                         {
                             mainWindow.wordList3.Rows.RemoveAt(indexOfWordList);
                         }

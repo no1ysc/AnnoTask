@@ -89,6 +89,7 @@ namespace AnnoTaskClient
 
         private void AddThesaurusWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
+            logic.emptyTermList();
             UIHandler.Instance.CommonUI.setAddThesaurusWindowButtonEnable();
         }
 

@@ -53,17 +53,24 @@ namespace AnnoTaskClient.UIController
         }
         private void refreshThesaurusWindowConceptFrom(List<String> termList)
         {
-            String selectedTerm = termList[0];
 
-            addThesaurusWindow.ConceptFromComboBox.Items.Clear();
-            addThesaurusWindow.ConceptFromComboBox.Text = selectedTerm;
-
-            for (int i = 0; i < termList.Count; ++i)
+            if (termList.Count == 0)
             {
-                addThesaurusWindow.ConceptFromComboBox.Items.Add(termList[i]);
+                addThesaurusWindow.ConceptFromComboBox.Items.Clear();
+                return;
             }
+            
+            {
+                String selectedTerm = termList[0];
 
+                addThesaurusWindow.ConceptFromComboBox.Items.Clear();
+                addThesaurusWindow.ConceptFromComboBox.Text = selectedTerm;
 
+                for (int i = 0; i < termList.Count; ++i)
+                {
+                    addThesaurusWindow.ConceptFromComboBox.Items.Add(termList[i]);
+                }
+            }
         }
 
         private delegate void ThesaurusWindowConceptToRefresh(List<String> termList);

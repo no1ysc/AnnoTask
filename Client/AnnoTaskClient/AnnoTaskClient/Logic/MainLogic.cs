@@ -407,6 +407,11 @@ namespace AnnoTaskClient.Logic
             this.selectedTabNumber = value;
         }
 
+        public void emptyTermList()
+        {
+            this.termList.Clear();
+        }
+
         internal void getTermList(List<string> selectedTerm)
         {
             if (selectedTerm != null && selectedTerm.Count != 0)
