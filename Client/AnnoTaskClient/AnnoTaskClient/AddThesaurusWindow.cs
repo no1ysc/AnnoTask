@@ -39,7 +39,7 @@ namespace AnnoTaskClient
         {
             ComboBox comb = (ComboBox)sender;
             string text = comb.Text;
-            logic.thesaurusWindowTermChanged(text);
+            //logic.thesaurusWindowTermChanged(text);
             logic.treeViewForThesaurusWindow(text);
         }
 
