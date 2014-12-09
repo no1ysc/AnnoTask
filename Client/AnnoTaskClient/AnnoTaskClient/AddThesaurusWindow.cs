@@ -35,12 +35,22 @@ namespace AnnoTaskClient
             logic.getConceptToList();
         }
 
+        internal bool SupressSelectIndexChanged { get; set; }
+        private void showSelectedTerm()
+        {
+            this.SupressSelectIndexChanged = true;
+            ConceptFromComboBox.SelectedIndex = 0;
+            this.SupressSelectIndexChanged = false;
+        }
+
         private void ConceptFromComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (this.SupressSelectIndexChanged) { return; }
             ComboBox comb = (ComboBox)sender;
             string text = comb.Text;
-            //logic.thesaurusWindowTermChanged(text);
+            logic.thesaurusWindowTermChanged(text);
             logic.treeViewForThesaurusWindow(text);
+            showSelectedTerm();
         }
 
         private void ConceptToComboBox_KeyDown(object sender, KeyEventArgs e)
