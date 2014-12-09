@@ -269,6 +269,8 @@ namespace AnnoTaskClient
         private void addDeleteListButton_Click(object sender, EventArgs e)
         {
             List<string> selectedTerms = new List<string>();
+            int tabNum = 0;
+
             if (this.tabControl1.SelectedTab == this.tabPage1)
             {
                 DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList1.Rows;
@@ -280,6 +282,7 @@ namespace AnnoTaskClient
                         selectedTerms.Add((string)selectedRow.Cells[1].Value);
                     }
                 }
+                tabNum = 1;
             }
             else if (this.tabControl1.SelectedTab == this.tabPage2)
             {
@@ -292,6 +295,7 @@ namespace AnnoTaskClient
                         selectedTerms.Add((string)selectedRow.Cells[1].Value);
                     }
                 }
+                tabNum = 2;
             }
             else if (this.tabControl1.SelectedTab == this.tabPage3)
             {
@@ -304,6 +308,7 @@ namespace AnnoTaskClient
                         selectedTerms.Add((string)selectedRow.Cells[1].Value);
                     }
                 }
+                tabNum = 3;
             }
             else if (this.tabControl1.SelectedTab == this.tabPage4)
             {
@@ -316,10 +321,11 @@ namespace AnnoTaskClient
                         selectedTerms.Add((string)selectedRow.Cells[1].Value);
                     }
                 }
+                tabNum = 4;
             }
 
 
-            logic.clickedAddDeleteList(selectedTerms);
+            logic.clickedAddDeleteList(selectedTerms, tabNum);
         }
 	}
 }

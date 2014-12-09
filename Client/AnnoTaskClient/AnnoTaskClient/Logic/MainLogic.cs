@@ -329,6 +329,22 @@ namespace AnnoTaskClient.Logic
 			}
 		}
 
+        internal void updateTermList(List<String> updateList, int tabNumber)
+        {
+            switch (tabNumber)
+            {
+                case 1:
+                    UIHandler.Instance.NGram1.RefreshTermList(updateList);
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+            }
+        }
+
 		internal string loadArticle(string term, string category, string title)
 		{
 			// find DOC ID
@@ -344,16 +360,17 @@ namespace AnnoTaskClient.Logic
 			return clientWormHole.getDocBodyFromID(targetID);
 		}
 
-        internal void clickedAddDeleteList(List<string> selectedTerm)
+        internal void clickedAddDeleteList(List<string> selectedTerm, int tabNum)
         {
             this.deleteList = selectedTerm;
             commandQ.AddLast("AddDeleteList");
-            MessageBox.Show("불용어 추가를 진행합니다.");
+            updateTermList(this.deleteList, tabNum); //불용어에 추가할 단어들은 현재 단어 리스트에서 제거하는 동작
         }
 
         private void addDeleteList()
         {
             clientWormHole.sendDeleteList(this.deleteList);
+            MessageBox.Show("불용어 추가를 진행하였습니다.");
         }
 
         internal void clickedAddThesaurus()
