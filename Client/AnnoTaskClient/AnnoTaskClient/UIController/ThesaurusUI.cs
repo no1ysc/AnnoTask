@@ -53,16 +53,17 @@ namespace AnnoTaskClient.UIController
         }
         private void refreshThesaurusWindowConceptFrom(List<String> termList)
         {
-            //addThesaurusWindow.ConceptFromComboBox.Items.Clear();
-            addThesaurusWindow.ConceptFromComboBox.Text = termList[0];
+            String selectedTerm = termList[0];
 
-            for (int i = 1; i < termList.Count; ++i)
+            addThesaurusWindow.ConceptFromComboBox.Items.Clear();
+            addThesaurusWindow.ConceptFromComboBox.Text = selectedTerm;
+
+            for (int i = 0; i < termList.Count; ++i)
             {
-                addThesaurusWindow.ConceptFromComboBox.Items.Remove(termList[i]);
                 addThesaurusWindow.ConceptFromComboBox.Items.Add(termList[i]);
             }
 
-            
+
         }
 
         private delegate void ThesaurusWindowConceptToRefresh(List<String> termList);
@@ -80,7 +81,7 @@ namespace AnnoTaskClient.UIController
             {
                 addThesaurusWindow.ConceptToComboBox.Items.Add(termList[i]);
             }
-            
+
             //addThesaurusWindow.ConceptToComboBox.DroppedDown = true;
         }
 
@@ -137,7 +138,7 @@ namespace AnnoTaskClient.UIController
         public String GetConceptFrom()
         {
             ConceptFromGet conceptFromGet = new ConceptFromGet(getConceptFrom);
-            return (String) addThesaurusWindow.Invoke(conceptFromGet, new object[] { });
+            return (String)addThesaurusWindow.Invoke(conceptFromGet, new object[] { });
         }
         private String getConceptFrom()
         {

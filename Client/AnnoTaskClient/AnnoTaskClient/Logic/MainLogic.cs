@@ -383,11 +383,17 @@ namespace AnnoTaskClient.Logic
         {
             String conceptFrom = UIHandler.Instance.ThesaurusUI.GetConceptFrom();
             String metaOntology = UIHandler.Instance.ThesaurusUI.GetMetaOntology();
+            List<string> temp = new List<string>();
 
             clientWormHole.AddThesaurus(conceptFrom, conceptToTerm, metaOntology);
+            if (this.termList.Contains(conceptFrom))
+            {
+                this.termList.Remove(conceptFrom);
+                this.termList.Sort();
+                temp = this.termList;
+                UIHandler.Instance.ThesaurusUI.RefreshConceptFromCombo(temp);
+            }
         }
-
-
 
         internal void getTermList(List<string> selectedTerm)
         {

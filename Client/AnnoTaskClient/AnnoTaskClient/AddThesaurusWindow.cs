@@ -33,6 +33,7 @@ namespace AnnoTaskClient
         private void addThesaurusButton_Click_1(object sender, EventArgs e)
         {
             logic.clickedAddThesaurus();
+            logic.getConceptToList();
         }
 
         private void ConceptFromComboBox_SelectedIndexChanged(object sender, EventArgs e)

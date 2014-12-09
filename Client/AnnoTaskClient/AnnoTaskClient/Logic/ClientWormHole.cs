@@ -225,7 +225,7 @@ EndOfInstance:
         {
             Command.Client2Server.RequestConcetpToList data = new Command.Client2Server.RequestConcetpToList();
             string json1_1 = new JsonConverter<Command.Client2Server.RequestConcetpToList>().Object2Json(data);
-
+            m_Reader = new StreamReader(m_ns, Encoding.UTF8);
             m_Writer.WriteLine(json1_1);
             m_Writer.Flush();
 
