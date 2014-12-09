@@ -89,19 +89,31 @@ namespace AnnoTaskClient.UIController
                 mainWindow.wordList1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = true;
             }            
         }
+        
+        delegate void RefreshTermListDelegate(List<string> updateList);
 
         internal void RefreshTermList(List<string> updateList)
         {
-            for (int indexOfWordList = 0; indexOfWordList < mainWindow.wordList1.RowCount; indexOfWordList++)
+            if (mainWindow.InvokeRequired)
             {
-                foreach(String term in updateList){
-                    if ((String)mainWindow.wordList1.Rows[indexOfWordList].Cells[1].Value == term)
+                RefreshTermListDelegate RefreshTermListDelegate = new RefreshTermListDelegate(RefreshTermList);
+                mainWindow.Invoke(RefreshTermListDelegate, new object[] { updateList });
+            }
+            else
+            {
+                for (int indexOfWordList = 0; indexOfWordList < mainWindow.wordList1.RowCount; indexOfWordList++)
+                {
+                    foreach (String term in updateList)
                     {
-                        mainWindow.wordList1.Rows.RemoveAt(indexOfWordList);
+                        if ((String)mainWindow.wordList1.Rows[indexOfWordList].Cells[1].Value == term)
+                        {
+                            mainWindow.wordList1.Rows.RemoveAt(indexOfWordList);
+                        }
                     }
                 }
+                mainWindow.wordList1.Refresh();
             }
-            mainWindow.wordList1.Refresh();
+
         }
     }
 }

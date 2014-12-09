@@ -16,7 +16,6 @@ namespace AnnoTaskClient
     public partial class AddThesaurusWindow : Form
     {
         private MainLogic logic = UIHandler.Instance.logic;
-
        
 
         public MainLogic getMainLogic()

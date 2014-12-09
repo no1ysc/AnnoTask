@@ -21,7 +21,8 @@ namespace AnnoTaskClient.Logic
         private ConceptTo[] conceptList;
         private LinkedList[] linkedList;
         private String conceptToTerm;
-        
+        private int selectedTabNumber;
+
 		public MainLogic()
 		{
 			
@@ -337,10 +338,13 @@ namespace AnnoTaskClient.Logic
                     UIHandler.Instance.NGram1.RefreshTermList(updateList);
                     break;
                 case 2:
+                    UIHandler.Instance.NGram2.RefreshTermList(updateList);
                     break;
                 case 3:
+                    UIHandler.Instance.NGram3.RefreshTermList(updateList);
                     break;
                 case 4:
+                    UIHandler.Instance.NGram4.RefreshTermList(updateList);
                     break;
             }
         }
@@ -393,6 +397,14 @@ namespace AnnoTaskClient.Logic
                 temp = this.termList;
                 UIHandler.Instance.ThesaurusUI.RefreshConceptFromCombo(temp);
             }
+            List<string> selectedConceptFrom = new List<string>();
+            selectedConceptFrom.Add(conceptFrom);
+            updateTermList(selectedConceptFrom, this.selectedTabNumber);
+        }
+
+        public void setTabNumber(int value)
+        {
+            this.selectedTabNumber = value;
         }
 
         internal void getTermList(List<string> selectedTerm)

@@ -94,6 +94,7 @@ namespace AnnoTaskClient
             List<string> selectedTerms = new List<string>();
             if (this.tabControl1.SelectedTab == this.tabPage1)
             {
+                logic.setTabNumber(1);
                 DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram1.getMainWindow().wordList1.Rows;
 
                 foreach (DataGridViewRow selectedRow in dataGridViewSelection)
@@ -106,6 +107,7 @@ namespace AnnoTaskClient
             }
             else if (this.tabControl1.SelectedTab == this.tabPage2)
             {
+                logic.setTabNumber(2);
                 DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram2.getMainWindow().wordList2.Rows;
 
                 foreach (DataGridViewRow selectedRow in dataGridViewSelection)
@@ -118,6 +120,7 @@ namespace AnnoTaskClient
             }
             else if (this.tabControl1.SelectedTab == this.tabPage3)
             {
+                logic.setTabNumber(3);
                 DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram3.getMainWindow().wordList3.Rows;
 
                 foreach (DataGridViewRow selectedRow in dataGridViewSelection)
@@ -130,6 +133,7 @@ namespace AnnoTaskClient
             }
             else if (this.tabControl1.SelectedTab == this.tabPage4)
             {
+                logic.setTabNumber(4);
                 DataGridViewRowCollection dataGridViewSelection = UIHandler.Instance.NGram4.getMainWindow().wordList4.Rows;
 
                 foreach (DataGridViewRow selectedRow in dataGridViewSelection)
