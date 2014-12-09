@@ -484,7 +484,7 @@ namespace AnnoTaskClient.Logic
                         articleView.SelectedText = word1;
                         
                         articleView.SelectionColor = System.Drawing.Color.Black;
-                        articleView.SelectionBackColor = System.Drawing.Color.Red;
+                        articleView.SelectionBackColor = System.Drawing.Color.Yellow;
                         articleView.SelectedText = word2;
 
                         word = "";
@@ -523,7 +523,7 @@ namespace AnnoTaskClient.Logic
                 articleView.SelectedText = word1;
 
                 articleView.SelectionColor = System.Drawing.Color.Black;
-                articleView.SelectionBackColor = System.Drawing.Color.Red;
+                articleView.SelectionBackColor = System.Drawing.Color.Yellow;
                 articleView.SelectedText = word2;
 
                 articleView.SelectionStart = line;
