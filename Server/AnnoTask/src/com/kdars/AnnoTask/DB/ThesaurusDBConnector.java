@@ -11,10 +11,10 @@ import com.kdars.AnnoTask.ContextConfig;
 import com.mysql.jdbc.Connection;
 
 public class ThesaurusDBConnector {
-//	private String conceptFromTable = ContextConfig.getInstance().Thesaurus_DB_TABLE_NAME1;
-//	private String conceptToTable = ContextConfig.getInstance().Thesaurus_DB_TABLE_NAME2;
-	private String conceptFromTable = "conceptfromtable_test";
-	private String conceptToTable = "concepttotable_test";
+	private String conceptFromTable = ContextConfig.getInstance().Thesaurus_DB_TABLE_NAME1;
+	private String conceptToTable = ContextConfig.getInstance().Thesaurus_DB_TABLE_NAME2;
+//	private String conceptFromTable = "conceptfromtable_test";
+//	private String conceptToTable = "concepttotable_test";
 	private String fromColName1 = "ConceptFrom_ID";
 	private String fromColName2 = "ConceptFrom";
 	private String foreignKeyColName = "ConceptTo_ID";
