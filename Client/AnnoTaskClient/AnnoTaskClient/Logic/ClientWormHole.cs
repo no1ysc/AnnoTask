@@ -71,7 +71,7 @@ namespace AnnoTaskClient.Logic
 			//m_Reader = new StreamReader(m_ns);
 			m_Writer = new StreamWriter(m_ns);
 			m_Reader = new StreamReader(m_ns, Encoding.UTF8);
-			m_ns.ReadTimeout = 30000;
+			m_ns.ReadTimeout = 300000;
 			
 			//m_Writer = new StreamWriter(m_ns, Encoding.UTF8);
 

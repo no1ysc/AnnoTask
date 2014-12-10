@@ -39,6 +39,7 @@ import com.kdars.AnnoTask.Server.Command.Server2Client.SendDocumentCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.TermTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendLinkedListCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.LinkedListResponse;
+import com.kdars.AnnoTask.Server.Command.Server2Client.TotalTermCount;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
@@ -211,7 +212,9 @@ public class UserControl extends Thread{
 		ArrayList<TermFreqByDoc> filteredTermByDocList = nGramFilter(workingDocIds);
 		
 		// (진규) filteredTermByDocList.size() == 총 보낼 term의 갯수 보내기.
-		transferObject(filteredTermByDocList.size());
+		TotalTermCount totalTermCount = new TotalTermCount();
+		totalTermCount.totalTermCount = filteredTermByDocList.size();
+		transferObject(totalTermCount);
 		
 		for (TermFreqByDoc TermByDoc : filteredTermByDocList){
 			TermTransfer termTransfer = new TermTransfer();
