@@ -20,6 +20,7 @@ import com.kdars.AnnoTask.DB.DeleteListDBManager;
 import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 import com.kdars.AnnoTask.DB.Document;
 import com.kdars.AnnoTask.DB.LinkedList;
+import com.kdars.AnnoTask.DB.TermFreqByDoc;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 import com.kdars.AnnoTask.DB.ThesaurusDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
@@ -239,44 +240,67 @@ public class UserControl extends Thread{
 		transferObject(notifyTransferEnd);
 	}
 	
-	private ArrayList<DocTermFreqByTerm[]> nGramFilter(ArrayList<Document> requestDocs){
-		int nGramNumber = ContextConfig.getInstance().getN_Gram();
-		HashMap<String, Integer> termHash = new HashMap<String, Integer>();
-		ArrayList<DocTermFreqByTerm[]> docByTermList = new ArrayList<DocTermFreqByTerm[]>();
-		for (Document doc : requestDocs){
-			DocTermFreqByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
-			docByTermList.add(docByTerm);
-			for (int nGramIndex = 1; nGramIndex < nGramNumber; nGramIndex++){
-				for (String term : docByTerm[nGramIndex].keySet()){
-					
-					if (termHash.containsKey(term)){
-						int priorValue = termHash.get(term);
-						termHash.replace(term, priorValue, priorValue + docByTerm[nGramIndex].get(term));
-					} else {
-						termHash.put(term, docByTerm[nGramIndex].get(term));
-					}
-					
-				}
+	private ArrayList<TermFreqByDoc> nGramFilter(ArrayList<Integer> docIdList){
+		ArrayList<TermFreqByDoc> filtering = TermFreqDBManager.getInstance().getTermConditional(docIdList);
+		
+		for (TermFreqByDoc termFreqByDocFilter : filtering){
+			int termFreqSum = 0;
+			for (int termFreq : termFreqByDocFilter.values()){
+				termFreqSum = termFreqSum + termFreq;
+			}
+			if (termFreqSum < 2){
+				filtering.remove(termFreqByDocFilter);
 			}
 		}
-		
-		for (String appendTerm : termHash.keySet()){
-			if (termHash.get(appendTerm) < 2){
-				int whiteSpaceCount = 0;
-				Pattern p = Pattern.compile(" ");
-				Matcher m = p.matcher(appendTerm);
-				while(m.find()){
-					m.start();
-					whiteSpaceCount++;
-				}
-				for (DocTermFreqByTerm[] docTermFreqByTerm : docByTermList){
-					docTermFreqByTerm[whiteSpaceCount].remove(appendTerm);
-				}
-			}
-		}
-		
-	return docByTermList;	
+		return filtering;
 	}
+		
+//		
+//		int nGramNumber = ContextConfig.getInstance().getN_Gram();
+//		HashMap<String, Integer> termHash = new HashMap<String, Integer>();
+//		ArrayList<DocTermFreqByTerm[]> docByTermList = new ArrayList<DocTermFreqByTerm[]>();
+//		for (Document doc : requestDocs){
+//			DocTermFreqByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
+//			docByTermList.add(docByTerm);
+//			for (int nGramIndex = 1; nGramIndex < nGramNumber; nGramIndex++){
+//				for (String term : docByTerm[nGramIndex].keySet()){
+//					
+//					if (termHash.containsKey(term)){
+//						int priorValue = termHash.get(term);
+//						termHash.replace(term, priorValue, priorValue + docByTerm[nGramIndex].get(term));
+//					} else {
+//						termHash.put(term, docByTerm[nGramIndex].get(term));
+//					}
+//					
+//				}
+//			}
+//		}
+//		
+//		for (String appendTerm : termHash.keySet()){
+//			if (termHash.get(appendTerm) < 2){
+//				int whiteSpaceCount = 0;
+//				Pattern p = Pattern.compile(" ");
+//				Matcher m = p.matcher(appendTerm);
+//				while(m.find()){
+//					m.start();
+//					whiteSpaceCount++;
+//				}
+//				for (DocTermFreqByTerm[] docTermFreqByTerm : docByTermList){
+//					docTermFreqByTerm[whiteSpaceCount].remove(appendTerm);
+//				}
+//			} else {
+//				/*
+//				 * (진규)
+//				 * 구현 계획 1: Ngramfilter 진행 시, termHash(Hashmap)에 request된 doc들의 단어빈도수들이 계산(sum)되어 저장되고, 여기에서 단어빈도수가 2보다 작으면 docTermFreqByTerm에서 제외된다.
+//				 * 구현 계획 2: 만약, 단어빈도수가 2보다 크거나 같다면, docTermFreqByTerm에서.. wait..
+//				 * 구현 계획 3: Ngramfilter logic 시작전에 termLockInDoc 써서 term들 모두 잠금.
+//				 */
+//				
+//			}
+//		}
+//		
+//	return docByTermList;	
+//	}
 	
 	
 	private void requestByDateHandler(RequestByDate requestByDate) {

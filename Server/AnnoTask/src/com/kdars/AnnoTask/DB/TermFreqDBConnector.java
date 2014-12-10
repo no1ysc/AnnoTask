@@ -3,6 +3,7 @@ package com.kdars.AnnoTask.DB;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -143,8 +144,49 @@ public class TermFreqDBConnector {
 	 * @param term
 	 * @return
 	 */
-	public TermFreqByDoc queryTerm(String term){
-		return null;
+	public ArrayList<TermFreqByDoc> queryTermConditional(ArrayList<Integer> docIdList){
+		ArrayList<TermFreqByDoc> termFreqByDocList = new ArrayList<TermFreqByDoc>();
+		ResultSet resultSet = null;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			StringBuilder queryMaker = new StringBuilder();
+			queryMaker.append("select " + colName2 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + " from " +  termFreqTable + " where ");
+			for (int docID : docIdList ){
+				queryMaker.append(colName2 + " = " + docID + " OR ");
+			}
+			queryMaker.replace(queryMaker.length()-4, queryMaker.length(), "");
+			
+			resultSet = stmt.executeQuery(queryMaker.toString());
+			
+			while (resultSet.next()){
+				int docID = resultSet.getInt(1);
+				String term = unescape(resultSet.getString(2));
+				int nGram = resultSet.getInt(3);
+				int termFreq = resultSet.getInt(4);
+				int termHolder = resultSet.getInt(5);
+				
+				TermFreqByDoc newTermFreqByDoc = new TermFreqByDoc(term, nGram, termHolder);
+				
+				for (TermFreqByDoc appendTermFreqByDoc : termFreqByDocList){
+					if (appendTermFreqByDoc.getTerm() == term){
+						appendTermFreqByDoc.put(docID, termFreq);
+						continue;
+					}
+				}
+				
+				newTermFreqByDoc.put(docID, termFreq);
+				termFreqByDocList.add(newTermFreqByDoc);				
+			}
+			
+			stmt.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+//			disconnect(sqlConnection);
+			e.printStackTrace();
+		}
+				
+		return termFreqByDocList;
 	}
 	
 	/**
