@@ -25,6 +25,7 @@ import com.kdars.AnnoTask.DB.ThesaurusDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddDeleteList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddThesaurus;
+import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAnnoTaskWork;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestByDate;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestGetLinkedList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestTermTransfer;
@@ -96,6 +97,14 @@ public class UserControl extends Thread{
 	}
 
 	private void commandParser(String commandFromUser) {
+		// 기흥: phase2.5 새로 정책을 바꿔서 짤 코드
+		if (commandFromUser.contains("bRequestAnnoTaskWork")){
+			RequestAnnoTaskWork requestAnnoTaskWork = new JSONDeserializer<RequestAnnoTaskWork>().deserialize(commandFromUser, RequestAnnoTaskWork.class);
+			termUnlock(userID); // 기흥: Client에서 작업 요청 시 이전 Lock되었던 Term들을 모두 Unlock 하도록 한다.
+			requestAnnoTaskWork(requestAnnoTaskWork);			
+		}
+		
+		
 		// 1-1 처리.
 		if (commandFromUser.contains("startDate")){
 //			System.out.println(commandFromUser);
@@ -138,6 +147,16 @@ public class UserControl extends Thread{
 			requestLinkedList(requestedLinkedList);
 		}
 		
+	}
+
+	private void requestAnnoTaskWork(RequestAnnoTaskWork requestAnnoTaskWork) {
+		/*
+		 * 기흥
+		 * 구현 계획 1: Client로 부터 작업 요청시 서버는 contentdb.job_table에서 client_jobstatus가 0인 녀석 중 10개의 doc_id를 가져오도록 한다. 가져오면 해당 status를 1로 업데이트.
+		 * 구현 계획 2: 가져온 doc_id를 가지고 termfreqdb.tftable에 쿼리를 하여 doc_id에 해당하는 term들을 가져와서 DocByTerm[]를 만들도록 한다. 가져온 term들은 모두 lock하는 것으로...
+		 * 구현 계획 3: DocByTerm[] 만들 때, doc 내 term freq.를 모두 계산해야 하며 ngram filter 로직을 태워야 함. 그리고 최종적으로 보낼 DocByTerm[]를 준비한다. 이 때 10개 문서에서의 cumulative한 term freq.를 보낼 자료구조를 만들어야함. 
+		 * 구현 계획 4: 최종적으로 보낼 DocByTerm[]가 나오면 Client쪽으로 보내도록 한다.
+		 */
 	}
 
 	private void deleteListRequestHandler(RequestAddDeleteList requestedDeleteList) {
