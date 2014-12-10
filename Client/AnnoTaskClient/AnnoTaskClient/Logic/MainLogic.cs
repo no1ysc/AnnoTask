@@ -139,7 +139,7 @@ namespace AnnoTaskClient.Logic
             //bool nate = UIHandler.Instance.CommonUI.isNate;
             //DocByTerm[] result = clientWormHole.ImportDoc(startDate, endDate, naver, daum, nate);
 
-            DocByTerm[] result = clientWormHole.JobStart();
+            TermFreqByDoc[] result = clientWormHole.JobStart();
 
 			if (result == null)
 			{
@@ -148,61 +148,61 @@ namespace AnnoTaskClient.Logic
 			}
 
 			// Doc -> Term
-			int procCount = 0;
-			int workingPercent = 40;
-			foreach (DocByTerm docByTerm in result)
-			{
-				foreach (string term in docByTerm.Terms.Keys)
-				{
-					if (!termNFreq.ContainsKey(term))
-					{
-						termNFreq[term] = new Frequency(term, docByTerm.Ngram);
-					}
-					termNFreq[term].FreqInDocument++;
-					termNFreq[term].TotalTermFreq += docByTerm.Terms[term];
-					termNFreq[term].appendCategory(docByTerm.DocCategory, docByTerm.DocID, docByTerm.Title);
-				}
+            //int procCount = 0;
+            //int workingPercent = 40;
+            //foreach (DocByTerm docByTerm in result)
+            //{
+            //    foreach (string term in docByTerm.Terms.Keys)
+            //    {
+            //        if (!termNFreq.ContainsKey(term))
+            //        {
+            //            termNFreq[term] = new Frequency(term, docByTerm.Ngram);
+            //        }
+            //        termNFreq[term].FreqInDocument++;
+            //        termNFreq[term].TotalTermFreq += docByTerm.Terms[term];
+            //        termNFreq[term].appendCategory(docByTerm.DocCategory, docByTerm.DocID, docByTerm.Title);
+            //    }
 
-				// 퍼센트 업.
-				int per = (procCount++ / result.Length) * workingPercent;
-				if (per >= 1)
-				{
-					UIHandler.Instance.CommonUI.ProgressBar += per;
-				}
-			}
-			UIHandler.Instance.CommonUI.ProgressBar = 90;
+            //    // 퍼센트 업.
+            //    int per = (procCount++ / result.Length) * workingPercent;
+            //    if (per >= 1)
+            //    {
+            //        UIHandler.Instance.CommonUI.ProgressBar += per;
+            //    }
+            //}
+            //UIHandler.Instance.CommonUI.ProgressBar = 90;
 
 
-			// 텀리스트 출력
-			procCount = 0;
-			workingPercent = 10;
-			foreach (Frequency freqTerm in termNFreq.Values)
-			{
-				switch (freqTerm.NGram)
-				{
-					case 1:
-						UIHandler.Instance.NGram1.AddTermList(freqTerm);
-						break;
-					case 2:
-						UIHandler.Instance.NGram2.AddTermList(freqTerm);
-						break;
-					case 3:
-						UIHandler.Instance.NGram3.AddTermList(freqTerm);
-						break;
-					case 4:
-						UIHandler.Instance.NGram4.AddTermList(freqTerm);
-						break;
-					default:
-						break;
-				}
+            //// 텀리스트 출력
+            //procCount = 0;
+            //workingPercent = 10;
+            //foreach (Frequency freqTerm in termNFreq.Values)
+            //{
+            //    switch (freqTerm.NGram)
+            //    {
+            //        case 1:
+            //            UIHandler.Instance.NGram1.AddTermList(freqTerm);
+            //            break;
+            //        case 2:
+            //            UIHandler.Instance.NGram2.AddTermList(freqTerm);
+            //            break;
+            //        case 3:
+            //            UIHandler.Instance.NGram3.AddTermList(freqTerm);
+            //            break;
+            //        case 4:
+            //            UIHandler.Instance.NGram4.AddTermList(freqTerm);
+            //            break;
+            //        default:
+            //            break;
+            //    }
 
-				// 퍼센트 업.
-				int per = (procCount++ / termNFreq.Count) * workingPercent;
-				if (per >= 1)
-				{
-					UIHandler.Instance.CommonUI.ProgressBar += per;
-				}
-			}
+            //    // 퍼센트 업.
+            //    int per = (procCount++ / termNFreq.Count) * workingPercent;
+            //    if (per >= 1)
+            //    {
+            //        UIHandler.Instance.CommonUI.ProgressBar += per;
+            //    }
+            //}
 
 			UIHandler.Instance.CommonUI.ProgressBar = 100;
 		}

@@ -34,7 +34,7 @@ namespace AnnoTaskClient.Logic
 			{
 				if (connectServer())
 				{
-					MessageBox.Show("서버에 연결 되었습니다.");
+					//MessageBox.Show("서버에 연결 되었습니다.");
 					return true;
 				}
 
