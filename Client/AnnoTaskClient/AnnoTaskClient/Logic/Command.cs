@@ -74,6 +74,12 @@ namespace AnnoTaskClient.Logic
 
 		public class Client2Server
 		{
+            //phase2.5 JobStart
+            public class RequestAnnoTaskWork
+            {
+                public bool bRequestAnnoTaskWork;
+            }
+
 			public class RequestByDate
 			{
 				// 요청날짜 문서 1-1

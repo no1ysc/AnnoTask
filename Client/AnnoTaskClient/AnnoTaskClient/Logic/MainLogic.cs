@@ -75,7 +75,7 @@ namespace AnnoTaskClient.Logic
 			if (clientWormHole.Connect())
 			{
 				// 서버 연결 안내문.
-				MessageBox.Show("서버 연결완료");
+				//MessageBox.Show("서버 연결완료");
 				UIHandler.Instance.CommonUI.ButtonEnable = true;
 			}
 			else
@@ -105,8 +105,8 @@ namespace AnnoTaskClient.Logic
 
 			switch(command)
 			{
-				case "Import":
-					importDoc();
+				case "JobStart":
+					jobStart();
 					UIHandler.Instance.CommonUI.ButtonEnable = true;
 					break;
                 case "AddDeleteList":
@@ -127,16 +127,19 @@ namespace AnnoTaskClient.Logic
 
 		}
 
-		private void importDoc()
+        // (기흥) phase2.5 
+		private void jobStart()
 		{
 			clear();
 
-			string startDate = UIHandler.Instance.CommonUI.StartDate + " 00:00:00";
-			string endDate = UIHandler.Instance.CommonUI.EndDate + " 23:59:59";
-			bool naver = UIHandler.Instance.CommonUI.isNaver;
-			bool daum = UIHandler.Instance.CommonUI.isDaum;
-			bool nate = UIHandler.Instance.CommonUI.isNate;
-			DocByTerm[] result = clientWormHole.ImportDoc(startDate, endDate, naver, daum, nate);
+            //string startDate = UIHandler.Instance.CommonUI.StartDate + " 00:00:00";
+            //string endDate = UIHandler.Instance.CommonUI.EndDate + " 23:59:59";
+            //bool naver = UIHandler.Instance.CommonUI.isNaver;
+            //bool daum = UIHandler.Instance.CommonUI.isDaum;
+            //bool nate = UIHandler.Instance.CommonUI.isNate;
+            //DocByTerm[] result = clientWormHole.ImportDoc(startDate, endDate, naver, daum, nate);
+
+            DocByTerm[] result = clientWormHole.JobStart();
 
 			if (result == null)
 			{
@@ -269,9 +272,9 @@ namespace AnnoTaskClient.Logic
 			UIHandler.Instance.CommonUI.ProgressBar = 0;
 		}
 
-		internal void clickedImportDoc()
+		internal void clickedJobStart()
 		{
-			commandQ.AddLast("Import");
+			commandQ.AddLast("JobStart");
 		}
 
         internal void getConceptToList()

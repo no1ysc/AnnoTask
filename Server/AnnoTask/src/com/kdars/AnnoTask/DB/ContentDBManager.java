@@ -2,6 +2,8 @@ package com.kdars.AnnoTask.DB;
 
 import java.util.ArrayList;
 
+import com.kdars.AnnoTask.ContextConfig;
+
 public class ContentDBManager {
 	private static ContentDBManager contentDBManager = new ContentDBManager();
 	private ContentDBConnector contentDB;
@@ -35,5 +37,10 @@ public class ContentDBManager {
 	public ArrayList<Document> getDocIDsFromDate(String startDate,
 			String endDate, boolean bNaver, boolean bDaum, boolean bNate) {
 		return contentDB.queryFromDate(startDate, endDate, bNaver, bDaum, bNate);
+	}
+
+	// (기흥) phase2.5 - 구현 계획1
+	public ArrayList<Integer> getClientJobCandidates() {
+		return contentDB.queryClientJobCandidates(ContextConfig.getInstance().getClientJobUnit());
 	}
 }

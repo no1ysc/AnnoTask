@@ -74,19 +74,19 @@ namespace AnnoTaskClient
 			return logic.loadArticle(term, category, title);
 		}
 
-		private void btnImportHandler()
+		private void btnJobStartHandler()
 		{
-			btnImportDoc.Enabled = false;
+			btnJobStart.Enabled = false;
 			clearUIContents();
-
-			logic.clickedImportDoc();
+			logic.clickedJobStart();
 		}
 
-		private void btnImportDoc_Click(object sender, EventArgs e)
+        // (기흥) "작업 시작하기" 버튼 클릭 시
+		private void btnJobStart_Click(object sender, EventArgs e)
 		{
-			this.btnImportDoc.Enabled = false;
-
-			btnImportHandler();
+            // (기흥) btnImportDoc -> btnJobStart 수정함.
+			this.btnJobStart.Enabled = false;
+			btnJobStartHandler();
 		}
 
         private void openAddThesaurusWindowButton_Click(object sender, EventArgs e)

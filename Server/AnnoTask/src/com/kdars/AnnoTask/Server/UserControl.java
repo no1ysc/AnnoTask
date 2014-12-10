@@ -55,6 +55,8 @@ public class UserControl extends Thread{
 	private ArrayList<Document> 		requestDocs;
 	private ArrayList<ConceptToList>	conceptLists;
 	private ArrayList<LinkedList> 		linkedLists;
+	private ArrayList<Integer>			workingDocIds;
+	
 	public UserControl(Socket socket, int userID){
 		this.socket = socket;
 		this.userID = userID;
@@ -98,7 +100,16 @@ public class UserControl extends Thread{
 	}
 
 	private void commandParser(String commandFromUser) {
-		// 기흥: phase2.5 새로 정책을 바꿔서 짤 코드
+		
+		/*
+		 * (기흥) phase2.5 새로 정책을 바꿔서 짤 코드
+		 * 구현 계획 1: Client로 부터 작업 요청시 서버는 contentdb.job_table에서 client_jobstatus가 0인 녀석 중 10개의 doc_id를 가져오도록 한다. 가져오면 해당 status를 1로 업데이트.
+		 * 구현 계획 2: 가져온 doc_id를 가지고 termfreqdb.tftable에 쿼리를 하여 doc_id에 해당하는 term들을 가져와서 DocByTerm[]를 만들도록 한다. 가져온 term들은 모두 lock하는 것으로...
+		 * 구현 계획 3: DocByTerm[] 만들 때, doc 내 term freq.를 모두 계산해야 하며 ngram filter 로직을 태워야 함. 그리고 최종적으로 보낼 DocByTerm[]를 준비한다. 이 때 10개 문서에서의 cumulative한 term freq.를 보낼 자료구조를 만들어야함. 
+		 * 구현 계획 4: 최종적으로 보낼 DocByTerm[]가 나오면 Client쪽으로 보내도록 한다.
+		 */
+		
+		// 구현 계획 1
 		if (commandFromUser.contains("bRequestAnnoTaskWork")){
 			RequestAnnoTaskWork requestAnnoTaskWork = new JSONDeserializer<RequestAnnoTaskWork>().deserialize(commandFromUser, RequestAnnoTaskWork.class);
 			termUnlock(userID); // 기흥: Client에서 작업 요청 시 이전 Lock되었던 Term들을 모두 Unlock 하도록 한다.
@@ -114,7 +125,7 @@ public class UserControl extends Thread{
 			termUnlock(userID);
 			requestByDateHandler(requestByDate);
 		}
-		//1-3 처리.
+		//1-3 처리. --> phase2.5 구현 계획 2
 		if (commandFromUser.contains("bTransfer")){
 			RequestTermTransfer requestTermTransfer = new JSONDeserializer<RequestTermTransfer>().deserialize(commandFromUser, RequestTermTransfer.class);
 			requestTermTransferHandler(requestTermTransfer);
@@ -149,15 +160,13 @@ public class UserControl extends Thread{
 		}
 		
 	}
-
-	private void requestAnnoTaskWork(RequestAnnoTaskWork requestAnnoTaskWork) {
-		/*
-		 * 기흥
-		 * 구현 계획 1: Client로 부터 작업 요청시 서버는 contentdb.job_table에서 client_jobstatus가 0인 녀석 중 10개의 doc_id를 가져오도록 한다. 가져오면 해당 status를 1로 업데이트.
-		 * 구현 계획 2: 가져온 doc_id를 가지고 termfreqdb.tftable에 쿼리를 하여 doc_id에 해당하는 term들을 가져와서 DocByTerm[]를 만들도록 한다. 가져온 term들은 모두 lock하는 것으로...
-		 * 구현 계획 3: DocByTerm[] 만들 때, doc 내 term freq.를 모두 계산해야 하며 ngram filter 로직을 태워야 함. 그리고 최종적으로 보낼 DocByTerm[]를 준비한다. 이 때 10개 문서에서의 cumulative한 term freq.를 보낼 자료구조를 만들어야함. 
-		 * 구현 계획 4: 최종적으로 보낼 DocByTerm[]가 나오면 Client쪽으로 보내도록 한다.
-		 */
+	
+	// (기흥) 구현 계획 1
+	private void requestAnnoTaskWork(RequestAnnoTaskWork requestAnnoTaskWork) {		
+		this.workingDocIds = ContentDBManager.getInstance().getClientJobCandidates();		
+		SendDocumentCount sendDocumentCount = new SendDocumentCount();
+		sendDocumentCount.doucumentCount = workingDocIds.size() * ContextConfig.getInstance().getN_Gram();		
+		transferObject(sendDocumentCount);
 	}
 
 	private void deleteListRequestHandler(RequestAddDeleteList requestedDeleteList) {
@@ -195,17 +204,10 @@ public class UserControl extends Thread{
 		transferObject(documentRes);
 	}
 
+	// (기흥) 구현 계획 2
 	private void requestTermTransferHandler(RequestTermTransfer requestTermTransfer) {
-		// TODO 문서전송 시작.!
-		
-		/*
-		 * for `~~~
-		 * 1. DOC ID set을 탐색하여 Term Freq DB 뒤짐.
-		 * 2. 텀 락 걸어야됨.
-		 * 3. DocByTerm 형태로 변환하여 전송.
-		 * for........
-		 */
-		
+	
+		// (기흥) nGramFilter argument를 this.workingDocIds만 넘겨주는 걸로 수정해야함... 여기서부터는 진규가 개발 예정.
 		ArrayList<DocTermFreqByTerm[]> filteredDocByTermList = nGramFilter(requestDocs);
 		
 		for (DocTermFreqByTerm[] docByTerm : filteredDocByTermList){
@@ -218,20 +220,6 @@ public class UserControl extends Thread{
 			
 			transferDocbyTerm(docByTerm);
 		}
-		
-//		for (Document doc : requestDocs){
-//			TermTransfer termTransfer = new TermTransfer();
-//			termTransfer.docID = doc.getDocumentID();
-//			termTransfer.docCategory = doc.getCategory();
-//			termTransfer.docTitle = doc.getTitle();
-//			
-//			DocTermFreqByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
-//			
-//			termLockInDoc(docByTerm);
-//			
-//			// 전송
-//			transferDocbyTerm(docByTerm);
-//		}
 		
 		// 전송완료 알림.
 		NotifyTransferEnd notifyTransferEnd = new NotifyTransferEnd();
