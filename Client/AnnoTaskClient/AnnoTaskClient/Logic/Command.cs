@@ -26,6 +26,7 @@ namespace AnnoTaskClient.Logic
 			{
 				// 텀 1개씩 전송	1-4(반복)
 				public string term;
+                public int termFreq4RequestedCorpus;
 				public int ngram;
 				public string termsJson;	// 추후 Map으로 다시 변환.<Term, Freq>
 			}

@@ -9,8 +9,8 @@ namespace AnnoTaskClient.Logic
 	class TermFreqByDoc
 	{
 		private string term;
+        private int termFreq4RequestedCorpus;
 		private int ngram;
-
         private Dictionary<int, int> terms;
 
 		public string Term
@@ -18,7 +18,11 @@ namespace AnnoTaskClient.Logic
 			get { return term; }
 			set { term = value; }
 		}
-		public int Ngram
+        public int TermFreq4RequestedCorpus {
+            get { return termFreq4RequestedCorpus; }
+            set { termFreq4RequestedCorpus = value; }
+        }
+        public int Ngram
 		{
 			get { return ngram; }
 			set { ngram = value; }
@@ -28,5 +32,5 @@ namespace AnnoTaskClient.Logic
 			get { return terms; }
 			set { terms = value; }
 		}
-	}
+    }
 }

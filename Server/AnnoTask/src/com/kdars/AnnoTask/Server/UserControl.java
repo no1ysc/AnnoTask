@@ -246,7 +246,7 @@ public class UserControl extends Thread{
 		for (int i = filtering.size()-1; i >= 0; i--){
 			TermFreqByDoc termFreqByDocFilter = filtering.get(i);
 			TermFreqDBManager.getInstance().termLock(termFreqByDocFilter.getTerm(), userID);
-			termFreqByDocFilter.setTermHolder(userID);
+//			termFreqByDocFilter.setTermHolder(userID);
 			int termFreqSum = 0;
 			for (int termFreq : termFreqByDocFilter.values()){
 				termFreqSum = termFreqSum + termFreq;

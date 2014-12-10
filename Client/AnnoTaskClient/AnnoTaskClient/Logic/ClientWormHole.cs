@@ -132,8 +132,9 @@ namespace AnnoTaskClient.Logic
                 Command.Server2Client.TermTransfer term = new JsonConverter<Command.Server2Client.TermTransfer>().Json2Object(json_transferedTerm);
                 termFreqByDoc[transferCount] = new TermFreqByDoc();
                 termFreqByDoc[transferCount].Term = term.term;
+                termFreqByDoc[transferCount].TermFreq4RequestedCorpus = term.termFreq4RequestedCorpus;
                 termFreqByDoc[transferCount].Ngram = term.ngram;
-                termFreqByDoc[transferCount].Terms = new JsonConverter<Dictionary<int, int>>().Json2Object(term.termsJson);
+                termFreqByDoc[transferCount].Terms = new JsonConverter<Dictionary<int, int>>().Json2Object(term.termsJson); //여기서 die.
                 
                 // ProgressBar 업데이트
                 UIHandler.Instance.CommonUI.ProgressBar = (transferCount / totalTermsToReceive) * 100;

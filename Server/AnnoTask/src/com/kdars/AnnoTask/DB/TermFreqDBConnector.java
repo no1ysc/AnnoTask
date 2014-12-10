@@ -165,7 +165,7 @@ public class TermFreqDBConnector {
 				int termFreq = resultSet.getInt(4);
 				int termHolder = resultSet.getInt(5);
 				
-				TermFreqByDoc newTermFreqByDoc = new TermFreqByDoc(term, nGram, termHolder);
+				TermFreqByDoc newTermFreqByDoc = new TermFreqByDoc(term, nGram);
 				
 				for (TermFreqByDoc appendTermFreqByDoc : termFreqByDocList){
 					if (appendTermFreqByDoc.getTerm() == term){
