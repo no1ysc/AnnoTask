@@ -21,7 +21,7 @@ public class UserListener extends Thread{
 
 	public void run(){
 		try {
-			serverSocket = new ServerSocket(5000);
+			serverSocket = new ServerSocket(50000);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
