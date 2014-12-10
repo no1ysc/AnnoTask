@@ -208,7 +208,7 @@ public class UserControl extends Thread{
 	private void requestTermTransferHandler(RequestTermTransfer requestTermTransfer) {
 	
 		// (기흥) nGramFilter argument를 this.workingDocIds만 넘겨주는 걸로 수정해야함... 여기서부터는 진규가 개발 예정.
-		ArrayList<DocTermFreqByTerm[]> filteredDocByTermList = nGramFilter(requestDocs);
+		ArrayList<TermFreqByDoc> filteredDocByTermList = nGramFilter(workingDocIds);
 		
 		for (DocTermFreqByTerm[] docByTerm : filteredDocByTermList){
 			TermTransfer termTransfer = new TermTransfer();
@@ -227,8 +227,13 @@ public class UserControl extends Thread{
 		
 		transferObject(notifyTransferEnd);
 	}
-	
+	/*
+	 * (진규) phase 2.5에서부터 NgramFilter 구현 방식 바뀜.
+	 * 구현 계획 1: DB단에서는 docID List를 받아서 TermFreqByDoc을 만들어서 리스트로 묶은 다음 보내준다.
+	 * 구현 계획 2: Ngramfilter 진행 시, DB단에서 준 TermFreqByDoc list를 받아 각 TermFreqByDoc의 hashMap value들을 더해 2보다 작은 경우 TermFreqByDoc에서 remove하고, Filter된 list를 결과로 보내준다. 
+	 */
 	private ArrayList<TermFreqByDoc> nGramFilter(ArrayList<Integer> docIdList){
+		
 		ArrayList<TermFreqByDoc> filtering = TermFreqDBManager.getInstance().getTermConditional(docIdList);
 		
 		for (TermFreqByDoc termFreqByDocFilter : filtering){
@@ -277,12 +282,7 @@ public class UserControl extends Thread{
 //					docTermFreqByTerm[whiteSpaceCount].remove(appendTerm);
 //				}
 //			} else {
-//				/*
-//				 * (진규)
-//				 * 구현 계획 1: Ngramfilter 진행 시, termHash(Hashmap)에 request된 doc들의 단어빈도수들이 계산(sum)되어 저장되고, 여기에서 단어빈도수가 2보다 작으면 docTermFreqByTerm에서 제외된다.
-//				 * 구현 계획 2: 만약, 단어빈도수가 2보다 크거나 같다면, docTermFreqByTerm에서.. wait..
-//				 * 구현 계획 3: Ngramfilter logic 시작전에 termLockInDoc 써서 term들 모두 잠금.
-//				 */
+//			
 //				
 //			}
 //		}
