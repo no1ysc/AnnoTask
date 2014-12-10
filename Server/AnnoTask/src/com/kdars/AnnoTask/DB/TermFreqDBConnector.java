@@ -139,10 +139,10 @@ public class TermFreqDBConnector {
 		return true;
 	}
 	
-	/**
-	 * Column 한줄 가져옴
-	 * @param term
-	 * @return
+	/*
+	 * (진규) phase 2.5에서부터 NgramFilter 구현 방식 바뀜.
+	 * 구현 계획 1: client로부터 요청된 docID list를 받아서, 해당 docID들에 포함된 term들을 query하고 termFreqByDoc 채운 후, 이들을 묶어서 list로 return.
+	 * 구현 계획 2: connector레벨에서 termFreqByDoc을 만들 경우, 나중에 DB단이 바뀔 때 코드가 복잡해지므로 connector레벨에서는 docID, term, ngram, termFrequency, termHolder를 manager로 보내주고, manager에서 termFreqByDoc list를 만드는 구조로 바꿀 예정.
 	 */
 	public ArrayList<TermFreqByDoc> queryTermConditional(ArrayList<Integer> docIdList){
 		ArrayList<TermFreqByDoc> termFreqByDocList = new ArrayList<TermFreqByDoc>();

@@ -165,7 +165,7 @@ public class UserControl extends Thread{
 	private void requestAnnoTaskWork(RequestAnnoTaskWork requestAnnoTaskWork) {		
 		this.workingDocIds = ContentDBManager.getInstance().getClientJobCandidates();		
 		SendDocumentCount sendDocumentCount = new SendDocumentCount();
-		sendDocumentCount.doucumentCount = workingDocIds.size() * ContextConfig.getInstance().getN_Gram();		
+		sendDocumentCount.doucumentCount = workingDocIds.size();		
 		transferObject(sendDocumentCount);
 	}
 
@@ -208,17 +208,20 @@ public class UserControl extends Thread{
 	private void requestTermTransferHandler(RequestTermTransfer requestTermTransfer) {
 	
 		// (기흥) nGramFilter argument를 this.workingDocIds만 넘겨주는 걸로 수정해야함... 여기서부터는 진규가 개발 예정.
-		ArrayList<TermFreqByDoc> filteredDocByTermList = nGramFilter(workingDocIds);
+		ArrayList<TermFreqByDoc> filteredTermByDocList = nGramFilter(workingDocIds);
 		
-		for (DocTermFreqByTerm[] docByTerm : filteredDocByTermList){
+		// (진규) filteredTermByDocList.size() == 총 보낼 term의 갯수 보내기.
+		transferObject(filteredTermByDocList.size());
+		
+		for (TermFreqByDoc TermByDoc : filteredTermByDocList){
 			TermTransfer termTransfer = new TermTransfer();
-			termTransfer.docID = docByTerm[0].getDocID();
-			termTransfer.docCategory = docByTerm[0].getDocCategory();
-			termTransfer.docTitle = docByTerm[0].getTitle();
-			
-			termLockInDoc(docByTerm);
-			
-			transferDocbyTerm(docByTerm);
+			termTransfer.term = TermByDoc.getTerm();
+			termTransfer.termFreq4RequestedCorpus = TermByDoc.getTermFreq4RequestedCorpus();
+			termTransfer.nGram = TermByDoc.getNgram();
+			termTransfer.docIdByTermFreqJson = new JSONSerializer().exclude("*.class").serialize(TermByDoc);
+		
+			// (진규) 단어 하나씩 TermFreqByDoc 구조에 담아서 보내기.
+			transferObject(termTransfer);
 		}
 		
 		// 전송완료 알림.
@@ -227,28 +230,34 @@ public class UserControl extends Thread{
 		
 		transferObject(notifyTransferEnd);
 	}
+	
 	/*
 	 * (진규) phase 2.5에서부터 NgramFilter 구현 방식 바뀜.
 	 * 구현 계획 1: DB단에서는 docID List를 받아서 TermFreqByDoc을 만들어서 리스트로 묶은 다음 보내준다.
 	 * 구현 계획 2: Ngramfilter 진행 시, DB단에서 준 TermFreqByDoc list를 받아 각 TermFreqByDoc의 hashMap value들을 더해 2보다 작은 경우 TermFreqByDoc에서 remove하고, Filter된 list를 결과로 보내준다. 
+	 * 구현 계획 3: filter되는 term들에 대해서도 termLock을 하기 위해 ngramfilter에서 요청된 DocID들에 물린 모든 term들을 termHolder로 lock한다.
 	 */
 	private ArrayList<TermFreqByDoc> nGramFilter(ArrayList<Integer> docIdList){
 		
 		ArrayList<TermFreqByDoc> filtering = TermFreqDBManager.getInstance().getTermConditional(docIdList);
 		
 		for (TermFreqByDoc termFreqByDocFilter : filtering){
+			//filter전에 TermLock 진행.
+			TermFreqDBManager.getInstance().termLock(termFreqByDocFilter.getTerm(), termFreqByDocFilter.getTermHolder());
 			int termFreqSum = 0;
 			for (int termFreq : termFreqByDocFilter.values()){
 				termFreqSum = termFreqSum + termFreq;
 			}
 			if (termFreqSum < 2){
 				filtering.remove(termFreqByDocFilter);
+				continue;
 			}
+			termFreqByDocFilter.setTermFreq4RequestedCorpus(termFreqSum);
 		}
 		return filtering;
 	}
 		
-//		
+	//(진규) phase 2.5에서부터 NgramFilter 구현 방식 바뀜.	
 //		int nGramNumber = ContextConfig.getInstance().getN_Gram();
 //		HashMap<String, Integer> termHash = new HashMap<String, Integer>();
 //		ArrayList<DocTermFreqByTerm[]> docByTermList = new ArrayList<DocTermFreqByTerm[]>();
@@ -345,21 +354,21 @@ public class UserControl extends Thread{
 		transferObject(meta);
 	}
 	
-
-	private void transferDocbyTerm(DocTermFreqByTerm[] docByTerm) {
-		for (int index = 0; index < docByTerm.length; index++){
-			TermTransfer termTransfer = new TermTransfer();
-			termTransfer.docCategory = docByTerm[index].getDocCategory();
-			termTransfer.docID = docByTerm[index].getDocID();
-			termTransfer.ngram = docByTerm[index].getNGram();
-			termTransfer.docTitle = docByTerm[index].getTitle();
-			termTransfer.termsJson = new JSONSerializer().exclude("*.class").serialize(docByTerm[index]);
-			
-//			System.out.println(termTransfer.termsJson);
-			
-			transferObject(termTransfer);
-		}		
-	}
+	//(진규) phase 2.5에서부터 NgramFilter 구현 방식 바뀜.
+//	private void transferDocbyTerm(DocTermFreqByTerm[] docByTerm) {
+//		for (int index = 0; index < docByTerm.length; index++){
+//			TermTransfer termTransfer = new TermTransfer();
+//			termTransfer.docCategory = docByTerm[index].getDocCategory();
+//			termTransfer.docID = docByTerm[index].getDocID();
+//			termTransfer.ngram = docByTerm[index].getNGram();
+//			termTransfer.docTitle = docByTerm[index].getTitle();
+//			termTransfer.termsJson = new JSONSerializer().exclude("*.class").serialize(docByTerm[index]);
+//			
+////			System.out.println(termTransfer.termsJson);
+//			
+//			transferObject(termTransfer);
+//		}		
+//	}
 
 	private void transferObject(Object obj) {
 		String json = new JSONSerializer().exclude("*.class").serialize(obj);
@@ -373,18 +382,19 @@ public class UserControl extends Thread{
 		}
 	}
 
-	private void termLockInDoc(DocTermFreqByTerm[] docByTerm) {
-		for (int index = 0; index < docByTerm.length; index++){
-			
-			for (Iterator<Map.Entry<String, Integer>> iter = docByTerm[index].entrySet().iterator(); iter.hasNext();){
-				Map.Entry<String, Integer> entry = iter.next();
-				String term = entry.getKey();
-				if (!TermFreqDBManager.getInstance().termLock(term, userID)){
-					iter.remove();
-				}
-			}
-		}
-	}
+	//(진규) phase 2.5에서부터 NgramFilter 구현 방식 바뀜.
+//	private void termLockInDoc(TermFreqByDoc TermByDoc) {	
+//		for (int index = 0; index < docByTerm.length; index++){
+//			
+//			for (Iterator<Map.Entry<String, Integer>> iter = docByTerm[index].entrySet().iterator(); iter.hasNext();){
+//				Map.Entry<String, Integer> entry = iter.next();
+//				String term = entry.getKey();
+//				if (!TermFreqDBManager.getInstance().termLock(term, userID)){
+//					iter.remove();
+//				}
+//			}
+//		}
+//	}
 	
 	private void termUnlock(int userID) {
 		// TODO Auto-generated method stub
