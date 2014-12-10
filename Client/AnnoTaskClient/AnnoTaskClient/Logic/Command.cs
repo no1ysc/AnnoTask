@@ -16,12 +16,16 @@ namespace AnnoTaskClient.Logic
 				public int doucumentCount;
 			}
 
+            // (기흥) 단어 총 갯수
+            public class SendTermCount
+            {
+                public int totalTermCount;
+            }
+
 			public class TermTransfer
 			{
 				// 텀 1개씩 전송	1-4(반복)
-				public int docID;
-				public string docCategory;
-				public string docTitle;
+				public string term;
 				public int ngram;
 				public string termsJson;	// 추후 Map으로 다시 변환.<Term, Freq>
 			}
