@@ -31,14 +31,7 @@ namespace AnnoTaskClient
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            this.btnImportDoc = new System.Windows.Forms.Button();
-            this.bNate = new System.Windows.Forms.CheckBox();
-            this.bDaum = new System.Windows.Forms.CheckBox();
-            this.bNaver = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.endDate = new System.Windows.Forms.DateTimePicker();
-            this.startDate = new System.Windows.Forms.DateTimePicker();
+            this.btnJobStart = new System.Windows.Forms.Button();
             this.docCount = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.termCount = new System.Windows.Forms.Label();
@@ -155,88 +148,20 @@ namespace AnnoTaskClient
             // 
             // btnImportDoc
             // 
-            this.btnImportDoc.Enabled = false;
-            this.btnImportDoc.Location = new System.Drawing.Point(553, 46);
-            this.btnImportDoc.Name = "btnImportDoc";
-            this.btnImportDoc.Size = new System.Drawing.Size(120, 23);
-            this.btnImportDoc.TabIndex = 16;
-            this.btnImportDoc.Text = "문서 가져오기";
-            this.btnImportDoc.UseVisualStyleBackColor = true;
-            this.btnImportDoc.Click += new System.EventHandler(this.btnImportDoc_Click);
-            // 
-            // bNate
-            // 
-            this.bNate.AutoSize = true;
-            this.bNate.Checked = true;
-            this.bNate.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bNate.Location = new System.Drawing.Point(495, 52);
-            this.bNate.Name = "bNate";
-            this.bNate.Size = new System.Drawing.Size(49, 17);
-            this.bNate.TabIndex = 15;
-            this.bNate.Text = "Nate";
-            this.bNate.UseVisualStyleBackColor = true;
-            // 
-            // bDaum
-            // 
-            this.bDaum.AutoSize = true;
-            this.bDaum.Checked = true;
-            this.bDaum.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bDaum.Location = new System.Drawing.Point(435, 52);
-            this.bDaum.Name = "bDaum";
-            this.bDaum.Size = new System.Drawing.Size(54, 17);
-            this.bDaum.TabIndex = 14;
-            this.bDaum.Text = "Daum";
-            this.bDaum.UseVisualStyleBackColor = true;
-            // 
-            // bNaver
-            // 
-            this.bNaver.AutoSize = true;
-            this.bNaver.Checked = true;
-            this.bNaver.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bNaver.Location = new System.Drawing.Point(374, 52);
-            this.bNaver.Name = "bNaver";
-            this.bNaver.Size = new System.Drawing.Size(55, 17);
-            this.bNaver.TabIndex = 13;
-            this.bNaver.Text = "Naver";
-            this.bNaver.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(193, 30);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(70, 13);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "끝나는 날짜";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 13);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "시작 날짜";
-            // 
-            // endDate
-            // 
-            this.endDate.Location = new System.Drawing.Point(193, 49);
-            this.endDate.Name = "endDate";
-            this.endDate.Size = new System.Drawing.Size(170, 20);
-            this.endDate.TabIndex = 10;
-            // 
-            // startDate
-            // 
-            this.startDate.Location = new System.Drawing.Point(11, 49);
-            this.startDate.Name = "startDate";
-            this.startDate.Size = new System.Drawing.Size(170, 20);
-            this.startDate.TabIndex = 9;
+            this.btnJobStart.Enabled = false;
+            this.btnJobStart.Location = new System.Drawing.Point(14, 46);
+            this.btnJobStart.Name = "btnImportDoc";
+            this.btnJobStart.Size = new System.Drawing.Size(176, 23);
+            this.btnJobStart.TabIndex = 16;
+            this.btnJobStart.Text = "작업 시작하기";
+            this.btnJobStart.UseVisualStyleBackColor = true;
+            this.btnJobStart.Click += new System.EventHandler(this.btnJobStart_Click);
             // 
             // docCount
             // 
             this.docCount.AutoSize = true;
             this.docCount.Cursor = System.Windows.Forms.Cursors.Default;
-            this.docCount.Location = new System.Drawing.Point(766, 77);
+            this.docCount.Location = new System.Drawing.Point(850, 51);
             this.docCount.Name = "docCount";
             this.docCount.Size = new System.Drawing.Size(13, 13);
             this.docCount.TabIndex = 22;
@@ -245,7 +170,7 @@ namespace AnnoTaskClient
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(699, 77);
+            this.label7.Location = new System.Drawing.Point(792, 51);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(61, 13);
             this.label7.TabIndex = 21;
@@ -254,7 +179,7 @@ namespace AnnoTaskClient
             // termCount
             // 
             this.termCount.AutoSize = true;
-            this.termCount.Location = new System.Drawing.Point(892, 77);
+            this.termCount.Location = new System.Drawing.Point(936, 51);
             this.termCount.Name = "termCount";
             this.termCount.Size = new System.Drawing.Size(13, 13);
             this.termCount.TabIndex = 20;
@@ -263,7 +188,7 @@ namespace AnnoTaskClient
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(825, 77);
+            this.label4.Location = new System.Drawing.Point(879, 51);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(61, 13);
             this.label4.TabIndex = 19;
@@ -273,7 +198,7 @@ namespace AnnoTaskClient
             // 
             this.progressLabel.AutoSize = true;
             this.progressLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.progressLabel.Location = new System.Drawing.Point(931, 49);
+            this.progressLabel.Location = new System.Drawing.Point(739, 49);
             this.progressLabel.Name = "progressLabel";
             this.progressLabel.Size = new System.Drawing.Size(25, 15);
             this.progressLabel.TabIndex = 18;
@@ -281,9 +206,9 @@ namespace AnnoTaskClient
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(679, 46);
+            this.progressBar.Location = new System.Drawing.Point(196, 46);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(250, 23);
+            this.progressBar.Size = new System.Drawing.Size(537, 23);
             this.progressBar.TabIndex = 17;
             // 
             // menuStrip1
@@ -612,12 +537,12 @@ namespace AnnoTaskClient
             this.article2.BackColor = System.Drawing.SystemColors.Window;
             this.article2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.article2.Location = new System.Drawing.Point(0, 22);
-            this.article2.Multiline = true;
             this.article2.Name = "article2";
             this.article2.ReadOnly = true;
             this.article2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.article2.Size = new System.Drawing.Size(305, 385);
             this.article2.TabIndex = 1;
+            this.article2.Text = "";
             // 
             // label10
             // 
@@ -766,12 +691,12 @@ namespace AnnoTaskClient
             this.article3.BackColor = System.Drawing.SystemColors.Window;
             this.article3.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.article3.Location = new System.Drawing.Point(0, 22);
-            this.article3.Multiline = true;
             this.article3.Name = "article3";
             this.article3.ReadOnly = true;
             this.article3.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.article3.Size = new System.Drawing.Size(305, 385);
             this.article3.TabIndex = 1;
+            this.article3.Text = "";
             // 
             // label13
             // 
@@ -852,13 +777,12 @@ namespace AnnoTaskClient
             // 
             this.Term4.HeaderText = "Term";
             this.Term4.Name = "Term4";
-            this.Term4.Width = 60;
+            this.Term4.Width = 90;
             // 
             // 빈도수4
             // 
             this.빈도수4.HeaderText = "빈도수";
             this.빈도수4.Name = "빈도수4";
-            this.Term4.Width = 90;
             // 
             // 출현문서수4
             // 
@@ -921,12 +845,12 @@ namespace AnnoTaskClient
             this.article4.BackColor = System.Drawing.SystemColors.Window;
             this.article4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.article4.Location = new System.Drawing.Point(0, 22);
-            this.article4.Multiline = true;
             this.article4.Name = "article4";
             this.article4.ReadOnly = true;
             this.article4.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.article4.Size = new System.Drawing.Size(305, 385);
             this.article4.TabIndex = 1;
+            this.article4.Text = "";
             // 
             // label16
             // 
@@ -988,14 +912,7 @@ namespace AnnoTaskClient
             this.Controls.Add(this.label4);
             this.Controls.Add(this.progressLabel);
             this.Controls.Add(this.progressBar);
-            this.Controls.Add(this.btnImportDoc);
-            this.Controls.Add(this.bNate);
-            this.Controls.Add(this.bDaum);
-            this.Controls.Add(this.bNaver);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.endDate);
-            this.Controls.Add(this.startDate);
+            this.Controls.Add(this.btnJobStart);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
@@ -1139,7 +1056,7 @@ namespace AnnoTaskClient
 		private System.Windows.Forms.DataGridViewTextBoxColumn Term4;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 빈도수4;
 		private System.Windows.Forms.DataGridViewTextBoxColumn 출현문서수4;
-		public System.Windows.Forms.Button btnImportDoc;
+		public System.Windows.Forms.Button btnJobStart;
         public System.Windows.Forms.Button openAddThesaurusWindowButton;
         private System.Windows.Forms.Button addDeleteListButton;
 	}
