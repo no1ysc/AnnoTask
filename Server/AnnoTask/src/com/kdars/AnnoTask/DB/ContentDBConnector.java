@@ -211,7 +211,7 @@ public class ContentDBConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			resultSet = stmt.executeQuery("select * from " + jobTable + " where client_jobstatus = 0 limit " + nRows + ";");
-			if(resultSet.next()){
+			while(resultSet.next()){
 				docID_List.add(resultSet.getInt("doc_id"));
 				//System.out.println(docID_List.get(docID_List.size()-1));
 			}
