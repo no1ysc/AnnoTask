@@ -20,6 +20,7 @@ import com.kdars.AnnoTask.DB.DeleteListDBManager;
 import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 import com.kdars.AnnoTask.DB.Document;
 import com.kdars.AnnoTask.DB.LinkedList;
+import com.kdars.AnnoTask.DB.TermFreqByDoc;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 import com.kdars.AnnoTask.DB.ThesaurusDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
@@ -207,7 +208,7 @@ public class UserControl extends Thread{
 	private void requestTermTransferHandler(RequestTermTransfer requestTermTransfer) {
 	
 		// (기흥) nGramFilter argument를 this.workingDocIds만 넘겨주는 걸로 수정해야함... 여기서부터는 진규가 개발 예정.
-		ArrayList<DocTermFreqByTerm[]> filteredDocByTermList = nGramFilter(requestDocs);
+		ArrayList<TermFreqByDoc> filteredDocByTermList = nGramFilter(workingDocIds);
 		
 		for (DocTermFreqByTerm[] docByTerm : filteredDocByTermList){
 			TermTransfer termTransfer = new TermTransfer();
@@ -226,45 +227,68 @@ public class UserControl extends Thread{
 		
 		transferObject(notifyTransferEnd);
 	}
-	
-	private ArrayList<DocTermFreqByTerm[]> nGramFilter(ArrayList<Document> requestDocs){
-		int nGramNumber = ContextConfig.getInstance().getN_Gram();
-		HashMap<String, Integer> termHash = new HashMap<String, Integer>();
-		ArrayList<DocTermFreqByTerm[]> docByTermList = new ArrayList<DocTermFreqByTerm[]>();
-		for (Document doc : requestDocs){
-			DocTermFreqByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
-			docByTermList.add(docByTerm);
-			for (int nGramIndex = 1; nGramIndex < nGramNumber; nGramIndex++){
-				for (String term : docByTerm[nGramIndex].keySet()){
-					
-					if (termHash.containsKey(term)){
-						int priorValue = termHash.get(term);
-						termHash.replace(term, priorValue, priorValue + docByTerm[nGramIndex].get(term));
-					} else {
-						termHash.put(term, docByTerm[nGramIndex].get(term));
-					}
-					
-				}
+	/*
+	 * (진규) phase 2.5에서부터 NgramFilter 구현 방식 바뀜.
+	 * 구현 계획 1: DB단에서는 docID List를 받아서 TermFreqByDoc을 만들어서 리스트로 묶은 다음 보내준다.
+	 * 구현 계획 2: Ngramfilter 진행 시, DB단에서 준 TermFreqByDoc list를 받아 각 TermFreqByDoc의 hashMap value들을 더해 2보다 작은 경우 TermFreqByDoc에서 remove하고, Filter된 list를 결과로 보내준다. 
+	 */
+	private ArrayList<TermFreqByDoc> nGramFilter(ArrayList<Integer> docIdList){
+		
+		ArrayList<TermFreqByDoc> filtering = TermFreqDBManager.getInstance().getTermConditional(docIdList);
+		
+		for (TermFreqByDoc termFreqByDocFilter : filtering){
+			int termFreqSum = 0;
+			for (int termFreq : termFreqByDocFilter.values()){
+				termFreqSum = termFreqSum + termFreq;
+			}
+			if (termFreqSum < 2){
+				filtering.remove(termFreqByDocFilter);
 			}
 		}
-		
-		for (String appendTerm : termHash.keySet()){
-			if (termHash.get(appendTerm) < 2){
-				int whiteSpaceCount = 0;
-				Pattern p = Pattern.compile(" ");
-				Matcher m = p.matcher(appendTerm);
-				while(m.find()){
-					m.start();
-					whiteSpaceCount++;
-				}
-				for (DocTermFreqByTerm[] docTermFreqByTerm : docByTermList){
-					docTermFreqByTerm[whiteSpaceCount].remove(appendTerm);
-				}
-			}
-		}
-		
-	return docByTermList;	
+		return filtering;
 	}
+		
+//		
+//		int nGramNumber = ContextConfig.getInstance().getN_Gram();
+//		HashMap<String, Integer> termHash = new HashMap<String, Integer>();
+//		ArrayList<DocTermFreqByTerm[]> docByTermList = new ArrayList<DocTermFreqByTerm[]>();
+//		for (Document doc : requestDocs){
+//			DocTermFreqByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
+//			docByTermList.add(docByTerm);
+//			for (int nGramIndex = 1; nGramIndex < nGramNumber; nGramIndex++){
+//				for (String term : docByTerm[nGramIndex].keySet()){
+//					
+//					if (termHash.containsKey(term)){
+//						int priorValue = termHash.get(term);
+//						termHash.replace(term, priorValue, priorValue + docByTerm[nGramIndex].get(term));
+//					} else {
+//						termHash.put(term, docByTerm[nGramIndex].get(term));
+//					}
+//					
+//				}
+//			}
+//		}
+//		
+//		for (String appendTerm : termHash.keySet()){
+//			if (termHash.get(appendTerm) < 2){
+//				int whiteSpaceCount = 0;
+//				Pattern p = Pattern.compile(" ");
+//				Matcher m = p.matcher(appendTerm);
+//				while(m.find()){
+//					m.start();
+//					whiteSpaceCount++;
+//				}
+//				for (DocTermFreqByTerm[] docTermFreqByTerm : docByTermList){
+//					docTermFreqByTerm[whiteSpaceCount].remove(appendTerm);
+//				}
+//			} else {
+//			
+//				
+//			}
+//		}
+//		
+//	return docByTermList;	
+//	}
 	
 	
 	private void requestByDateHandler(RequestByDate requestByDate) {

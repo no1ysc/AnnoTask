@@ -1,5 +1,7 @@
 package com.kdars.AnnoTask.DB;
 
+import java.util.ArrayList;
+
 import com.kdars.AnnoTask.ContextConfig;
 
 public class TermFreqDBManager {
@@ -14,13 +16,9 @@ public class TermFreqDBManager {
 		return	thisClass;
 	}
 	
-	public TermFreqByDoc getTerm(String term, int termHolder){
-		TermFreqByDoc	termByDoc = new TermFreqByDoc(term, termHolder);
-		// termByDoc 체우는 로직 필요,,,,,
-		termLock(term, termHolder);
-		// 체우면서 DB에 락걸어주어야함,
+	public ArrayList<TermFreqByDoc> getTermConditional(ArrayList<Integer> docIdList){
 		
-		return termByDoc;
+		return termFreqDB.queryTermConditional(docIdList);
 	}
 	
 	public boolean deleteTerm(String term, int termHolder){
