@@ -59,7 +59,28 @@ public class TermFreqDBConnector {
 		
 		return true;
 	}
-	
+	public int sumTermFrequency(String term, Integer doc_id) {
+		ResultSet resultSet = null;
+		int sumTermFreq = 0;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			String targetedTerm = escape(term);
+			int lastDocId = doc_id+ContextConfig.getInstance().getClientJobUnit()-1;
+			
+			String query = "select sum(" + colName6 + ") from " + termFreqTable + " where term = \"" + targetedTerm + "\" and docid between " + doc_id + "  and " + lastDocId + ";";
+			resultSet = stmt.executeQuery(query);
+			while(resultSet.next()){
+				sumTermFreq = resultSet.getInt(1);				
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sumTermFreq;
+		
+	}
+
 	public boolean deleteDoc(DocTermFreqByTerm docByTerm){
 //		java.sql.Connection sqlConnectionLocal = connect();
 		String docCategory = docByTerm.getDocCategory();
@@ -90,11 +111,11 @@ public class TermFreqDBConnector {
 	 * @param termHolder
 	 * @return 락에 성공하면 true, 실패하면 False
 	 */
-	public boolean updateTermLockState(String term, int termHolder){
+	public boolean updateTermLockState(ArrayList<Integer> doc_id, int termHolder){
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			String escapedTerm = escape(term);
-			stmt.execute("update TFtable set TermStatus = " + termHolder + " where Term = \"" + escapedTerm + "\";");
+			//String escapedTerm = escape(term);
+			stmt.execute("update TFtable set TermStatus = " + termHolder + " where docid between " + doc_id.get(0) + " and " + doc_id.get(doc_id.size()-1) +";");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -307,5 +328,6 @@ public class TermFreqDBConnector {
 		
 		return true;
 	}
+
 }
  

@@ -17,7 +17,6 @@ public class TermFreqDBManager {
 	}
 	
 	public ArrayList<TermFreqByDoc> getTermConditional(ArrayList<Integer> docIdList){
-		
 		return termFreqDB.queryTermConditional(docIdList);
 	}
 	
@@ -53,7 +52,11 @@ public class TermFreqDBManager {
 		return true;
 	}
 	
-	public boolean termLock(String term, int termHolder){
-		return termFreqDB.updateTermLockState(term, termHolder);
+	public boolean termLock(ArrayList<Integer> doc_id, int termHolder){
+		return termFreqDB.updateTermLockState(doc_id, termHolder);
+	}
+
+	public int sumTermFrequency(String term, Integer doc_id) {
+		return termFreqDB.sumTermFrequency(term, doc_id);
 	}
 }
