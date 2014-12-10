@@ -23,6 +23,10 @@ public class TermFreqByDoc extends HashMap<Integer, Integer>{
 		this.termFreq4RequestedCorpus = sum;
 	}
 	
+	public void setTermHolder(int termHolder){
+		this.termHolder = termHolder;
+	}
+	
 	public int getNgram(){
 		return this.nGram;
 	}

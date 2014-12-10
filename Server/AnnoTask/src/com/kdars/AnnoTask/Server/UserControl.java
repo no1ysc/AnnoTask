@@ -240,10 +240,10 @@ public class UserControl extends Thread{
 	private ArrayList<TermFreqByDoc> nGramFilter(ArrayList<Integer> docIdList){
 		
 		ArrayList<TermFreqByDoc> filtering = TermFreqDBManager.getInstance().getTermConditional(docIdList);
-		
-		for (TermFreqByDoc termFreqByDocFilter : filtering){
-			//filter전에 TermLock 진행.
-			TermFreqDBManager.getInstance().termLock(termFreqByDocFilter.getTerm(), termFreqByDocFilter.getTermHolder());
+		for (int i = filtering.size()-1; i >= 0; i--){
+			TermFreqByDoc termFreqByDocFilter = filtering.get(i);
+			TermFreqDBManager.getInstance().termLock(termFreqByDocFilter.getTerm(), userID);
+			termFreqByDocFilter.setTermHolder(userID);
 			int termFreqSum = 0;
 			for (int termFreq : termFreqByDocFilter.values()){
 				termFreqSum = termFreqSum + termFreq;
@@ -254,6 +254,7 @@ public class UserControl extends Thread{
 			}
 			termFreqByDocFilter.setTermFreq4RequestedCorpus(termFreqSum);
 		}
+
 		return filtering;
 	}
 		
