@@ -33,13 +33,17 @@ namespace AnnoTaskClient
         {
             logic.clickedAddThesaurus();
             logic.getConceptToList();
+            if (ConceptFromComboBox.Items.Count == 0)
+            {
+                ConceptFromComboBox.Text = "";
+            }
         }
 
         internal bool SupressSelectIndexChanged { get; set; }
-        private void showSelectedTerm()
+        private void showSelectedTerm(String text)
         {
             this.SupressSelectIndexChanged = true;
-            ConceptFromComboBox.SelectedIndex = 0;
+            ConceptFromComboBox.Text = text;
             this.SupressSelectIndexChanged = false;
         }
 
@@ -48,20 +52,8 @@ namespace AnnoTaskClient
             if (this.SupressSelectIndexChanged) { return; }
             ComboBox comb = (ComboBox)sender;
             string text = comb.Text;
-            logic.thesaurusWindowTermChanged(text);
             logic.treeViewForThesaurusWindow(text);
-            showSelectedTerm();
-        }
-
-        private void ConceptToComboBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            ComboBox comb = (ComboBox)sender;
-            string text = comb.Text;
-
-            if (e.KeyCode == Keys.Enter)
-            {
-                logic.getLinkedList(text);
-            }
+            showSelectedTerm(text);
         }
 
         private void treeView1_DoubleClick(object sender, EventArgs e)

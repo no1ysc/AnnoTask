@@ -82,7 +82,7 @@ namespace AnnoTaskClient.UIController
         private void refreshThesaurusWindowConceptTo(List<String> termList)
         {
             addThesaurusWindow.ConceptToComboBox.Items.Clear();
-            addThesaurusWindow.ConceptToComboBox.Text = termList[0];
+            //addThesaurusWindow.ConceptToComboBox.Text = termList[0];
 
             for (int i = 0; i < termList.Count; ++i)
             {

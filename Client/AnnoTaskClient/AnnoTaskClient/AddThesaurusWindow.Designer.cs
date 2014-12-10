@@ -69,7 +69,6 @@
             this.ConceptToComboBox.Size = new System.Drawing.Size(206, 21);
             this.ConceptToComboBox.TabIndex = 1;
             this.ConceptToComboBox.SelectedIndexChanged += new System.EventHandler(this.ConceptToComboBox_SelectedIndexChanged);
-            this.ConceptToComboBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ConceptToComboBox_KeyDown);
             // 
             // MetaOntologyComboBox
             // 

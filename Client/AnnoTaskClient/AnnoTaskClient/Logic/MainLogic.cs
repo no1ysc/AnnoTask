@@ -380,7 +380,7 @@ namespace AnnoTaskClient.Logic
         internal void clickedAddThesaurus()
         {
             commandQ.AddLast("AddThesaurus");
-            MessageBox.Show("시소러스에 단어 추가를 진행합니다.");
+            MessageBox.Show("시소러스에 단어 추가를 진행하였습니다.");
         }
 
         private void addThesaurus()
@@ -426,41 +426,6 @@ namespace AnnoTaskClient.Logic
             }
 
             MessageBox.Show("단어를 선택해 주세요.");
-        }
-
-        internal void thesaurusWindowTermChanged(string term)
-        {
-            termList.Remove(term);
-            termList.Insert(0, term);
-
-            UIHandler.Instance.ThesaurusUI.RefreshConceptFromCombo(termList);
-        }
-
-        internal void conceptToFind(string term)
-        {
-            if (term.Equals(""))
-            {
-                return;
-            }
-
-            List<String> list = new List<string>();
-            list.Add(term);
-
-            if (termList == null && termList.Count == 0)
-            {
-                return;
-            }
-
-            for (int i = 0; i < conceptList.Count(); ++i)
-            {
-                string temp = conceptList[i].conceptToTerms;
-                if (temp.Contains(term))
-                {
-                    list.Add(temp);
-                }
-            }
-
-            UIHandler.Instance.ThesaurusUI.RefreshConceptToCombo(list);
         }
 
         internal void treeViewForThesaurusWindow(string p)
