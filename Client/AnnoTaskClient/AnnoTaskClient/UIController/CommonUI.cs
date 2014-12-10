@@ -38,7 +38,7 @@ namespace AnnoTaskClient.UIController
 		}
 		private void setButtonEnableState(bool bState)
 		{
-			mainWindow.btnImportDoc.Enabled = bState;
+			mainWindow.btnJobStart.Enabled = bState;
 		}
 
         public void setAddThesaurusWindowButtonEnable()
