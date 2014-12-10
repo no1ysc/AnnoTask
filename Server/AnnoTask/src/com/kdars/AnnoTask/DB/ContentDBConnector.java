@@ -203,4 +203,29 @@ public class ContentDBConnector {
 		
 		return ret;
 	}
+	
+	// (기흥) 구현 계획 1: job_table에서 client_jobstatus가 0인 row 10개 쿼리
+	public ArrayList<Integer> queryClientJobCandidates(int nRows) {
+		ResultSet resultSet = null;
+		ArrayList<Integer> docID_List = new ArrayList<Integer>();
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			resultSet = stmt.executeQuery("select * from " + jobTable + " where client_jobstatus = 0 limit " + nRows + ";");
+			if(resultSet.next()){
+				docID_List.add(resultSet.getInt("doc_id"));
+				//System.out.println(docID_List.get(docID_List.size()-1));
+			}
+			// update client_jobstatus to 1
+			for(int i = 0; i< docID_List.size(); i++){
+				stmt.execute("update " + jobTable + " set client_jobstatus = 1 where doc_id = " + docID_List.get(i));
+			}
+			stmt.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return docID_List;
+	}
 }

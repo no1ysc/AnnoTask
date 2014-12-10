@@ -32,6 +32,14 @@ public class ContextConfig {
 	}
 	/* Special Character Setting */
 	
+	/* ClientJobUnit = number of rows */
+	private int nRows = 10;
+	public int getClientJobUnit() {
+		return this.nRows;
+	}
+
+	/* ClientJobUnit = number of rows */
+	
 	/* Character length and document length limit for tokenizing */
 	private int charlimit = 50;
 	public int getCharLimit(){
@@ -104,5 +112,5 @@ public class ContextConfig {
 	public final String Thesaurus_DB_TABLE_NAME1 = "conceptfromtable";
 	public final String Thesaurus_DB_TABLE_NAME2 = "concepttotable";
 	/* Thesaurus DB Connect Info*/
-	
+		
 }
