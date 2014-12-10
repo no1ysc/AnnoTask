@@ -95,5 +95,16 @@ namespace AnnoTaskClient
             UIHandler.Instance.CommonUI.setAddThesaurusWindowButtonEnable();
         }
 
+        private void ConceptToComboBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            ComboBox comb = (ComboBox)sender;
+            string text = comb.Text;
+
+            if(e.KeyCode == Keys.Enter)
+            {
+                logic.getLinkedList(text);
+            }            
+        }
+
     }
 }
