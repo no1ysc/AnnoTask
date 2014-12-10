@@ -12,7 +12,7 @@ public class TermTransfer extends Command
 	public String term;
 	public int nGram;
 	public int termFreq4RequestedCorpus;
-	public String docIdByTermFreqJson; //추후 Map으로 다시 변환.<docID, termFreq>
+	public String termsJson; //추후 Map으로 다시 변환.<docID, termFreq>
 	
 //	// 텀 1개씩 전송	1-4(반복)
 //	public int docID;

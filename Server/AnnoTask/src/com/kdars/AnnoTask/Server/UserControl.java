@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -209,8 +211,9 @@ public class UserControl extends Thread{
 	private void requestTermTransferHandler(RequestTermTransfer requestTermTransfer) {
 	
 		// (기흥) nGramFilter argument를 this.workingDocIds만 넘겨주는 걸로 수정해야함... 여기서부터는 진규가 개발 예정.
+		long start_time = System.currentTimeMillis();
 		ArrayList<TermFreqByDoc> filteredTermByDocList = nGramFilter(workingDocIds);
-		
+		System.out.println(((start_time - System.currentTimeMillis()) / (60000)) % 60);
 		// (진규) filteredTermByDocList.size() == 총 보낼 term의 갯수 보내기.
 		TotalTermCount totalTermCount = new TotalTermCount();
 		totalTermCount.totalTermCount = filteredTermByDocList.size();
@@ -221,7 +224,7 @@ public class UserControl extends Thread{
 			termTransfer.term = TermByDoc.getTerm();
 			termTransfer.termFreq4RequestedCorpus = TermByDoc.getTermFreq4RequestedCorpus();
 			termTransfer.nGram = TermByDoc.getNgram();
-			termTransfer.docIdByTermFreqJson = new JSONSerializer().exclude("*.class").serialize(TermByDoc);
+			termTransfer.termsJson = new JSONSerializer().exclude("*.class").serialize(TermByDoc);
 		
 			// (진규) 단어 하나씩 TermFreqByDoc 구조에 담아서 보내기.
 			transferObject(termTransfer);
@@ -245,7 +248,18 @@ public class UserControl extends Thread{
 		ArrayList<TermFreqByDoc> filtering = TermFreqDBManager.getInstance().getTermConditional(docIdList);
 		for (int i = filtering.size()-1; i >= 0; i--){
 			TermFreqByDoc termFreqByDocFilter = filtering.get(i);
-			TermFreqDBManager.getInstance().termLock(termFreqByDocFilter.getTerm(), userID);
+			String checkTerm = termFreqByDocFilter.getTerm();
+			int whiteSpaceCount = 0;
+			Pattern p = Pattern.compile(" ");
+			Matcher m = p.matcher(checkTerm);
+			while(m.find()){
+				m.start();
+				whiteSpaceCount++;
+			}
+			if (whiteSpaceCount == 0){
+				continue;
+			}
+			TermFreqDBManager.getInstance().termLock(checkTerm, userID);
 //			termFreqByDocFilter.setTermHolder(userID);
 			int termFreqSum = 0;
 			for (int termFreq : termFreqByDocFilter.values()){
