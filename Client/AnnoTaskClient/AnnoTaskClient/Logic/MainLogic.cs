@@ -144,7 +144,7 @@ namespace AnnoTaskClient.Logic
             int workingPercent = 40;
             foreach (TermFreqByDoc termByDoc in result)
             {
-                Frequency wordListEntry = new Frequency(termByDoc.Term, termByDoc.Ngram, termByDoc.TermFreq4RequestedCorpus, termByDoc.Terms.Count());
+                Frequency wordListEntry = new Frequency(termByDoc.Term, termByDoc.Ngram, termByDoc.TermFreq4RequestedCorpus, termByDoc.Terms.Count);
                 switch (termByDoc.Ngram)
                 {
                     case 1:

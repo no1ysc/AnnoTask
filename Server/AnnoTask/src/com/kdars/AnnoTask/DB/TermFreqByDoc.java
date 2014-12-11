@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 public class TermFreqByDoc extends HashMap<Integer, Integer>{
 	
-	//private int termHolder;
 	private String term;
 	private int nGram;
 	private int termFreq4RequestedCorpus;
@@ -16,16 +15,11 @@ public class TermFreqByDoc extends HashMap<Integer, Integer>{
 	public TermFreqByDoc(String term, int nGram){
 		this.term = term;
 		this.nGram = nGram;
-//		this.termHolder = termHolder;
 	}
 	
 	public void setTermFreq4RequestedCorpus(int sum){
 		this.termFreq4RequestedCorpus = sum;
 	}
-	
-//	public void setTermHolder(int termHolder){
-//		this.termHolder = termHolder;
-//	}
 	
 	public int getNgram(){
 		return this.nGram;
@@ -39,7 +33,4 @@ public class TermFreqByDoc extends HashMap<Integer, Integer>{
 		return this.term;
 	}
 	
-//	public int getTermHolder(){
-//		return this.termHolder;
-//	}
 }
