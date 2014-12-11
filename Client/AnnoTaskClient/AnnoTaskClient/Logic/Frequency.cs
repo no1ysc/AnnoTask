@@ -8,12 +8,12 @@ namespace AnnoTaskClient.Logic
 {
 	public class Frequency
 	{
-		public Frequency(string term, int nGram)
+        public Frequency(string term, int nGram, int totalTermFreq, int freqInDocument)
 		{
 			this.term = term;
 			this.nGram = nGram;
-			totalTermFreq = 0;
-			freqInDocument = 0;
+            this.totalTermFreq = totalTermFreq;
+            this.freqInDocument = freqInDocument;
 		}
 
 		private string term;

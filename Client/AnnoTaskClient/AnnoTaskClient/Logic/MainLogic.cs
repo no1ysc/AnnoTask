@@ -140,6 +140,29 @@ namespace AnnoTaskClient.Logic
 				return;
 			}
 
+            int procCount = 0;
+            int workingPercent = 40;
+            foreach (TermFreqByDoc termByDoc in result)
+            {
+                Frequency wordListEntry = new Frequency(termByDoc.Term, termByDoc.Ngram, termByDoc.TermFreq4RequestedCorpus, termByDoc.Terms.Count());
+                switch (termByDoc.Ngram)
+                {
+                    case 1:
+                        UIHandler.Instance.NGram1.AddTermList(wordListEntry);
+                        break;
+                    case 2:
+                        UIHandler.Instance.NGram2.AddTermList(wordListEntry);
+                        break;
+                    case 3:
+                        UIHandler.Instance.NGram3.AddTermList(wordListEntry);
+                        break;
+                    case 4:
+                        UIHandler.Instance.NGram4.AddTermList(wordListEntry);
+                        break;
+                    default:
+                        break;
+                }
+            }
 			UIHandler.Instance.CommonUI.ProgressBar = 100;
 		}
 
