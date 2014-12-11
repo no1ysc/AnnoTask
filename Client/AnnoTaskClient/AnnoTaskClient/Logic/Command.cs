@@ -53,6 +53,11 @@ namespace AnnoTaskClient.Logic
 				public string crawlerVersion;
 			}
 
+            public class DocMeta
+            {
+                public Dictionary<string, Dictionary<int, string>> docMeta;
+            }
+
             public class ConceptToCount
             {
                 public int conceptToCount;
@@ -95,6 +100,10 @@ namespace AnnoTaskClient.Logic
 				public bool bNate;
 			}
 
+            public class RequestDocMeta
+            {
+                public List<int> termLinkedDocIds;
+            }
 
 			public class RequestTermTransfer
 			{

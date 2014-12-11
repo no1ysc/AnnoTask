@@ -23,6 +23,9 @@ namespace AnnoTaskClient.Logic
         private String conceptToTerm;
         private int selectedTabNumber;
 
+        private Command.Server2Client.DocMeta docMeta = new Command.Server2Client.DocMeta();
+        private TermFreqByDoc[] resultFromServer;
+
 		public MainLogic()
 		{
 			
@@ -132,16 +135,16 @@ namespace AnnoTaskClient.Logic
 		{
 			clear();
 
-            TermFreqByDoc[] result = clientWormHole.JobStart();
+            resultFromServer = clientWormHole.JobStart();
 
-			if (result == null)
+			if (resultFromServer == null)
 			{
                 MessageBox.Show("더이상 가져올 문서가 없습니다.");
 				return;
 			}
 
             // (기흥) 가져온 term들을 화면에 뿌려주는 로직.
-            foreach (TermFreqByDoc termByDoc in result)
+            foreach (TermFreqByDoc termByDoc in resultFromServer)
             {
                 Frequency wordListEntry = new Frequency(termByDoc.Term, termByDoc.Ngram, termByDoc.TermFreq4RequestedCorpus, termByDoc.Terms.Count);
                 switch (termByDoc.Ngram)
@@ -244,24 +247,35 @@ namespace AnnoTaskClient.Logic
 
 		internal void cellContentDoubleClick(string p, int tabNumber)
 		{
-			// 트리뷰를 생성.
-			switch (tabNumber)
-			{
-				case 1:
-					UIHandler.Instance.NGram1.RefreshDocList(termNFreq[p]);
-					break;
-				case 2:
-					UIHandler.Instance.NGram2.RefreshDocList(termNFreq[p]);
-					break;
-				case 3:
-					UIHandler.Instance.NGram3.RefreshDocList(termNFreq[p]);
-					break;
-				case 4:
-					UIHandler.Instance.NGram4.RefreshDocList(termNFreq[p]);
-					break;
-				default:
-					break;
-			}
+
+            foreach (TermFreqByDoc termByDoc in resultFromServer)
+            {
+                if (termByDoc.Term.Equals(p))
+                {
+                    // 서버에 doc_id 리스트를 보내야함.
+                    List<int> termLinkedDocIds = new List<int>(termByDoc.Terms.Keys);
+                    // 트리뷰를 생성.
+                    switch (tabNumber)
+                    {
+                        case 1:
+                            docMeta.docMeta = clientWormHole.getDocMeta(termLinkedDocIds);
+                            UIHandler.Instance.NGram1.RefreshDocList(p, docMeta);
+                            break;
+                        case 2:
+                            UIHandler.Instance.NGram2.RefreshDocList(termNFreq[p]);
+                            break;
+                        case 3:
+                            UIHandler.Instance.NGram3.RefreshDocList(termNFreq[p]);
+                            break;
+                        case 4:
+                            UIHandler.Instance.NGram4.RefreshDocList(termNFreq[p]);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+			
 		}
 
         internal void cellContentCheck(DataGridViewCellEventArgs e, int tabNumber)
@@ -309,9 +323,9 @@ namespace AnnoTaskClient.Logic
 		{
 			// find DOC ID
 			int targetID = -1;
-			foreach (int docID in termNFreq[term].Category[category].Keys)
+			foreach (int docID in docMeta.docMeta[category].Keys)
 			{
-				if (termNFreq[term].Category[category][docID].Contains(title))
+                if (docMeta.docMeta[category][docID].Contains(title))
 				{
 					targetID = docID;
 				}

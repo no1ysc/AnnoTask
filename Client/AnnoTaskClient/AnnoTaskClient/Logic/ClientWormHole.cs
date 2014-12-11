@@ -343,6 +343,23 @@ namespace AnnoTaskClient.Logic
             return conceptToList;
         }
 
+        // 트리뷰를 위해 요청하는 녀석
+        internal Dictionary<string, Dictionary<int, string>> getDocMeta(List<int> termLinkedDocIds)
+        {
+            Command.Client2Server.RequestDocMeta requestDocMeta = new Command.Client2Server.RequestDocMeta();
+            requestDocMeta.termLinkedDocIds = termLinkedDocIds;
+            string json_requestDocMeta = new JsonConverter<Command.Client2Server.RequestDocMeta>().Object2Json(requestDocMeta);
+            m_Writer.WriteLine(json_requestDocMeta);
+            m_Writer.Flush();
+
+            //Command.Server2Client.DocMeta docMeta;
+            string json_getDocMeta = m_Reader.ReadLine();
+            //docMeta = new JsonConverter<Command.Server2Client.DocMeta>().Json2Object(json_getDocMeta);
+            Dictionary<string, Dictionary<int, string>> deserializedDocMeta = new JsonConverter<Dictionary<string, Dictionary<int, string>>>().Json2Object(json_getDocMeta);
+            //docMetal.docMeta = deserializedDocMeta;
+            return deserializedDocMeta;
+        }
+
 		internal string getDocBodyFromID(int targetID)
 		{
 			Command.Client2Server.DocumentRequest docReq = new Command.Client2Server.DocumentRequest();

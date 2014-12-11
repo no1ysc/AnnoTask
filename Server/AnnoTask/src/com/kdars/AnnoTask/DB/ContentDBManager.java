@@ -1,8 +1,11 @@
 package com.kdars.AnnoTask.DB;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.kdars.AnnoTask.ContextConfig;
+import com.kdars.AnnoTask.Server.Command.Client2Server.RequestDocMeta;
+import com.kdars.AnnoTask.Server.Command.Server2Client.DocMetaTransfer;
 
 public class ContentDBManager {
 	private static ContentDBManager contentDBManager = new ContentDBManager();
@@ -42,5 +45,9 @@ public class ContentDBManager {
 	// (기흥) phase2.5 - 구현 계획1
 	public ArrayList<Integer> getClientJobCandidates() {
 		return contentDB.queryClientJobCandidates(ContextConfig.getInstance().getClientJobUnit());
+	}
+
+	public DocMetaTransfer getDocMeta(List<Integer> docIDList) {
+		return contentDB.queryDocMeta(docIDList);
 	}
 }

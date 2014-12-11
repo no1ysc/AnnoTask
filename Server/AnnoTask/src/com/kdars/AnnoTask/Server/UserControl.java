@@ -30,9 +30,11 @@ import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddDeleteList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddThesaurus;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAnnoTaskWork;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestByDate;
+import com.kdars.AnnoTask.Server.Command.Client2Server.RequestDocMeta;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestGetLinkedList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestTermTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.ConceptListResponse;
+import com.kdars.AnnoTask.Server.Command.Server2Client.DocMetaTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.DocumentResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.MetaResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.NotifyTransferEnd;
@@ -120,13 +122,11 @@ public class UserControl extends Thread{
 		}
 		
 		
-		// 1-1 처리.
-		if (commandFromUser.contains("startDate")){
+		// 문서 제목 및 카테고리 요청시
+		if (commandFromUser.contains("termLinkedDocIds")){
 //			System.out.println(commandFromUser);
-			RequestByDate requestByDate = new JSONDeserializer<RequestByDate>().deserialize(commandFromUser, RequestByDate.class);
-//			RequestByDate requestByDate = new JSONDeserializer<RequestByDate>().use(null, RequestTermTransfer.class).deserialize(commandFromUser);
-			termUnlock(userID);
-			requestByDateHandler(requestByDate);
+			RequestDocMeta requestDocMeta = new JSONDeserializer<RequestDocMeta>().deserialize(commandFromUser, RequestDocMeta.class);
+			requestDocMetaHandler(requestDocMeta);
 		}
 		//1-3 처리. --> phase2.5 구현 계획 2
 		if (commandFromUser.contains("bTransfer")){
@@ -164,6 +164,14 @@ public class UserControl extends Thread{
 		
 	}
 	
+	// 트리뷰 요청 시
+	private void requestDocMetaHandler(RequestDocMeta requestDocMeta) {
+		DocMetaTransfer documentMeta = new DocMetaTransfer();
+		documentMeta = ContentDBManager.getInstance().getDocMeta(requestDocMeta.termLinkedDocIds);
+		String transferJSON = new JSONSerializer().exclude("*.class").serialize(documentMeta);
+		transferObject(transferJSON);
+	}
+
 	// (기흥) 구현 계획 1
 	private void requestAnnoTaskWork(RequestAnnoTaskWork requestAnnoTaskWork) {		
 		this.workingDocIds = ContentDBManager.getInstance().getClientJobCandidates();		

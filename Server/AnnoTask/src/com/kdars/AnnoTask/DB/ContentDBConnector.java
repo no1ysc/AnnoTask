@@ -4,12 +4,16 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.print.attribute.standard.PresentationDirection;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import com.kdars.AnnoTask.ContextConfig;
+import com.kdars.AnnoTask.Server.Command.Client2Server.RequestDocMeta;
+import com.kdars.AnnoTask.Server.Command.Server2Client.DocMetaTransfer;
 
 public class ContentDBConnector {
 	private java.sql.Connection sqlConnection;
@@ -227,5 +231,54 @@ public class ContentDBConnector {
 		}
 		
 		return docID_List;
+	}
+
+	public DocMetaTransfer queryDocMeta(List<Integer> docIDList) {
+		//HashMap<String, HashMap<Integer, String>>
+		DocMetaTransfer finalDocMetaTransfer = new DocMetaTransfer();
+		HashMap<String, HashMap<Integer, String>> finalData = new HashMap<String, HashMap<Integer, String>>();
+		HashMap<Integer, String> data = new HashMap<Integer, String>();
+		ResultSet resultSet = null;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			StringBuilder sb = new StringBuilder();
+			sb.append("select category, doc_id, title from " + contentTable + " where ");
+			for(int doc_id : docIDList){
+				sb.append("doc_id = " + doc_id + " OR ");
+			}
+			sb.replace(sb.length()-4, sb.length(), ";");
+			resultSet = stmt.executeQuery(sb.toString());
+			
+			boolean forLoopBreaker;
+			while(resultSet.next()){
+				forLoopBreaker = false;
+				String category = resultSet.getString(1);
+				int doc_id = resultSet.getInt(2);
+				String title = unescape(resultSet.getString(3));
+				if(finalData.size() != 0){
+					for ( String cat : finalData.keySet()){
+						if (cat.equals(category)){
+							finalData.get(cat).put(doc_id, title);
+							forLoopBreaker = true;
+							continue;
+						}
+					}					
+				}
+				
+				if (forLoopBreaker){
+					continue;
+				}
+				data.put(doc_id, title);
+				finalData.put(category, data);
+				data.clear();
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		finalDocMetaTransfer.docMeta = finalData;
+		return finalDocMetaTransfer;
 	}
 }

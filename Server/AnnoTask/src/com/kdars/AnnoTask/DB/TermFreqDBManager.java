@@ -16,7 +16,7 @@ public class TermFreqDBManager {
 		return	thisClass;
 	}
 	
-	public ArrayList<TermFreqByDoc> getTermConditional(Integer firstDocId){
+	public ArrayList<TermFreqByDoc> getTermConditional(int firstDocId){
 		return termFreqDB.queryTermConditional(firstDocId);
 	}
 	
