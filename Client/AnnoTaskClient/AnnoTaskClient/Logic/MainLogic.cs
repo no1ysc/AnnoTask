@@ -140,8 +140,7 @@ namespace AnnoTaskClient.Logic
 				return;
 			}
 
-            int procCount = 0;
-            int workingPercent = 40;
+            // (기흥) 가져온 term들을 화면에 뿌려주는 로직.
             foreach (TermFreqByDoc termByDoc in result)
             {
                 Frequency wordListEntry = new Frequency(termByDoc.Term, termByDoc.Ngram, termByDoc.TermFreq4RequestedCorpus, termByDoc.Terms.Count());
@@ -220,11 +219,6 @@ namespace AnnoTaskClient.Logic
 		{
 			// TODO : 메모리 누수 가능성 점검해야함.
 			termNFreq = new Dictionary<string, Frequency>();
-
-			//foreach (Frequency freq in termNFreq.Values)
-			//{
-
-			//}
 
 			UIHandler.Instance.CommonUI.TermCount = 0;
 			UIHandler.Instance.CommonUI.DocCount = 0;
@@ -326,6 +320,7 @@ namespace AnnoTaskClient.Logic
 			return clientWormHole.getDocBodyFromID(targetID);
 		}
 
+        // (기흥) 불용어 추가 버튼 클릭시.
         internal void clickedAddDeleteList(List<string> selectedTerm, int tabNum)
         {
             this.deleteList = selectedTerm;

@@ -36,14 +36,15 @@ namespace AnnoTaskClient.Logic
 			get { return totalTermFreq; }
 			set { totalTermFreq = value; }
 		}
+
 		private int freqInDocument;
 		public int FreqInDocument
 		{
 			get { return freqInDocument; }
 			set { freqInDocument = value; }
 		}
-
-		private Dictionary<string, Dictionary<int, string>> category = new Dictionary<string, Dictionary<int, string>>();
+        
+		private Dictionary<string, Dictionary<int, string>> category = new Dictionary<string, Dictionary<int, string>>(); //cat, id, title
 		public Dictionary<string, Dictionary<int, string>> Category // id, title
 		{
 			get { return category; }
