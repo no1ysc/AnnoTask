@@ -165,36 +165,37 @@ public class TermFreqDBConnector {
 	 * 구현 계획 1: client로부터 요청된 docID list를 받아서, 해당 docID들에 포함된 term들을 query하고 termFreqByDoc 채운 후, 이들을 묶어서 list로 return.
 	 * 구현 계획 2: connector레벨에서 termFreqByDoc을 만들 경우, 나중에 DB단이 바뀔 때 코드가 복잡해지므로 connector레벨에서는 docID, term, ngram, termFrequency, termHolder를 manager로 보내주고, manager에서 termFreqByDoc list를 만드는 구조로 바꿀 예정.
 	 */
-	public ArrayList<TermFreqByDoc> queryTermConditional(ArrayList<Integer> docIdList){
+	public ArrayList<TermFreqByDoc> queryTermConditional(Integer firstDocId){
 		ArrayList<TermFreqByDoc> termFreqByDocList = new ArrayList<TermFreqByDoc>();
+		int lastDocId = firstDocId + ContextConfig.getInstance().getClientJobUnit() - 1;
 		ResultSet resultSet = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			StringBuilder queryMaker = new StringBuilder();
-			queryMaker.append("select " + colName2 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + " from " +  termFreqTable + " where ");
-			for (int docID : docIdList ){
-				queryMaker.append(colName2 + " = " + docID + " OR ");
-			}
-			queryMaker.replace(queryMaker.length()-4, queryMaker.length(), "");
+			String query = "select " + colName2 + ", " + colName4 + ", " + colName5 + ", " + colName6 + " from " + termFreqTable + " where " + colName2 + " between " + firstDocId + "  and " + lastDocId + ";";
+			resultSet = stmt.executeQuery(query);
 			
-			resultSet = stmt.executeQuery(queryMaker.toString());
-			
+			boolean forLoopBreaker;
 			while (resultSet.next()){
+				forLoopBreaker = false;
 				int docID = resultSet.getInt(1);
 				String term = unescape(resultSet.getString(2));
+				System.out.println(term);
 				int nGram = resultSet.getInt(3);
 				int termFreq = resultSet.getInt(4);
-				int termHolder = resultSet.getInt(5);
-				
-				TermFreqByDoc newTermFreqByDoc = new TermFreqByDoc(term, nGram);
 				
 				for (TermFreqByDoc appendTermFreqByDoc : termFreqByDocList){
-					if (appendTermFreqByDoc.getTerm() == term){
+					if (appendTermFreqByDoc.getTerm().equals(term)){
 						appendTermFreqByDoc.put(docID, termFreq);
+						forLoopBreaker = true;
 						continue;
 					}
 				}
 				
+				if (forLoopBreaker){
+					continue;
+				}
+				
+				TermFreqByDoc newTermFreqByDoc = new TermFreqByDoc(term, nGram);
 				newTermFreqByDoc.put(docID, termFreq);
 				termFreqByDocList.add(newTermFreqByDoc);				
 			}

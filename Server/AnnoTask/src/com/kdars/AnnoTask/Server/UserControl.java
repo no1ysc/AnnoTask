@@ -247,25 +247,27 @@ public class UserControl extends Thread{
 	 */
 	private ArrayList<TermFreqByDoc> nGramFilter(ArrayList<Integer> docIdList){
 		
-		ArrayList<TermFreqByDoc> filtering = TermFreqDBManager.getInstance().getTermConditional(docIdList);
+		ArrayList<TermFreqByDoc> filtering = TermFreqDBManager.getInstance().getTermConditional(docIdList.get(0));
 		TermFreqDBManager.getInstance().termLock(docIdList, userID);
 
 		for (int i = filtering.size()-1; i >= 0; i--){
 			TermFreqByDoc termFreqByDocFilter = filtering.get(i);
-			if (termFreqByDocFilter.getNgram() == 1){
-				continue;
-			}
+	
 			//termFreqByDocFilter.setTermHolder(userID);
 			//int termFreqSum = TermFreqDBManager.getInstance().sumTermFrequency(termFreqByDocFilter.getTerm(),docIdList.get(0));;
+			
 			int termFreqSum = 0;
 			for (int termFreq : termFreqByDocFilter.values()){
 				termFreqSum = termFreqSum + termFreq;
 			}
-			if (termFreqSum < 2){
-				filtering.remove(termFreqByDocFilter);
+			
+			if (termFreqByDocFilter.getNgram() == 1 || termFreqSum > 1){
+				termFreqByDocFilter.setTermFreq4RequestedCorpus(termFreqSum);
 				continue;
 			}
-			termFreqByDocFilter.setTermFreq4RequestedCorpus(termFreqSum);
+			
+			filtering.remove(termFreqByDocFilter);
+			
 		}
 
 		return filtering;

@@ -143,7 +143,7 @@ namespace AnnoTaskClient.Logic
             // (기흥) 가져온 term들을 화면에 뿌려주는 로직.
             foreach (TermFreqByDoc termByDoc in result)
             {
-                Frequency wordListEntry = new Frequency(termByDoc.Term, termByDoc.Ngram, termByDoc.TermFreq4RequestedCorpus, termByDoc.Terms.Count());
+                Frequency wordListEntry = new Frequency(termByDoc.Term, termByDoc.Ngram, termByDoc.TermFreq4RequestedCorpus, termByDoc.Terms.Count);
                 switch (termByDoc.Ngram)
                 {
                     case 1:
