@@ -91,7 +91,14 @@ namespace AnnoTaskClient.Logic
             // (기흥) 서버에서 보내온 작업량을 받아서...
             string json_ReceiveDocCount = m_Reader.ReadLine();
             Command.Server2Client.SendDocumentCount docCount = new JsonConverter<Command.Server2Client.SendDocumentCount>().Json2Object(json_ReceiveDocCount);
-            UIHandler.Instance.CommonUI.DocCount = docCount.doucumentCount; // (기흥) "총 문서수" 업데이트
+            if (docCount.doucumentCount != 0)
+            {
+                UIHandler.Instance.CommonUI.DocCount = docCount.doucumentCount; // (기흥) "총 문서수" 업데이트
+            }
+            else
+            {
+                return null; // (기흥) 더이상 가져온게 없으면 return null.
+            }
 
             // (기흥) 이제 본격적으로 단어들을 보내달라고 서버에게 요청.
             Command.Client2Server.RequestTermTransfer requestTermTransfer = new Command.Client2Server.RequestTermTransfer();
@@ -118,8 +125,7 @@ namespace AnnoTaskClient.Logic
                     json_transferedTerm = m_Reader.ReadLine();
                     if (json_transferedTerm == null)
                     {
-                        Console.WriteLine("서버로부터 받은 단어가 없습니다. ㅜㅜ");
-                        goto EndOfInstance;
+                        Console.WriteLine("서버로부터 받은 단어가 없습니다.");
                     }
                 }
                 catch (IOException e)
@@ -134,7 +140,7 @@ namespace AnnoTaskClient.Logic
                 termFreqByDoc[transferCount].Term = term.term;
                 termFreqByDoc[transferCount].TermFreq4RequestedCorpus = term.termFreq4RequestedCorpus;
                 termFreqByDoc[transferCount].Ngram = term.ngram;
-                termFreqByDoc[transferCount].Terms = new JsonConverter<Dictionary<int, int>>().Json2Object(term.termsJson); //여기서 die.
+                termFreqByDoc[transferCount].Terms = new JsonConverter<Dictionary<int, int>>().Json2Object(term.termsJson);
                 
                 // ProgressBar 업데이트
                 UIHandler.Instance.CommonUI.ProgressBar = (transferCount / totalTermsToReceive) * 100;
@@ -145,7 +151,6 @@ namespace AnnoTaskClient.Logic
             Command.Server2Client.NotifyTransferEnd end = new JsonConverter<Command.Server2Client.NotifyTransferEnd>().Json2Object(json_isEndTransfer);
 
             EndOfInstance: //완료...
-            //UIHandler.Instance.CommonUI.ProgressBar = 50;
 
             return termFreqByDoc;
         }

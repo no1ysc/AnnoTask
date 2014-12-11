@@ -132,77 +132,13 @@ namespace AnnoTaskClient.Logic
 		{
 			clear();
 
-            //string startDate = UIHandler.Instance.CommonUI.StartDate + " 00:00:00";
-            //string endDate = UIHandler.Instance.CommonUI.EndDate + " 23:59:59";
-            //bool naver = UIHandler.Instance.CommonUI.isNaver;
-            //bool daum = UIHandler.Instance.CommonUI.isDaum;
-            //bool nate = UIHandler.Instance.CommonUI.isNate;
-            //DocByTerm[] result = clientWormHole.ImportDoc(startDate, endDate, naver, daum, nate);
-
             TermFreqByDoc[] result = clientWormHole.JobStart();
 
 			if (result == null)
 			{
-				MessageBox.Show("해당 기간에 문서가 존재하지 않습니다.");
+                MessageBox.Show("더이상 가져올 문서가 없습니다.");
 				return;
 			}
-
-			// Doc -> Term
-            //int procCount = 0;
-            //int workingPercent = 40;
-            //foreach (DocByTerm docByTerm in result)
-            //{
-            //    foreach (string term in docByTerm.Terms.Keys)
-            //    {
-            //        if (!termNFreq.ContainsKey(term))
-            //        {
-            //            termNFreq[term] = new Frequency(term, docByTerm.Ngram);
-            //        }
-            //        termNFreq[term].FreqInDocument++;
-            //        termNFreq[term].TotalTermFreq += docByTerm.Terms[term];
-            //        termNFreq[term].appendCategory(docByTerm.DocCategory, docByTerm.DocID, docByTerm.Title);
-            //    }
-
-            //    // 퍼센트 업.
-            //    int per = (procCount++ / result.Length) * workingPercent;
-            //    if (per >= 1)
-            //    {
-            //        UIHandler.Instance.CommonUI.ProgressBar += per;
-            //    }
-            //}
-            //UIHandler.Instance.CommonUI.ProgressBar = 90;
-
-
-            //// 텀리스트 출력
-            //procCount = 0;
-            //workingPercent = 10;
-            //foreach (Frequency freqTerm in termNFreq.Values)
-            //{
-            //    switch (freqTerm.NGram)
-            //    {
-            //        case 1:
-            //            UIHandler.Instance.NGram1.AddTermList(freqTerm);
-            //            break;
-            //        case 2:
-            //            UIHandler.Instance.NGram2.AddTermList(freqTerm);
-            //            break;
-            //        case 3:
-            //            UIHandler.Instance.NGram3.AddTermList(freqTerm);
-            //            break;
-            //        case 4:
-            //            UIHandler.Instance.NGram4.AddTermList(freqTerm);
-            //            break;
-            //        default:
-            //            break;
-            //    }
-
-            //    // 퍼센트 업.
-            //    int per = (procCount++ / termNFreq.Count) * workingPercent;
-            //    if (per >= 1)
-            //    {
-            //        UIHandler.Instance.CommonUI.ProgressBar += per;
-            //    }
-            //}
 
 			UIHandler.Instance.CommonUI.ProgressBar = 100;
 		}
@@ -377,7 +313,7 @@ namespace AnnoTaskClient.Logic
         private void addDeleteList()
         {
             clientWormHole.sendDeleteList(this.deleteList);
-            MessageBox.Show("불용어 추가를 진행하였습니다.");
+            //MessageBox.Show("불용어 추가를 진행하였습니다.");
         }
 
         internal void clickedAddThesaurus()
