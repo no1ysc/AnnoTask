@@ -55,7 +55,14 @@ namespace AnnoTaskClient.Logic
 
             public class DocMeta
             {
-                public Dictionary<string, Dictionary<int, string>> docMeta;
+                public string category;
+                public string docIdList;
+                public string title;
+
+                // ArrayList
+                //public List<string> category;
+                //public List<int> docIdList;
+                //public List<string> title;
             }
 
             public class ConceptToCount

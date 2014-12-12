@@ -33,7 +33,7 @@ public class ContextConfig {
 	/* Special Character Setting */
 	
 	/* ClientJobUnit = number of rows */
-	private int nRows = 25;
+	private int nRows = 10;
 	public int getClientJobUnit() {
 		return this.nRows;
 	}

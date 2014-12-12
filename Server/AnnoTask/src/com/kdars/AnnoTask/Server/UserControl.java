@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +26,7 @@ import com.kdars.AnnoTask.DB.LinkedList;
 import com.kdars.AnnoTask.DB.TermFreqByDoc;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 import com.kdars.AnnoTask.DB.ThesaurusDBManager;
+import com.kdars.AnnoTask.MapReduce.DocMetaSet;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddDeleteList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddThesaurus;
@@ -166,10 +168,20 @@ public class UserControl extends Thread{
 	
 	// 트리뷰 요청 시
 	private void requestDocMetaHandler(RequestDocMeta requestDocMeta) {
-		DocMetaTransfer documentMeta = new DocMetaTransfer();
-		documentMeta = ContentDBManager.getInstance().getDocMeta(requestDocMeta.termLinkedDocIds);
-		String transferJSON = new JSONSerializer().exclude("*.class").serialize(documentMeta);
-		transferObject(transferJSON);
+		List<Integer> termLinkedDocIds = requestDocMeta.termLinkedDocIds;
+		DocMetaSet documentMeta = new DocMetaSet();
+		
+		// String으로...
+		documentMeta.category = new JSONSerializer().exclude("*.class").serialize(ContentDBManager.getInstance().getCategoryByDocID(termLinkedDocIds));
+		documentMeta.docIdList = new JSONSerializer().exclude("*.class").serialize((ArrayList<Integer>) termLinkedDocIds);
+		documentMeta.title = new JSONSerializer().exclude("*.class").serialize(ContentDBManager.getInstance().getDocTitleByDocID(termLinkedDocIds));
+		
+		// ArrayList 그대로...
+//		documentMeta.category = ContentDBManager.getInstance().getCategoryByDocID(termLinkedDocIds);
+//		documentMeta.docIdList = (ArrayList<Integer>) termLinkedDocIds;
+//		documentMeta.title = ContentDBManager.getInstance().getDocTitleByDocID(termLinkedDocIds);
+		
+		transferObject(documentMeta);
 	}
 
 	// (기흥) 구현 계획 1

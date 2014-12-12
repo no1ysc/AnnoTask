@@ -38,32 +38,30 @@ namespace AnnoTaskClient.UIController
 			mainWindow.wordList1.Rows[mainWindow.wordList1.RowCount-1].Cells[3].Value = termFreq.FreqInDocument;
 		}
 
-		private delegate void DocListRefresh(string str, Command.Server2Client.DocMeta docMeta);
-        public void RefreshDocList(string str, Command.Server2Client.DocMeta docMeta)
+        private delegate void DocListRefresh(string term, Dictionary<string, Dictionary<int, string>> docMeta);
+        public void RefreshDocList(string str, Dictionary<string, Dictionary<int, string>> docMeta)
 		{
 			DocListRefresh docListRefresh = new DocListRefresh(refreshDocList);
 			mainWindow.Invoke(docListRefresh, new object[] { str, docMeta });
 		}
-		private void refreshDocList(string str, Command.Server2Client.DocMeta docMeta)
+        private void refreshDocList(string str, Dictionary<string, Dictionary<int, string>> docMeta)
 		{
 			mainWindow.docList1.Nodes.Clear();
 
 			TreeNode root = new TreeNode(str);
-
+            TreeNode child = new TreeNode();
             root.ExpandAll();
 
-            //Console.WriteLine(docMeta.docMeta["경제"].Count);
-            
-			foreach (string category in docMeta.docMeta.Keys)
-			{
-				string content = category + "(" + docMeta.docMeta[category].Count + ")";
-				
-				TreeNode child = root.Nodes.Add(content);
-                foreach (int docID in docMeta.docMeta[category].Keys)
-				{
-					child.Nodes.Add(docMeta.docMeta[category][docID]);
-				}
-			}
+            foreach (string category in docMeta.Keys)
+            {
+                string content = category + "(" + docMeta[category].Count + ")";
+
+                child = root.Nodes.Add(content);
+                foreach (int doc_id in docMeta[category].Keys)
+                {
+                    child.Nodes.Add(docMeta[category][doc_id]);
+                }
+            }
 
 			mainWindow.docList1.Nodes.Add(root);
 		}

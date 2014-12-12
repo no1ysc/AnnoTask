@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kdars.AnnoTask.ContextConfig;
+import com.kdars.AnnoTask.MapReduce.DocMetaSet;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestDocMeta;
-import com.kdars.AnnoTask.Server.Command.Server2Client.DocMetaTransfer;
 
 public class ContentDBManager {
 	private static ContentDBManager contentDBManager = new ContentDBManager();
@@ -46,8 +46,27 @@ public class ContentDBManager {
 	public ArrayList<Integer> getClientJobCandidates() {
 		return contentDB.queryClientJobCandidates(ContextConfig.getInstance().getClientJobUnit());
 	}
-
-	public DocMetaTransfer getDocMeta(List<Integer> docIDList) {
-		return contentDB.queryDocMeta(docIDList);
+	
+/*	public DocMetaSet getDocMeta(List<Integer> docIDList, String category) {
+		return contentDB.queryDocMetaWithCategory(docIDList, category);
 	}
+*/
+	public ArrayList<String> getCategoryList(List<Integer> termLinkedDocIds) {
+		
+		return contentDB.queryCategoryList(termLinkedDocIds);
+	}
+
+	// (기흥) 카테고리 가져오기
+	public ArrayList<String> getCategoryByDocID(List<Integer> termLinkedDocIds) {
+		return contentDB.queryCategoryList(termLinkedDocIds);
+	}
+	// (기흥) 문서 제목 가져오기
+	public ArrayList<String> getDocTitleByDocID(List<Integer> termLinkedDocIds) {
+		return contentDB.queryTitle(termLinkedDocIds);
+	}
+
+//	public DocMetaTransfer getDocMeta(List<Integer> docIDList) {
+//		return contentDB.queryDocMeta(docIDList);
+//	}
+
 }

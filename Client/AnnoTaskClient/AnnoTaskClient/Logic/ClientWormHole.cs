@@ -344,20 +344,24 @@ namespace AnnoTaskClient.Logic
         }
 
         // 트리뷰를 위해 요청하는 녀석
-        internal Dictionary<string, Dictionary<int, string>> getDocMeta(List<int> termLinkedDocIds)
+        internal Logic.DocMeta getDocMeta(List<int> termLinkedDocIds)
         {
+            // (기흥) 해당 term이 출현한 doc_id들을 서버에 보냄.
             Command.Client2Server.RequestDocMeta requestDocMeta = new Command.Client2Server.RequestDocMeta();
             requestDocMeta.termLinkedDocIds = termLinkedDocIds;
             string json_requestDocMeta = new JsonConverter<Command.Client2Server.RequestDocMeta>().Object2Json(requestDocMeta);
             m_Writer.WriteLine(json_requestDocMeta);
             m_Writer.Flush();
 
-            //Command.Server2Client.DocMeta docMeta;
+            // (기흥) 서버로부터 category, doc_id, title을 받음.
+            Command.Server2Client.DocMeta docMeta;
             string json_getDocMeta = m_Reader.ReadLine();
-            //docMeta = new JsonConverter<Command.Server2Client.DocMeta>().Json2Object(json_getDocMeta);
-            Dictionary<string, Dictionary<int, string>> deserializedDocMeta = new JsonConverter<Dictionary<string, Dictionary<int, string>>>().Json2Object(json_getDocMeta);
-            //docMetal.docMeta = deserializedDocMeta;
-            return deserializedDocMeta;
+            docMeta = new JsonConverter<Command.Server2Client.DocMeta>().Json2Object(json_getDocMeta);
+            List<string> cat = new JsonConverter<List<string>>().Json2Object(docMeta.category);
+            List<int> id = new JsonConverter<List<int>>().Json2Object(docMeta.docIdList);
+            List<string> title = new JsonConverter<List<string>>().Json2Object(docMeta.title);
+            Logic.DocMeta receivedDataMeta = new DocMeta(cat, id, title);
+            return receivedDataMeta;
         }
 
 		internal string getDocBodyFromID(int targetID)

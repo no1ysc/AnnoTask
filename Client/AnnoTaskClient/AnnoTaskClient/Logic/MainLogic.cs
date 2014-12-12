@@ -23,6 +23,9 @@ namespace AnnoTaskClient.Logic
         private String conceptToTerm;
         private int selectedTabNumber;
 
+        //
+        private DocMeta documentMeta = new DocMeta(null, null, null);
+        private Dictionary<string, Dictionary<int, string>> dMeta = new Dictionary<string, Dictionary<int, string>>();
         private Command.Server2Client.DocMeta docMeta = new Command.Server2Client.DocMeta();
         private TermFreqByDoc[] resultFromServer;
 
@@ -245,6 +248,7 @@ namespace AnnoTaskClient.Logic
             commandQ.AddLast("GetLinkedList");
         }
 
+        // 단어 선택 시
 		internal void cellContentDoubleClick(string p, int tabNumber)
 		{
 
@@ -258,8 +262,24 @@ namespace AnnoTaskClient.Logic
                     switch (tabNumber)
                     {
                         case 1:
-                            docMeta.docMeta = clientWormHole.getDocMeta(termLinkedDocIds);
-                            UIHandler.Instance.NGram1.RefreshDocList(p, docMeta);
+                            documentMeta = clientWormHole.getDocMeta(termLinkedDocIds);
+
+                            for (int index = 0; index < documentMeta.Category.Count; index++)
+                            {
+                                string cat = documentMeta.Category[index];
+                                Dictionary<int, string> temp = new Dictionary<int,string>();
+                                temp.Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
+                                if (!dMeta.ContainsKey(cat))
+                                {
+                                    dMeta.Add(cat, temp);
+                                }
+                                else
+                                {
+                                    dMeta[cat].Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
+                                }
+                            }
+                            UIHandler.Instance.NGram1.RefreshDocList(p, dMeta);
+                            dMeta.Clear();
                             break;
                         case 2:
                             UIHandler.Instance.NGram2.RefreshDocList(termNFreq[p]);
@@ -323,13 +343,13 @@ namespace AnnoTaskClient.Logic
 		{
 			// find DOC ID
 			int targetID = -1;
-			foreach (int docID in docMeta.docMeta[category].Keys)
-			{
-                if (docMeta.docMeta[category][docID].Contains(title))
-				{
-					targetID = docID;
-				}
-			}
+            //foreach (int docID in docMeta.docMeta[category].Keys)
+            //{
+            //    if (docMeta.docMeta[category][docID].Contains(title))
+            //    {
+            //        targetID = docID;
+            //    }
+            //}
 
 			return clientWormHole.getDocBodyFromID(targetID);
 		}
