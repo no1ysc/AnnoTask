@@ -38,33 +38,34 @@ namespace AnnoTaskClient.UIController
 			mainWindow.wordList4.Rows[mainWindow.wordList4.RowCount-1].Cells[3].Value = termFreq.FreqInDocument;
 		}
 
-		private delegate void DocListRefresh(Frequency freq);
-		public void RefreshDocList(Frequency term)
-		{
-			DocListRefresh docListRefresh = new DocListRefresh(refreshDocList);
-			mainWindow.Invoke(docListRefresh, new object[] { term });
-		}
-		private void refreshDocList(Frequency term)
-		{
-			mainWindow.docList4.Nodes.Clear();
+        // (기흥) 트리뷰 생성하는 동작 수정
+        private delegate void DocListRefresh(string term, Dictionary<string, Dictionary<int, string>> docMeta);
+        public void RefreshDocList(string str, Dictionary<string, Dictionary<int, string>> docMeta)
+        {
+            DocListRefresh docListRefresh = new DocListRefresh(refreshDocList);
+            mainWindow.Invoke(docListRefresh, new object[] { str, docMeta });
+        }
+        private void refreshDocList(string str, Dictionary<string, Dictionary<int, string>> docMeta)
+        {
+            mainWindow.docList4.Nodes.Clear();
 
-			TreeNode root = new TreeNode(term.Term);
-
+            TreeNode root = new TreeNode(str);
+            TreeNode child = new TreeNode();
             root.ExpandAll();
 
-			foreach (string category in term.Category.Keys)
-			{
-				string content = category + "(" + term.Category[category].Count.ToString() + ")";
-				
-				TreeNode child = root.Nodes.Add(content);
-				foreach (int docID in term.Category[category].Keys)
-				{
-					child.Nodes.Add(term.Category[category][docID]);
-				}
-			}
+            foreach (string category in docMeta.Keys)
+            {
+                string content = category + "(" + docMeta[category].Count + ")";
 
-			mainWindow.docList4.Nodes.Add(root);
-		}
+                child = root.Nodes.Add(content);
+                foreach (int doc_id in docMeta[category].Keys)
+                {
+                    child.Nodes.Add(docMeta[category][doc_id]);
+                }
+            }
+
+            mainWindow.docList4.Nodes.Add(root);
+        }
 
 
         private delegate void CheckboxRefresh(DataGridViewCellEventArgs e);

@@ -263,7 +263,7 @@ namespace AnnoTaskClient.Logic
                     {
                         case 1:
                             documentMeta = clientWormHole.getDocMeta(termLinkedDocIds);
-
+                            dMeta.Clear();
                             for (int index = 0; index < documentMeta.Category.Count; index++)
                             {
                                 string cat = documentMeta.Category[index];
@@ -279,16 +279,66 @@ namespace AnnoTaskClient.Logic
                                 }
                             }
                             UIHandler.Instance.NGram1.RefreshDocList(p, dMeta);
-                            dMeta.Clear();
                             break;
+                        
                         case 2:
-                            UIHandler.Instance.NGram2.RefreshDocList(termNFreq[p]);
+                            documentMeta = clientWormHole.getDocMeta(termLinkedDocIds);
+                            dMeta.Clear();
+                            for (int index = 0; index < documentMeta.Category.Count; index++)
+                            {
+                                string cat = documentMeta.Category[index];
+                                Dictionary<int, string> temp = new Dictionary<int,string>();
+                                temp.Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
+                                if (!dMeta.ContainsKey(cat))
+                                {
+                                    dMeta.Add(cat, temp);
+                                }
+                                else
+                                {
+                                    dMeta[cat].Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
+                                }
+                            }
+                            UIHandler.Instance.NGram2.RefreshDocList(p, dMeta);
                             break;
+
                         case 3:
-                            UIHandler.Instance.NGram3.RefreshDocList(termNFreq[p]);
+                            documentMeta = clientWormHole.getDocMeta(termLinkedDocIds);
+                            dMeta.Clear();
+                            for (int index = 0; index < documentMeta.Category.Count; index++)
+                            {
+                                string cat = documentMeta.Category[index];
+                                Dictionary<int, string> temp = new Dictionary<int,string>();
+                                temp.Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
+                                if (!dMeta.ContainsKey(cat))
+                                {
+                                    dMeta.Add(cat, temp);
+                                }
+                                else
+                                {
+                                    dMeta[cat].Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
+                                }
+                            }
+                            UIHandler.Instance.NGram3.RefreshDocList(p, dMeta);
                             break;
+
                         case 4:
-                            UIHandler.Instance.NGram4.RefreshDocList(termNFreq[p]);
+                            documentMeta = clientWormHole.getDocMeta(termLinkedDocIds);
+                            dMeta.Clear();
+                            for (int index = 0; index < documentMeta.Category.Count; index++)
+                            {
+                                string cat = documentMeta.Category[index];
+                                Dictionary<int, string> temp = new Dictionary<int,string>();
+                                temp.Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
+                                if (!dMeta.ContainsKey(cat))
+                                {
+                                    dMeta.Add(cat, temp);
+                                }
+                                else
+                                {
+                                    dMeta[cat].Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
+                                }
+                            }
+                            UIHandler.Instance.NGram4.RefreshDocList(p, dMeta);
                             break;
                         default:
                             break;
@@ -343,13 +393,13 @@ namespace AnnoTaskClient.Logic
 		{
 			// find DOC ID
 			int targetID = -1;
-            //foreach (int docID in docMeta.docMeta[category].Keys)
-            //{
-            //    if (docMeta.docMeta[category][docID].Contains(title))
-            //    {
-            //        targetID = docID;
-            //    }
-            //}
+            foreach (int docID in dMeta[category].Keys)
+            {
+                if (dMeta[category][docID].Contains(title))
+                {
+                    targetID = docID;
+                }
+            }
 
 			return clientWormHole.getDocBodyFromID(targetID);
 		}

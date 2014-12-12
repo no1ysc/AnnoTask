@@ -38,6 +38,7 @@ namespace AnnoTaskClient.UIController
 			mainWindow.wordList1.Rows[mainWindow.wordList1.RowCount-1].Cells[3].Value = termFreq.FreqInDocument;
 		}
 
+        // (기흥) 트리뷰 생성하는 동작 수정
         private delegate void DocListRefresh(string term, Dictionary<string, Dictionary<int, string>> docMeta);
         public void RefreshDocList(string str, Dictionary<string, Dictionary<int, string>> docMeta)
 		{
