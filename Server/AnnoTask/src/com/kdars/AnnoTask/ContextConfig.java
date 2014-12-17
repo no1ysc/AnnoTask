@@ -11,6 +11,13 @@ public class ContextConfig {
 	//TODO: 처음에 프로그램 시작할때, DB 전부 연결될때까지 대기하는 부분,
 	// TODO : TermDB Lock 걸린거 전부 풀어주고 초기화 하는 부분.,
 	
+	/* 각 프로세스 작업제한 시간 */
+	private int LIMIT_TIME_SEC = 100;
+	public int getLimitTimeSec(){
+		return	LIMIT_TIME_SEC;
+	}
+	/* 각 프로세스 작업제한 시간 */
+	
 	/* N-Gram Setting */
 	private int N_Gram = 4;	// 최대 N-gram
 	public int getN_Gram(){
@@ -69,11 +76,16 @@ public class ContextConfig {
 
 	
 	
-	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.9:3306/contentdb";
-	public final String CONTENT_DB_NAME = "contentdb"; 
-	public final String CONTENT_DB_USER_ID = "root";
-	public final String CONTENT_DB_USER_PASS = "1qaz@WSX";
-	public final String CONTENT_DB_contentTABLE_NAME = "content_v02";
+	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://128.2.213.162/ewok_v01";
+	public final String CONTENT_DB_NAME = "ewok_v01"; 
+	public final String CONTENT_DB_USER_ID = "kdars";
+	public final String CONTENT_DB_USER_PASS = "kdarscom";
+	public final String CONTENT_DB_contentTABLE_NAME = "contents";
+//	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.9:3306/contentdb";
+//	public final String CONTENT_DB_NAME = "contentdb"; 
+//	public final String CONTENT_DB_USER_ID = "root";
+//	public final String CONTENT_DB_USER_PASS = "1qaz@WSX";
+//	public final String CONTENT_DB_contentTABLE_NAME = "content_v02";
 	public final String CONTENT_DB_jobTABLE_NAME = "job_table";
 	
 	/* ContentProcessor Attributes */

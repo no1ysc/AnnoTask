@@ -15,9 +15,6 @@ public class Monitor extends Thread{
 	private ArrayList<ContentProcessor>	processQueue;
 	private ArrayList <Integer> jobCandidates = new ArrayList<Integer>();
 	
-	public long processStartTime;
-	
-	
 	public Monitor(){
 		processQueue = new ArrayList<ContentProcessor>();
 	}
@@ -40,7 +37,7 @@ public class Monitor extends Thread{
 					processQueue.remove(i);
 				}
 				
-				if(((System.currentTimeMillis() - processStartTime) / (60*1000)) > 1){
+				if(processQueue.get(i).checkOvertime()){
 					processQueue.get(i).rollbackWorkingStatus(processQueue.get(i).getDocument().getDocumentID());
 					processQueue.remove(i);
 					System.out.println("process removed!");
@@ -67,7 +64,6 @@ public class Monitor extends Thread{
 		ContentProcessor cp = new ContentProcessor(jobCandidates.get(0));
 		processQueue.add(cp);
 		jobCandidates.remove(0);
-		processStartTime = System.currentTimeMillis();
 //		System.out.println(processStartTime);
 		return cp;
 	}

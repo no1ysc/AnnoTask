@@ -14,6 +14,7 @@ public class ContentProcessor extends Thread{
 //	private NgramFilter ngramFilter;	// TODO: 저쪽으로 가야할듯., 유저가 가저가기 전,,,,,,에서 하는걸로,.
 	private int nGram = ContextConfig.getInstance().getN_Gram();
 	private Document document = null;
+	private long processStartTime;
 	
 	public enum ProcessState{
 		Ready, Running, Completed 
@@ -22,13 +23,14 @@ public class ContentProcessor extends Thread{
 	
 	public ContentProcessor(int docID){
 		document = ContentDBManager.getInstance().getContent(docID);
-				
+		
 		this.state = ProcessState.Ready;
+		processStartTime = System.currentTimeMillis();
 	}
-
+	
 	public void run(){
 		this.state = ProcessState.Running;
-
+		
 		Tokenizer tokenizer = new Tokenizer();
 		DuplicationChecker dupChecker = new DuplicationChecker();
 		StopWordRemover stopWordRemover = new StopWordRemover();
@@ -37,6 +39,19 @@ public class ContentProcessor extends Thread{
 		
 		this.state = ProcessState.Completed;
 		System.out.println("completed");
+	}
+	
+	/**
+	 * 프로세스가 정해진 시간동안 끝나지 않으면 종료하기 위한 Checker 리턴.
+	 * @author JS
+	 * @return true : 종료대상, false :  
+	 */
+	public boolean checkOvertime(){
+		if ( (System.currentTimeMillis() - processStartTime) > ContextConfig.getInstance().getLimitTimeSec() * 1000){
+			return true;
+		}
+		
+		return false;
 	}
 
 	private void extractTermStructure(	Tokenizer tokenizer, 

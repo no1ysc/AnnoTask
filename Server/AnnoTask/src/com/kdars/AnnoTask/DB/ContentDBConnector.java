@@ -25,7 +25,7 @@ public class ContentDBConnector {
 	
 	public ContentDBConnector(){
 		while (!connect());
-		setTrigger();
+//		setTrigger();
 		//생성자에서 잘못된 녀석들 정정 할 것.
 		cleanJobTable();
 	}
