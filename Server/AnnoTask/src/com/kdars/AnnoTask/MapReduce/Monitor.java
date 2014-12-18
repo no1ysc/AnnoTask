@@ -35,6 +35,7 @@ public class Monitor extends Thread{
 				if(processQueue.get(i).getProcessState() == ProcessState.Completed){
 					ContentDBManager.getInstance().updateJobCompletion(processQueue.get(i).getDocument().getDocumentID());
 					processQueue.remove(i);
+					continue;
 				}
 				
 				if(processQueue.get(i).checkOvertime()){
