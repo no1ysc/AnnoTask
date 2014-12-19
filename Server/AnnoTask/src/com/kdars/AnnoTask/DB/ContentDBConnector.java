@@ -71,12 +71,44 @@ public class ContentDBConnector {
 	}
 
 	public boolean update(String columnName, int id, int status){ //for job completion updates
+		String jdbcUrl = ContextConfig.getInstance().CONTENT_DB_JDBC_URL;
+		String DBName = ContextConfig.getInstance().CONTENT_DB_NAME;
+		String userID = ContextConfig.getInstance().CONTENT_DB_USER_ID;
+		String userPass = ContextConfig.getInstance().CONTENT_DB_USER_PASS;
+
 		try {
-			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.execute("update " + jobTable + " set " + columnName + " = " + status + " where doc_id = " + id);
-			stmt.close();
+			if(!sqlConnection.isClosed()){
+				java.sql.Statement stmt2 = sqlConnection.createStatement();
+				stmt2.execute("update " + jobTable + " set " + columnName + " = " + status + " where doc_id = " + id);
+				stmt2.close();				
+			}else{
+				System.out.println("나 죽음.");
+			}
 		} catch (SQLException e) {
+			System.out.println("doc_id = " + id);
 			// TODO Auto-generated catch block
+			try {
+				try{
+					sqlConnection = DriverManager.getConnection(jdbcUrl, userID, userPass);
+					
+					java.sql.Statement stmt = sqlConnection.createStatement();
+					stmt.execute("use "+DBName);
+					stmt.close();
+				}catch(SQLException e2){
+//					e.printStackTrace();
+					System.err.println("ContentDB Connection Error.");
+					return false;
+				}
+
+				java.sql.Statement stmt3 = sqlConnection.createStatement();
+				
+				stmt3.execute("update " + jobTable + " set " + columnName + " = " + status + " where doc_id = 1;");
+				System.out.println("2nd try 문");
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 			e.printStackTrace();
 		}
 		return false;

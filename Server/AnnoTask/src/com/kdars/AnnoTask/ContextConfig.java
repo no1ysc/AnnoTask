@@ -12,7 +12,7 @@ public class ContextConfig {
 	// TODO : TermDB Lock 걸린거 전부 풀어주고 초기화 하는 부분.,
 	
 	/* 각 프로세스 작업제한 시간 */
-	private int LIMIT_TIME_SEC = 100;
+	private int LIMIT_TIME_SEC = 1000;
 	public int getLimitTimeSec(){
 		return	LIMIT_TIME_SEC;
 	}
@@ -53,7 +53,7 @@ public class ContextConfig {
 		return this.charlimit;
 	}
 	
-	private int doclimit = 10000;
+	private int doclimit = 100;
 	public int getDocLimit(){
 		return this.doclimit;	
 	}
@@ -74,8 +74,6 @@ public class ContextConfig {
 //	public final String CONTENT_DB_USER_PASS = "1q2w3e4r";
 //	public final String CONTENT_DB_TABLE_NAME = "content_v01";
 
-	
-	
 	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://128.2.213.162/ewok_v01";
 	public final String CONTENT_DB_NAME = "ewok_v01"; 
 	public final String CONTENT_DB_USER_ID = "kdars";

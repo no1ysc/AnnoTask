@@ -16,12 +16,18 @@ public class ContentProcessor extends Thread{
 	private Document document = null;
 	private long processStartTime;
 	
+	private int docID;
+	public int getDocID(){
+		return this.docID;
+	}
+	
 	public enum ProcessState{
-		Ready, Running, Completed 
+		Ready, Running, Completed, EmptyDoc
 	}
 	private ProcessState state;
 	
 	public ContentProcessor(int docID){
+		this.docID = docID;
 		document = ContentDBManager.getInstance().getContent(docID);
 		
 		this.state = ProcessState.Ready;
@@ -30,12 +36,15 @@ public class ContentProcessor extends Thread{
 	
 	public void run(){
 		this.state = ProcessState.Running;
-		
-		Tokenizer tokenizer = new Tokenizer();
-		DuplicationChecker dupChecker = new DuplicationChecker();
-		StopWordRemover stopWordRemover = new StopWordRemover();
-	
-		extractTermStructure(tokenizer, dupChecker, stopWordRemover, document);
+
+		if(document != null){
+			Tokenizer tokenizer = new Tokenizer();
+			DuplicationChecker dupChecker = new DuplicationChecker();
+			StopWordRemover stopWordRemover = new StopWordRemover();
+			extractTermStructure(tokenizer, dupChecker, stopWordRemover, document);
+		}else{
+			this.state = ProcessState.EmptyDoc;
+		}
 		
 		this.state = ProcessState.Completed;
 		System.out.println("completed");

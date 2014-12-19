@@ -14,7 +14,7 @@ import com.kdars.AnnoTask.MapReduce.ContentProcessor.ProcessState;
 public class Monitor extends Thread{
 	private ArrayList<ContentProcessor>	processQueue;
 	private ArrayList <Integer> jobCandidates = new ArrayList<Integer>();
-	
+
 	public Monitor(){
 		processQueue = new ArrayList<ContentProcessor>();
 	}
@@ -32,11 +32,11 @@ public class Monitor extends Thread{
 			
 			// 3. Check ContentProcessor's status, if complete then delete from ArrayList and set complete_status to 1 in job_table
 			for(int i = processQueue.size()-1; i >= 0 ; i--){
-				if(processQueue.get(i).getProcessState() == ProcessState.Completed){
-					ContentDBManager.getInstance().updateJobCompletion(processQueue.get(i).getDocument().getDocumentID());
+				if(processQueue.get(i).getProcessState() == ProcessState.Completed || processQueue.get(i).getProcessState() == ProcessState.EmptyDoc){
+					ContentDBManager.getInstance().updateJobCompletion(processQueue.get(i).getDocID());
 					processQueue.remove(i);
+					continue;
 				}
-				
 				if(processQueue.get(i).checkOvertime()){
 					processQueue.get(i).rollbackWorkingStatus(processQueue.get(i).getDocument().getDocumentID());
 					processQueue.remove(i);

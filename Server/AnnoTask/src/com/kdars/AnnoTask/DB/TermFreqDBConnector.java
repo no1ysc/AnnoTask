@@ -40,19 +40,25 @@ public class TermFreqDBConnector {
 		int docID = docByTerm.getDocID();
 		int nGram = docByTerm.getNGram();
 
+		ResultSet resultSet = null;
 		String addTerm = null;
 		try {
 			for (String addTermCheck : docByTerm.keySet()){
 				java.sql.Statement stmt = sqlConnection.createStatement();
 				addTerm = escape(addTermCheck);
-				stmt.executeUpdate("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "\", '" + String.valueOf(docID) + "', '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + String.valueOf(docByTerm.get(addTermCheck)) + "', '0');");
+				//System.out.println("select * from " + termFreqTable + " where " + colName1 + "= \"" + String.valueOf(docID) + "_" +addTermCheck +"\";");
+			//	resultSet = stmt.executeQuery("select * from " + termFreqTable + " where " + colName1 + "= \"" + String.valueOf(docID) + "_" +addTermCheck +"\";");
+			//	if(!resultSet.next()){
+					stmt.executeUpdate("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "\", '" + String.valueOf(docID) + "', '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + String.valueOf(docByTerm.get(addTermCheck)) + "', '0');");
+				//}
 				stmt.close();
 			}
 //			disconnect(sqlConnectionLocal);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "\", '" + String.valueOf(docID) + "', '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + "1', '0');");
-			e.printStackTrace();
+			// 이승철 박기흥 20141218
+//			System.out.println("insert into "+ termFreqTable + " (" + colName1 + ", " + colName2 + ", " + colName3 + ", " + colName4 + ", " + colName5 + ", " + colName6 + ", " + colName7 + ") values (\"" + String.valueOf(docID) + "_" + addTerm + "\", '" + String.valueOf(docID) + "', '" + docCategory + "', \"" + addTerm + "\", '" + String.valueOf(nGram) + "', '" + "1', '0');");
+//			e.printStackTrace();
 //			disconnect(sqlConnectionLocal);
 			return false;
 		}
@@ -147,7 +153,7 @@ public class TermFreqDBConnector {
 		try {
 				java.sql.Statement stmt = sqlConnection.createStatement();
 				String deleteTerm = escape(term);
-				stmt.execute("delete from "+ termFreqTable + " where " + colName4 + " = \"" + deleteTerm + "\" AND " + colName7 + " = '" + String.valueOf(termHolder) + "';");
+				stmt.execute("delete from "+ termFreqTable + " where " + colName4 + " = \"" + deleteTerm + "\")"); /* AND " + colName7 + " = '" + String.valueOf(termHolder) + "';");*/
 				stmt.close();
 //			disconnect(sqlConnectionLocal);
 		} catch (SQLException e) {
