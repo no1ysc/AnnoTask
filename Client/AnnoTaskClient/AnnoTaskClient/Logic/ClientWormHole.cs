@@ -23,6 +23,9 @@ namespace AnnoTaskClient.Logic
 			m_client.Close();
 		}
 
+		private bool connected = false;
+		public bool Connected { get { return connected; } }
+
 		internal bool Connect()
 		{
 			//Thread worker = new Thread(new ThreadStart(connectServer));
@@ -35,11 +38,13 @@ namespace AnnoTaskClient.Logic
 				if (connectServer())
 				{
 					//MessageBox.Show("서버에 연결 되었습니다.");
+					connected = true;
 					return true;
 				}
 
 				if (failCount > Configure.Instance.ConnectionWaitTimeS)
 				{
+					connected = false;
 					MessageBox.Show("서버에 연결하지 못했습니다.");
 					return false;
 				}
@@ -450,5 +455,16 @@ namespace AnnoTaskClient.Logic
 
 			return new ReturnFromServer(returnFromServer.term, returnFromServer.returnValue, returnFromServer.message);
         }
-    }
+
+		internal void Destroy()
+		{
+			if (connected)
+			{
+				m_Reader.Close();
+				m_Writer.Close();
+				m_ns.Close();
+				m_client.Close();
+			}
+		}
+	}
 }

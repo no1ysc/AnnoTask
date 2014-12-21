@@ -102,6 +102,9 @@ namespace AnnoTaskClient.Logic
 				}
 				Thread.Sleep(10);
 			}
+
+			// 종료시 처리.
+			clientWormHole.Destroy();
 		}
 
 		private void CommandParser()
