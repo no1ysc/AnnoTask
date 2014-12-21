@@ -73,7 +73,28 @@ public class ThesaurusDBConnector {
 		return true;
 	}
 	
-	public boolean delete(Thesaurus thes){  
+	public boolean delete(String deleteTerm){  
+		ResultSet resultset = null;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			String escapedConceptFrom = escape(deleteTerm);
+			resultset = stmt.executeQuery("select " + toColName1 + " from " + conceptToTable + " where " + toColName1 + " = \"" + escapedConceptFrom + "\";");
+			if (resultset.next()){
+				ResultSet resultset1 = stmt.executeQuery("select * from " + conceptFromTable + ", " + conceptToTable + " where " + toColName1 + " = \"" + escapedConceptFrom + "\" and " + conceptFromTable + "." + foreignKeyColName + " = " + conceptToTable + "." + foreignKeyColName + ";");
+				while (resultset1.next()){
+					String deleteConceptFrom = resultset1.getString(2);
+					stmt.execute("delete from " + conceptFromTable + " where " + fromColName2 + " = \"" + deleteConceptFrom + "\";");
+				}
+				stmt.execute("delete from " + conceptToTable + " where " + toColName1 + " = \"" + escapedConceptFrom + "\";");
+			}else{
+				stmt.execute("delete from " + conceptFromTable + " where " + fromColName2 + " = \"" + escapedConceptFrom + "\";");
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 	

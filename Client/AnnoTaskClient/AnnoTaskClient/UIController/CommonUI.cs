@@ -46,6 +46,18 @@ namespace AnnoTaskClient.UIController
             mainWindow.openAddThesaurusWindowButton.Enabled = true;
         }
 
+
+		
+		/// <summary>
+		/// @Author : JS
+		/// 메인윈도우 활성화/비활성화
+		/// </summary>
+		/// <param name="status"></param>
+		public void setMainWindowEnableStatus(bool status)
+		{
+			mainWindow.Enabled = status;
+		}
+
 		public int TermCount
 		{
 			set

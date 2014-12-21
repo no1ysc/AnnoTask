@@ -40,6 +40,7 @@ import com.kdars.AnnoTask.Server.Command.Server2Client.DocMetaTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.DocumentResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.MetaResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.NotifyTransferEnd;
+import com.kdars.AnnoTask.Server.Command.Server2Client.ReturnAddDeleteList;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendConceptToCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendDocumentCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.TermTransfer;
@@ -193,11 +194,78 @@ public class UserControl extends Thread{
 	}
 
 	private void deleteListRequestHandler(RequestAddDeleteList requestedDeleteList) {
-		for (String deleteTerm : requestedDeleteList.addDeleteList) {
-			DeleteListDBManager.getInstance().AddTermToDelete(deleteTerm);
-			TermFreqDBManager.getInstance().deleteTerm(deleteTerm, userID);
+		// 이승철 수정. 20141220
+		// 유저에게 리턴 패킷을 날려주는 방식으로 변경.
+		ArrayList<ReturnAddDeleteList>	returnList = new ArrayList<ReturnAddDeleteList>(); 
+		
+		if (requestedDeleteList.isForced){
+			// 강제로 Delete List로 넣기. 다른 테이블(현재는 Thesaurus Table만 있음)은 다지워줌.
+			for (String deleteTerm : requestedDeleteList.addDeleteList) {
+				if (isExistThesaurusTable(deleteTerm)){
+					removeThesaurusTable(deleteTerm);
+				}
+				addDeleteList(deleteTerm);
+				returnList.add(new ReturnAddDeleteList(deleteTerm, "Normal", "Normal"));
+			}
+		} else {
+			// Thesaurus Table, DeleteList Table 체크해서 둘다 없을 경우만 작업. 
+			// 둘중하나 라도 있을 경우는 작업하지 않고 클라에게 알려줌.
+			// 해당사항 없는 애들은 작업 바로 작업..
+			for (String deleteTerm : requestedDeleteList.addDeleteList) {
+				if (isExistDeleteList(deleteTerm)){
+					// 이미 있으면 아무것도 안하고 리턴만.
+					returnList.add(new ReturnAddDeleteList(deleteTerm, "ExistDeleteTable", "ExistDeleteTable"));
+				} else if (isExistThesaurusTable(deleteTerm)){
+					// 시소러스 테이블로부터 텀정보를 얻어와서 메세지로 전달. 작업은 안함.
+					returnList.add(new ReturnAddDeleteList(deleteTerm, "ExistThesaurusTable", readThesaurus(deleteTerm)));
+				} else {
+					// 어느 테이블에도 속하지 않은 경우는 그냥 작업.
+					addDeleteList(deleteTerm);
+					returnList.add(new ReturnAddDeleteList(deleteTerm, "Normal", "Normal"));
+				}
+			}
 		}
 		
+		transferObject(returnList);
+	}
+	
+	private String readThesaurus(String term) {
+		return ThesaurusDBManager.getInstance().getTermInformation(term);
+	}
+
+	/**
+	 * Thesaurus Table에서 지움.
+	 * @param term
+	 */
+	private void removeThesaurusTable(String term) {
+		ThesaurusDBManager.getInstance().deleteTerm(term);
+	}
+
+	/**
+	 * Delete List에 해당 텀이 있는지 확인.
+	 * @param term
+	 * @return true : 있음, false : 없음.
+	 */
+	private boolean isExistDeleteList(String term){
+		return false;
+	}
+	
+	/**
+	 * Thesaurus Table에 해당 텀이 있는지 확인.
+	 * @param term
+	 * @return true : 있음, false : 없음.
+	 */
+	private boolean isExistThesaurusTable(String term){
+		return false;
+	}
+	
+	/**
+	 * Delete List에 추가
+	 * @param term
+	 */
+	private void addDeleteList(String term){
+		DeleteListDBManager.getInstance().AddTermToDelete(term);
+		TermFreqDBManager.getInstance().deleteTerm(term);
 	}
 	
 	private void thesaurusRequestHandler(RequestAddThesaurus entryComponents) {
@@ -205,7 +273,7 @@ public class UserControl extends Thread{
 		String conceptTo = entryComponents.conceptTo;
 		String metaOntology = entryComponents.metaOntology;
 		ThesaurusDBManager.getInstance().setEntry(conceptFrom, conceptTo, metaOntology);
-		TermFreqDBManager.getInstance().deleteTerm(conceptFrom, userID);
+		TermFreqDBManager.getInstance().deleteTerm(conceptFrom);
 	}
 	
 	private void documentRequestHandler(DocumentRequest documentRequest) {

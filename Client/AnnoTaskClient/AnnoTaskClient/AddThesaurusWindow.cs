@@ -31,8 +31,7 @@ namespace AnnoTaskClient
 
         private void addThesaurusButton_Click_1(object sender, EventArgs e)
         {
-            logic.clickedAddThesaurus();
-            logic.getConceptToList();
+            logic.clickedAddThesaurus(this.ConceptFromComboBox.Text, this.ConceptToComboBox.Text, this.MetaOntologyComboBox.Text);
             if (ConceptFromComboBox.Items.Count == 0)
             {
                 ConceptFromComboBox.Text = "";
@@ -92,7 +91,8 @@ namespace AnnoTaskClient
         private void AddThesaurusWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             logic.emptyTermList();
-            UIHandler.Instance.CommonUI.setAddThesaurusWindowButtonEnable();
+			//UIHandler.Instance.CommonUI.setAddThesaurusWindowButtonEnable();
+			UIHandler.Instance.CommonUI.setMainWindowEnableStatus(true);
         }
 
         private void ConceptToComboBox_KeyDown(object sender, KeyEventArgs e)

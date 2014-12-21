@@ -20,30 +20,62 @@ namespace AnnoTaskClient.UIController
         }
 
 
-        private string conceptToTerm;
-        public string conceptToTerms
-        {
-            get { return (String)addThesaurusWindow.ConceptToComboBox.SelectedItem; ; }
-            set { conceptToTerm = value; }
-        }
+		#region ConceptTo, ConceptFrom, Meta  get, set
+		// getter, setter, delegate 전반적 수정, 이승철, 20141220
+		private delegate String ConceptFromGet();
+		private String getConceptFrom()
+		{
+			return addThesaurusWindow.ConceptFromComboBox.Text;
+		}
 
-        public String conceptFrom
+		private delegate String MetaOntologyGet();
+		private String getMetaOntology()
+		{
+			return addThesaurusWindow.MetaOntologyComboBox.Text;
+		}
+
+		private delegate String ConceptToGet();
+		private String getConceptTo()
+		{
+			return addThesaurusWindow.ConceptToComboBox.Text;
+		}
+
+        public string ConceptTo
         {
-            get { return (String)addThesaurusWindow.ConceptFromComboBox.SelectedItem; }
-            set {addThesaurusWindow.ConceptFromComboBox.Text = value;}
+			get
+			{
+				ConceptToGet conceptToGet = new ConceptToGet(getConceptTo);
+				return (string)addThesaurusWindow.Invoke(conceptToGet, new object[] { });
+			}
+			set { addThesaurusWindow.ConceptToComboBox.Text = value; }
         }
+		public string ConceptFrom
+        {
+			get
+			{
+				ConceptFromGet conceptFromGet = new ConceptFromGet(getConceptFrom);
+				return (string)addThesaurusWindow.Invoke(conceptFromGet, new object[] { });
+			}
+        }
+		public string MetaOntology
+		{
+			get
+			{
+				MetaOntologyGet metaOntologyGet = new MetaOntologyGet(getMetaOntology);
+				return (String)addThesaurusWindow.Invoke(metaOntologyGet, new object[] { });
+			}
+		}
+
+		//public String conceptTo
+		//{
+		//	get { return (String)addThesaurusWindow.ConceptToComboBox.SelectedItem; }
+		//	set { addThesaurusWindow.ConceptToComboBox.Text = value; }
+		//}
+
+		#endregion
         
-        public String conceptTo
-        {
-            get { return (String)addThesaurusWindow.ConceptToComboBox.SelectedItem; }
-            set { addThesaurusWindow.ConceptToComboBox.Text = value; }
-        }
 
-        public String metaOntology
-        {
-            get { return (String)addThesaurusWindow.MetaOntologyComboBox.SelectedItem; }
-            set { addThesaurusWindow.MetaOntologyComboBox.Text = value; }
-        }
+        
 
         private delegate void ThesaurusWindowConceptFromRefresh(List<String> termList);
         public void RefreshConceptFromCombo(List<String> termList)
@@ -139,30 +171,6 @@ namespace AnnoTaskClient.UIController
             {
                 addThesaurusWindow.linkedList.Text += temp.linkedTerms+Environment.NewLine;
             }
-        }
-
-        private delegate String ConceptFromGet();
-        public String GetConceptFrom()
-        {
-            ConceptFromGet conceptFromGet = new ConceptFromGet(getConceptFrom);
-            return (String)addThesaurusWindow.Invoke(conceptFromGet, new object[] { });
-        }
-        private String getConceptFrom()
-        {
-            return addThesaurusWindow.ConceptFromComboBox.Text;
-        }
-
-        private delegate String MetaOntologyGet();
-        public String GetMetaOntology()
-        {
-            MetaOntologyGet metaOntologyGet = new MetaOntologyGet(getMetaOntology);
-            return (String)addThesaurusWindow.Invoke(metaOntologyGet, new object[] { });
-        }
-        private String getMetaOntology()
-        {
-            return addThesaurusWindow.MetaOntologyComboBox.Text;
-        }
-
-        
+        }        
     }
 }

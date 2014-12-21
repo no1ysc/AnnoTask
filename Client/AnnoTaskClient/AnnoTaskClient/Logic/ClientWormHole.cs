@@ -391,69 +391,64 @@ namespace AnnoTaskClient.Logic
 
 		// 이승철 수정 20141220
 		// 리턴 있는 모양으로.
-        internal ReturnFromServer sendDeleteList(List<string> list)
+        internal List<ReturnFromServer> sendDeleteList(List<string> list)
         {
-            Command.Client2Server.RequestAddDeleteList deleteListReq = new Command.Client2Server.RequestAddDeleteList();
-            deleteListReq.addDeleteList = list;
-            string json_addDeleteList = new JsonConverter<Command.Client2Server.RequestAddDeleteList>().Object2Json(deleteListReq);
-            m_Writer.WriteLine(json_addDeleteList);
-            m_Writer.Flush();
-
-			//리턴 받아보기.
-			string jsonRes = m_Reader.ReadLine();
-			Command.Server2Client.ReturnAddDeleteList returnFromServer = new JsonConverter<Command.Server2Client.ReturnAddDeleteList>().Json2Object(jsonRes);
-
-			return new ReturnFromServer(returnFromServer.returnValue, returnFromServer.message);
+			return _sendDeleteList(list, false);
         }
 
-		internal ReturnFromServer sendDeleteListForce(List<string> list)
+		internal List<ReturnFromServer> sendDeleteListForce(List<string> list)
 		{
-			Command.Client2Server.RequestAddDeleteList deleteListReq = new Command.Client2Server.RequestAddDeleteList(true);
-            deleteListReq.addDeleteList = list;
-            string json_addDeleteList = new JsonConverter<Command.Client2Server.RequestAddDeleteList>().Object2Json(deleteListReq);
-            m_Writer.WriteLine(json_addDeleteList);
-            m_Writer.Flush();
+			return _sendDeleteList(list, true);
+		}
+
+		private List<ReturnFromServer> _sendDeleteList(List<string> list, bool isForced)
+		{
+			List<ReturnFromServer> ret = new List<ReturnFromServer>();
+
+			Command.Client2Server.RequestAddDeleteList deleteListReq = new Command.Client2Server.RequestAddDeleteList(isForced);
+			deleteListReq.addDeleteList = list;
+			string json_addDeleteList = new JsonConverter<Command.Client2Server.RequestAddDeleteList>().Object2Json(deleteListReq);
+			m_Writer.WriteLine(json_addDeleteList);
+			m_Writer.Flush();
 
 			//리턴 받아보기.
 			string jsonRes = m_Reader.ReadLine();
-			Command.Server2Client.ReturnAddDeleteList returnFromServer = new JsonConverter<Command.Server2Client.ReturnAddDeleteList>().Json2Object(jsonRes);
+			List<Command.Server2Client.ReturnAddDeleteList> returnFromServer = new JsonConverter<List<Command.Server2Client.ReturnAddDeleteList>>().Json2Object(jsonRes);
 
-			return new ReturnFromServer(returnFromServer.returnValue, returnFromServer.message);
+			foreach (Command.Server2Client.ReturnAddDeleteList item in returnFromServer)
+			{
+				ret.Add(new ReturnFromServer(item.term, item.returnValue, item.message));
+			}
+
+			return ret;
 		}
 
+		public ReturnFromServer AddThesaurus(string conceptFrom, string conceptTo, string metaOntology)
+		{
+			return _AddThesaurus(conceptFrom, conceptTo, metaOntology, false);
+		}
 
-        internal bool AddThesaurus(string conceptFrom, string conceptTo, string metaOntology)
+		public ReturnFromServer AddThesaurusForce(string conceptFrom, string conceptTo, string metaOntology)
+		{
+			return _AddThesaurus(conceptFrom, conceptTo, metaOntology, true);
+		}
+
+		private ReturnFromServer _AddThesaurus(string conceptFrom, string conceptTo, string metaOntology, bool isForced)
         {
-            Command.Client2Server.RequestAddThesaurus entry = new Command.Client2Server.RequestAddThesaurus();
+			Command.Client2Server.RequestAddThesaurus entry = new Command.Client2Server.RequestAddThesaurus(isForced);
             entry.conceptFrom = conceptFrom;
             entry.conceptTo = conceptTo;
             entry.metaOntology = metaOntology;
-            try
-            {
-                string json_addThesaurus = new JsonConverter<Command.Client2Server.RequestAddThesaurus>().Object2Json(entry);
 
-                System.Diagnostics.Debug.WriteLine(json_addThesaurus);
+			string json_addThesaurus = new JsonConverter<Command.Client2Server.RequestAddThesaurus>().Object2Json(entry);
+			m_Writer.WriteLine(json_addThesaurus);
+			m_Writer.Flush();
 
-                m_client = new TcpClient(Configure.Instance.ServerIP, Configure.Instance.ServerPort);
-                m_ns = m_client.GetStream();
-                m_Writer = new StreamWriter(m_ns);
+			//리턴 받아보기.
+			string jsonRes = m_Reader.ReadLine();
+			Command.Server2Client.ReturnAddThesaurus returnFromServer = new JsonConverter<Command.Server2Client.ReturnAddThesaurus>().Json2Object(jsonRes);
 
-                Console.WriteLine(json_addThesaurus);
-                Console.WriteLine(json_addThesaurus.Length);
-
-                if (json_addThesaurus != null)
-                {
-                    m_Writer.WriteLine(json_addThesaurus);
-                    m_Writer.Flush();
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
-            }
-
+			return new ReturnFromServer(returnFromServer.term, returnFromServer.returnValue, returnFromServer.message);
         }
     }
 }

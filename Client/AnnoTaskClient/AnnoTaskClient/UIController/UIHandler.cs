@@ -16,7 +16,6 @@ namespace AnnoTaskClient.UIController
 		}
 
 		private MainWindow mainWindow;
-
         public void runUIHandler(MainWindow value)
 		{
 			mainWindow = value;
@@ -28,33 +27,28 @@ namespace AnnoTaskClient.UIController
 			ngram4 = new NGramUI4(mainWindow);
 		}
 
+		private AddThesaurusWindow addThesaurusWindow;
+		public void runUIHandler_Thesaurus(AddThesaurusWindow value)
+		{
+			addThesaurusWindow = value;
+
+			thesaurusUI = new ThesaurusUI(addThesaurusWindow);
+		}
+
 		private CommonUI commonUI;
 		private NGramUI1 ngram1;
 		private NGramUI2 ngram2;
 		private NGramUI3 ngram3;
 		private NGramUI4 ngram4;
+		private ThesaurusUI thesaurusUI;
 
 		public CommonUI CommonUI { get { return commonUI; } }
 		public NGramUI1 NGram1 { get{return ngram1;}	}
 		public NGramUI2 NGram2 { get{return ngram2;}	}
 		public NGramUI3 NGram3 { get{return ngram3;}	}
 		public NGramUI4 NGram4 { get{return ngram4;} }
-
-        public AddThesaurusWindow addThesaurusWindow;
-        public void runUIHandler_Thesaurus(AddThesaurusWindow value)
-        {
-            addThesaurusWindow = value;
-
-            thesaurusUI = new ThesaurusUI(addThesaurusWindow);
-        }
-
-        private ThesaurusUI thesaurusUI;
-
-        public ThesaurusUI ThesaurusUI { get { return thesaurusUI;  } }
-
-
-
-
+		public ThesaurusUI ThesaurusUI { get { return thesaurusUI;  } }
+		
         public MainLogic logic = new MainLogic();
 
 	}

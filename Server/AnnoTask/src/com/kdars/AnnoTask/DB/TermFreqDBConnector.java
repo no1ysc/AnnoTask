@@ -147,7 +147,7 @@ public class TermFreqDBConnector {
 	 * @param term
 	 * @return
 	 */
-	public boolean deleteTerm(String term, int termHolder){
+	public boolean deleteTerm(String term){
 //		java.sql.Connection sqlConnectionLocal = connect();
 
 		try {

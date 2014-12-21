@@ -90,6 +90,14 @@ namespace AnnoTaskClient.Logic
 
 			public class ReturnAddDeleteList
 			{
+				public string term;
+				public string returnValue;
+				public string message;
+			}
+
+			public class ReturnAddThesaurus
+			{
+				public string term;
 				public string returnValue;
 				public string message;
 			}
@@ -133,10 +141,6 @@ namespace AnnoTaskClient.Logic
 
             public class RequestAddDeleteList
             {
-				public RequestAddDeleteList()
-				{
-
-				}
 				public RequestAddDeleteList(bool forced)
 				{
 					isForced = forced;
@@ -147,6 +151,11 @@ namespace AnnoTaskClient.Logic
 
             public class RequestAddThesaurus
             {
+				public RequestAddThesaurus(bool forced)
+				{
+					isForced = forced;
+				}
+				private bool isForced = false;
                 public String conceptFrom;
                 public String conceptTo;
                 public String metaOntology;

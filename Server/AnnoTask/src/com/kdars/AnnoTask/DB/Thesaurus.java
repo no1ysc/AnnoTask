@@ -84,5 +84,15 @@ public class Thesaurus {
 //		return this.conceptFrom;
 //	}
 	
+	/**
+	 * 텀의 간략한 정보를 가져옴.
+	 * @author JS
+	 * @return
+	 */
+	public String getInformation(){
+		return	"conceptFrom : " + conceptFrom + ", " +
+				"conceptTo : " + conceptTo  + ", " +
+				"metaOntology : " + metaOntology;
+	}
 	
 }

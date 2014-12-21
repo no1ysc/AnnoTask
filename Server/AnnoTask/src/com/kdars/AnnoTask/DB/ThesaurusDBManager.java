@@ -15,6 +15,21 @@ public class ThesaurusDBManager {
 		return	thisClass;
 	}
 	
+	
+	/**
+	 * 텀의 정보를 가져옴.
+	 * @author JS 
+	 * @param term
+	 * @return
+	 */
+	public String getTermInformation(String term){
+		return thesaurusDB.query(queryColumnName, term).getInformation();
+	}
+	
+	public void deleteTerm(String deleteTerm){
+		thesaurusDB.delete(deleteTerm);
+	}
+	
 	/**
 	 * 
 	 * @param from 

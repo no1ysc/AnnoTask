@@ -16,11 +16,9 @@ namespace AnnoTaskClient.Logic
 
 		private ClientWormHole clientWormHole = new ClientWormHole();
 		private Dictionary<string, Frequency> termNFreq = new Dictionary<string, Frequency>(); // Term, Freq
-        private List<String> deleteList;
         private List<string> termList = new List<string>();
         private ConceptTo[] conceptList;
         private LinkedList[] linkedList;
-        private String conceptToTerm;
         private int selectedTabNumber;
 
         //
@@ -74,7 +72,7 @@ namespace AnnoTaskClient.Logic
 
 
 
-		private LinkedList<string> commandQ = new LinkedList<string>();
+		private LinkedList<InternalCommand> commandQ = new LinkedList<InternalCommand>();
 
 		public  void doWork()
 		{
@@ -102,7 +100,8 @@ namespace AnnoTaskClient.Logic
 
 		private void CommandParser()
 		{
-			string command = commandQ.First.Value;
+			InternalCommand internalCommand = commandQ.First.Value;
+			string command = internalCommand.Command;
 		
 			lock (commandQ) 
 			{
@@ -116,17 +115,28 @@ namespace AnnoTaskClient.Logic
 					UIHandler.Instance.CommonUI.ButtonEnable = true;
 					break;
                 case "AddDeleteList":
-                    addDeleteList();
+					AddDeleteList addDeleteListParam = (AddDeleteList)internalCommand;
+					addDeleteList(addDeleteListParam.SelectedTerms);
+					updateTermList(addDeleteListParam.SelectedTerms, addDeleteListParam.TabNum); //불용어에 추가할 단어들은 현재 단어 리스트에서 제거하는 동작
                     break;
                 case "AddThesaurus":
-                    addThesaurus();
+					//logic.getConceptToList();
+					AddThesaurus addThesaurusParam = (AddThesaurus)internalCommand;
+					importConceptToList();
+					addThesaurus(addThesaurusParam.ConceptFrom, addThesaurusParam.ConceptTo, addThesaurusParam.MetaOntology);
                     break;
-                case "GetConceptToList":
-                    importConceptToList();
-                    break;
+				case "GetConceptToList":
+					importConceptToList();
+					break;
                 case "GetLinkedList":
-                    importGetLinkedList();
+					GetLinkedList getLinkedList = (GetLinkedList)internalCommand;
+					importGetLinkedList(getLinkedList.Term);
+					UIHandler.Instance.ThesaurusUI.ConceptTo = getLinkedList.Term;
                     break;
+				case "OpenThesaurusWindow":
+					importConceptToList();
+					getTermList(((OpenThesaurusWindow)internalCommand).SelectedTerms);
+					break;
 				default:
 					break;
 			}
@@ -198,9 +208,8 @@ namespace AnnoTaskClient.Logic
             }
         }
 
-        private void importGetLinkedList()
+        private void importGetLinkedList(string term)
         {
-            string term = conceptToTerm;
             string conceptToId = "";
             for (int i = 0; i < conceptList.Count(); ++i)
             {
@@ -233,19 +242,17 @@ namespace AnnoTaskClient.Logic
 
 		internal void clickedJobStart()
 		{
-			commandQ.AddLast("JobStart");
+			commandQ.AddLast(new JobStart());
 		}
 
         internal void getConceptToList()
         {     
-            commandQ.AddLast("GetConceptToList");
+            commandQ.AddLast(new GetConceptToList());
         }
-                
+
         internal void getLinkedList(String term)
-       {
-           conceptToTerm = term;
-            UIHandler.Instance.ThesaurusUI.conceptTo = term;
-            commandQ.AddLast("GetLinkedList");
+		{
+            commandQ.AddLast(new GetLinkedList(term));
         }
 
         // 단어 선택 시
@@ -407,60 +414,105 @@ namespace AnnoTaskClient.Logic
         // (기흥) 불용어 추가 버튼 클릭시.
         internal void clickedAddDeleteList(List<string> selectedTerm, int tabNum)
         {
-            this.deleteList = selectedTerm;
-            commandQ.AddLast("AddDeleteList");
-            updateTermList(this.deleteList, tabNum); //불용어에 추가할 단어들은 현재 단어 리스트에서 제거하는 동작
+			commandQ.AddLast(new AddDeleteList(selectedTerm, tabNum));
         }
 
-        private void addDeleteList()
+		private void addDeleteList(List<string> deleteList)
         {
-			ReturnFromServer returnValue = clientWormHole.sendDeleteList(this.deleteList);
+			List<ReturnFromServer> returnValues = clientWormHole.sendDeleteList(deleteList);
 
 			// 이승철 추가. 20141220
 			// 상황대처
-			switch (returnValue.ReturnValue)
+			foreach (ReturnFromServer returnValue in returnValues)
 			{
-				case "ExistThesaururTable":
-					string msg = "이미 Thesaurus Table에 추가된 단어입니다. \r\n" + 
-								"DeleteList에 추가하시겠습니까? \r\n" + 
-								"(추가하시면, Thesaurus Table에서는 삭제됩니다.)\r\n" + 
-								returnValue.Message;
-					// 사용자 선택후 진행.
-					DialogResult result = MessageBox.Show(msg, "DeleteList 추가", MessageBoxButtons.OKCancel);
-					if (result == DialogResult.Yes)
-					{
-						// 강제로 다시 불용어 리스트에 넣기.
-						clientWormHole.sendDeleteListForce(this.deleteList);
-					}
-					else
-					{
-						// 그냥 사전에 두기, 사전에 둘때 사전정보를 찍어주는게 맞나?
-					}
-										
-					break;
-				case "ExistDeleteTable":
-					// 사용자에게 겹쳤다라고 알려줌.
-					MessageBox.Show("이전에 이미 추가된 단어 입니다.");
-					break;
-				case "Normal":
-					MessageBox.Show("불용어 추가를 진행하였습니다.");
-					break;
+				switch (returnValue.ReturnValue)
+				{
+					case "ExistThesaurusTable":
+						string msg = "이미 Thesaurus Table에 추가된 단어입니다. \r\n" +
+									"DeleteList에 추가하시겠습니까? \r\n" +
+									"(추가하시면, Thesaurus Table에서는 삭제됩니다.)\r\n" +
+									returnValue.Message;
+						// 사용자 선택후 진행.
+						DialogResult result = MessageBox.Show(msg, "DeleteList 추가", MessageBoxButtons.OKCancel);
+						if (result == DialogResult.Yes)
+						{
+							// 강제로 다시 불용어 리스트에 넣기.
+							clientWormHole.sendDeleteListForce(deleteList);
+						}
+						else
+						{
+							// 그냥 사전에 두기
+						}
+
+						break;
+					case "ExistDeleteTable":
+						// 사용자에게 겹쳤다라고 알려줌.
+						MessageBox.Show("이전에 이미 추가된 단어 입니다.");
+						break;
+					case "Normal":
+						MessageBox.Show("불용어 추가를 진행하였습니다.");
+						break;
+				}
 			}
         }
 
-        internal void clickedAddThesaurus()
+		internal void clickedAddThesaurus(string conceptFrom, string conceptToTerm, string metaOntology)
         {
-            commandQ.AddLast("AddThesaurus");
-            MessageBox.Show("시소러스에 단어 추가를 진행하였습니다.");
+            commandQ.AddLast(new AddThesaurus(conceptFrom, conceptToTerm, metaOntology));
         }
 
-        private void addThesaurus()
+		private void addThesaurus(string conceptFrom, string conceptToTerm, string metaOntology)
         {
-            String conceptFrom = UIHandler.Instance.ThesaurusUI.GetConceptFrom();
-            String metaOntology = UIHandler.Instance.ThesaurusUI.GetMetaOntology();
-            List<string> temp = new List<string>();
+			// 이승철 추가, 선택권은 사용자에게.
+			ReturnFromServer returnValue = clientWormHole.AddThesaurus(conceptFrom, conceptToTerm, metaOntology);
+			
+			switch (returnValue.ReturnValue)
+			{
+				case "ExistThesaurusTable":
+					{
+						string msg = "이미 Thesaurus Table에 추가된 단어입니다. \r\n" +
+									"업데이트 하시겠습니까? \r\n" +
+									"(추가하시면, 기존입력사항은 삭제됩니다.)\r\n" +
+									returnValue.Message;
+						// 사용자 선택후 진행.
+						DialogResult result = MessageBox.Show(msg, "시소러스 추가", MessageBoxButtons.OKCancel);
+						if (result == DialogResult.Yes)
+						{
+							// 강제로 테이블에 넣기.
+							clientWormHole.AddThesaurusForce(conceptFrom, conceptToTerm, metaOntology);
+						}
+						else
+						{
+							// 그냥 사전에 두기
+						}
+					}
+					break;
+				case "ExistDeleteTable":
+					{
+						string msg = "이미 Delete List에 추가된 단어입니다. \r\n" +
+									"Thesaurus Table에 추가하시겠습니까? \r\n" +
+									"(추가하시면, Delete List에서는 삭제됩니다.)\r\n" +
+									returnValue.Message;
+						// 사용자 선택후 진행.
+						DialogResult result = MessageBox.Show(msg, "시소러스 추가", MessageBoxButtons.OKCancel);
+						if (result == DialogResult.Yes)
+						{
+							// 강제로 테이블에 넣기.
+							clientWormHole.AddThesaurusForce(conceptFrom, conceptToTerm, metaOntology);
+						}
+						else
+						{
+							// 그냥 사전에 두기
+						}
+					}
+					break;
+				case "Normal":
+					MessageBox.Show("시소러스에 단어 추가를 진행하였습니다.");
+					break;
+			}
 
-            clientWormHole.AddThesaurus(conceptFrom, conceptToTerm, metaOntology);
+
+			List<string> temp = new List<string>();
             if (this.termList.Contains(conceptFrom))
             {
                 this.termList.Remove(conceptFrom);
@@ -614,6 +666,11 @@ namespace AnnoTaskClient.Logic
 
             articleView.SelectionStart = line;
             articleView.ScrollToCaret();
-        }        
-    }
+        }
+
+		internal void OpenThesaurusWindow(List<string> paramSelectedTerms)
+		{
+			commandQ.AddLast(new OpenThesaurusWindow(paramSelectedTerms));
+		}
+	}
 }

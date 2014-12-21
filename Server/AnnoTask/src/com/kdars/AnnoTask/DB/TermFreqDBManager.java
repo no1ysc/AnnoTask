@@ -20,10 +20,10 @@ public class TermFreqDBManager {
 		return termFreqDB.queryTermConditional(firstDocId);
 	}
 	
-	public boolean deleteTerm(String term, int termHolder){
+	public boolean deleteTerm(String term){
 		// 소유자 확인해서 일치할때만 삭제.
 		
-		return	termFreqDB.deleteTerm(term, termHolder);
+		return	termFreqDB.deleteTerm(term);
 	}
 	
 	public DocTermFreqByTerm[] getDocByTerm(int docID, String category, String title){
