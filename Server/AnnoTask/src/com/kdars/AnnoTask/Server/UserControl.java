@@ -41,6 +41,7 @@ import com.kdars.AnnoTask.Server.Command.Server2Client.DocumentResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.MetaResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.NotifyTransferEnd;
 import com.kdars.AnnoTask.Server.Command.Server2Client.ReturnAddDeleteList;
+import com.kdars.AnnoTask.Server.Command.Server2Client.ReturnAddThesaurus;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendConceptToCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendDocumentCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.TermTransfer;
@@ -229,12 +230,67 @@ public class UserControl extends Thread{
 		transferObject(returnList);
 	}
 	
+	private void thesaurusRequestHandler(RequestAddThesaurus entryComponents) {
+		String conceptFrom = entryComponents.conceptFrom;
+		String conceptTo = entryComponents.conceptTo;
+		String metaOntology = entryComponents.metaOntology;
+		
+		// 이승철 수정, 20141220
+		ReturnAddThesaurus returnAddThesaurus;
+		
+		if (entryComponents.isForced){
+			// 강제로 Thesaurus Table로 넣기. 다른 테이블(현재는 Thesaurus Table, Delete List만 있음)은 다지워줌.
+			if (isExistDeleteList(conceptFrom)){
+				removeDeleteList(conceptFrom);
+				addThesaurus(conceptFrom, conceptTo, metaOntology);
+				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "ExistDeleteList");
+			} else if (isExistThesaurusTable(conceptFrom)){
+				removeThesaurusTable(conceptFrom);
+				addThesaurus(conceptFrom, conceptTo, metaOntology);
+				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "ExistThesaurusTable");
+			} else {
+				addThesaurus(conceptFrom, conceptTo, metaOntology);
+				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "Normal");
+			}			
+		} else {
+			if (isExistDeleteList(conceptFrom)){
+				// 이미 있으면 아무것도 안하고 리턴만.
+				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "ExistDeleteTable", "ExistDeleteTable");
+			} else if (isExistThesaurusTable(conceptFrom)){
+				// 시소러스 테이블로부터 텀정보를 얻어와서 메세지로 전달. 작업은 안함.
+				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "ExistThesaurusTable", readThesaurus(conceptFrom));
+			} else {
+				// 어느 테이블에도 속하지 않은 경우는 그냥 작업.
+				addThesaurus(conceptFrom, conceptTo, metaOntology);
+				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "Normal");
+			}
+		}
+		
+		transferObject(returnAddThesaurus);		
+	}
+	
+
+	/**
+	 * Delete List에서 지움.
+	 * @author JS
+	 * @param term
+	 */
+	private void removeDeleteList(String deleteTerm) {
+		DeleteListDBManager.getInstance().RemoveTermFromDeleteList(deleteTerm);
+	}
+
+	/**
+	 * @author JS
+	 * @param term
+	 * @return
+	 */
 	private String readThesaurus(String term) {
 		return ThesaurusDBManager.getInstance().getTermInformation(term);
 	}
 
 	/**
 	 * Thesaurus Table에서 지움.
+	 * @author JS
 	 * @param term
 	 */
 	private void removeThesaurusTable(String term) {
@@ -243,6 +299,7 @@ public class UserControl extends Thread{
 
 	/**
 	 * Delete List에 해당 텀이 있는지 확인.
+	 * @author JS
 	 * @param term
 	 * @return true : 있음, false : 없음.
 	 */
@@ -252,6 +309,7 @@ public class UserControl extends Thread{
 	
 	/**
 	 * Thesaurus Table에 해당 텀이 있는지 확인.
+	 * @author JS
 	 * @param term
 	 * @return true : 있음, false : 없음.
 	 */
@@ -261,6 +319,7 @@ public class UserControl extends Thread{
 	
 	/**
 	 * Delete List에 추가
+	 * @author JS
 	 * @param term
 	 */
 	private void addDeleteList(String term){
@@ -268,13 +327,19 @@ public class UserControl extends Thread{
 		TermFreqDBManager.getInstance().deleteTerm(term);
 	}
 	
-	private void thesaurusRequestHandler(RequestAddThesaurus entryComponents) {
-		String conceptFrom = entryComponents.conceptFrom;
-		String conceptTo = entryComponents.conceptTo;
-		String metaOntology = entryComponents.metaOntology;
+	/**
+	 * 시소러스 추가
+	 * @author JS
+	 * @param conceptFrom
+	 * @param conceptTo
+	 * @param metaOntology
+	 */
+	private void addThesaurus(String conceptFrom, String conceptTo, String metaOntology){
 		ThesaurusDBManager.getInstance().setEntry(conceptFrom, conceptTo, metaOntology);
 		TermFreqDBManager.getInstance().deleteTerm(conceptFrom);
 	}
+		
+	
 	
 	private void documentRequestHandler(DocumentRequest documentRequest) {
 		Document document = ContentDBManager.getInstance().getContent(documentRequest.documentID);

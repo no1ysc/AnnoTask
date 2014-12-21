@@ -5,6 +5,6 @@ import java.util.List;
 import com.kdars.AnnoTask.Server.Command.Command;
 
 public class RequestAddDeleteList {
-	public List<String> addDeleteList;
 	public boolean isForced;
+	public List<String> addDeleteList;
 }

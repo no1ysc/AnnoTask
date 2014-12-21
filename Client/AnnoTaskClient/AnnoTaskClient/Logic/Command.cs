@@ -156,9 +156,9 @@ namespace AnnoTaskClient.Logic
 					isForced = forced;
 				}
 				private bool isForced = false;
-                public String conceptFrom;
-                public String conceptTo;
-                public String metaOntology;
+                public string conceptFrom;
+                public string conceptTo;
+                public string metaOntology;
             }
 			
 			public class RequestConcetpToList
