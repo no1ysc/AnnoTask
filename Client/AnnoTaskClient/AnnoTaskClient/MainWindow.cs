@@ -170,78 +170,72 @@ namespace AnnoTaskClient
 			logic.cellContentDoubleClick(cellValue, tabNumber);
 		}
 
-        private void checkHandler(DataGridViewCellEventArgs e, int tabNumber)
+		private void checkHandler(int cellRow, int cellCol, int tabNum)
         {
             // TODO : 쓰레드는 안돌려도 된다? 작업이 짧아서?
-            logic.cellContentCheck(e, tabNumber);
+            logic.cellContentCheck(cellRow, cellCol, tabNum);
         }
 
       	private void wordList1_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
+			int cellRow = e.RowIndex;
+			int cellCol = e.ColumnIndex;
 
-            int cellRow = e.RowIndex;
-            int cellCol = e.ColumnIndex;
-
-            if (cellCol == 1)
-            {
-                cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 1);
-            }
-            else if (cellCol == 0)
-            {
-                checkHandler(e, 1);
-            }
-			
+			_wordList_CellClick(dataGridView, cellRow, cellCol, 1);			
 		}
 
 		private void wordList2_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
+			int cellRow = e.RowIndex;
+			int cellCol = e.ColumnIndex;
 
-            int cellRow = e.RowIndex;
-            int cellCol = e.ColumnIndex;
-
-            if (cellCol == 1)
-            {
-                cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 2);
-            }
-            else if (cellCol == 0)
-            {
-                checkHandler(e, 2);
-            }
+			_wordList_CellClick(dataGridView, cellRow, cellCol, 2);
 		}
 
 		private void wordList3_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
+			int cellRow = e.RowIndex;
+			int cellCol = e.ColumnIndex;
 
-            int cellRow = e.RowIndex;
-            int cellCol = e.ColumnIndex;
-
-            if (cellCol == 1)
-            {
-                cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 3);
-            }
-            else if (cellCol == 0)
-            {
-                checkHandler(e, 3);
-            }
+			_wordList_CellClick(dataGridView, cellRow, cellCol, 3);
 		}
 
 		private void wordList4_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridView dataGridView = (sender as DataGridView);
-            int cellRow = e.RowIndex;
-            int cellCol = e.ColumnIndex;
+			int cellRow = e.RowIndex;
+			int cellCol = e.ColumnIndex;
 
-            if (cellCol == 1)
-            {
-                cellClickHandler((string)dataGridView.Rows[e.RowIndex].Cells[1].Value, 4);
-            }
-            else if (cellCol == 0)
-            {
-                checkHandler(e, 4);
-            }
+			_wordList_CellClick(dataGridView, cellRow, cellCol, 4);
+		}
+
+		/// <summary>
+		/// 동작방식 리펙토링.
+		/// 이승철, 20141220
+		/// </summary>
+		/// <param name="dataGridView"></param>
+		/// <param name="cellRow"></param>
+		/// <param name="cellCol"></param>
+		/// <param name="tabNum"></param>
+		private void _wordList_CellClick(DataGridView dataGridView, int cellRow, int cellCol, int tabNum)
+		{
+			// 이승철 추가, 20141220, 컬럼이름 필드 클릭시 이벤트 걸림방지.
+			if (cellRow < 1)
+			{
+				return;
+			}
+
+			if (cellCol == 1)
+			{
+				cellClickHandler((string)dataGridView.Rows[cellRow].Cells[1].Value, tabNum);
+			}
+			else if (cellCol == 0)
+			{
+				checkHandler(cellRow, cellCol, tabNum);
+			}
 		}
 
 		// TODO : 아래 4개 이벤트들 쓰레드 안돌려도 된다? 작업이 짧아서?

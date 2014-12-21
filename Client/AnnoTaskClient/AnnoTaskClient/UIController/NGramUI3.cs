@@ -68,29 +68,30 @@ namespace AnnoTaskClient.UIController
         }
 
 
-        private delegate void CheckboxRefresh(DataGridViewCellEventArgs e);
-        public void RefreshCheckbox(DataGridViewCellEventArgs e)
-        {
-            CheckboxRefresh checkboxRefresh = new CheckboxRefresh(refreshCheckbox);
-            mainWindow.Invoke(checkboxRefresh, new object[] { e });
-        }
-        private void refreshCheckbox(DataGridViewCellEventArgs e)
-        {
-            bool cellStatus = false;
-            if (mainWindow.wordList3.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
-            {
-                cellStatus = (bool)mainWindow.wordList3.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-            }
+		// 이승철 수정, 20141220
+		private delegate void CheckboxRefresh(int cellRow, int cellCol);
+		public void RefreshCheckbox(int cellRow, int cellCol)
+		{
+			CheckboxRefresh checkboxRefresh = new CheckboxRefresh(refreshCheckbox);
+			mainWindow.Invoke(checkboxRefresh, new object[] { cellRow, cellCol });
+		}
+		private void refreshCheckbox(int cellRow, int cellCol)
+		{
+			bool cellStatus = false;
+			if (mainWindow.wordList3.Rows[cellRow].Cells[cellCol].Value != null)
+			{
+				cellStatus = (bool)mainWindow.wordList3.Rows[cellRow].Cells[cellCol].Value;
+			}
 
-            if (cellStatus)
-            {
-                mainWindow.wordList3.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
-            }
-            else
-            {
-                mainWindow.wordList3.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = true;
-            }
-        }
+			if (cellStatus)
+			{
+				mainWindow.wordList3.Rows[cellRow].Cells[cellCol].Value = false;
+			}
+			else
+			{
+				mainWindow.wordList3.Rows[cellRow].Cells[cellCol].Value = true;
+			}
+		}
 
         delegate void RefreshTermListDelegate(List<string> updateList);
 

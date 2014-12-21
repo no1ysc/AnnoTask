@@ -67,27 +67,28 @@ namespace AnnoTaskClient.UIController
 			mainWindow.docList1.Nodes.Add(root);
 		}
 
-        private delegate void CheckboxRefresh(DataGridViewCellEventArgs e);
-        public void RefreshCheckbox(DataGridViewCellEventArgs e)
+		// 이승철 수정, 20141220
+		private delegate void CheckboxRefresh(int cellRow, int cellCol);
+		public void RefreshCheckbox(int cellRow, int cellCol)
         {
             CheckboxRefresh checkboxRefresh = new CheckboxRefresh(refreshCheckbox);
-            mainWindow.Invoke(checkboxRefresh, new object[] { e });
+			mainWindow.Invoke(checkboxRefresh, new object[] { cellRow, cellCol });
         }
-        private void refreshCheckbox(DataGridViewCellEventArgs e)
+		private void refreshCheckbox(int cellRow, int cellCol)
         {
             bool cellStatus = false;
-            if (mainWindow.wordList1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+			if (mainWindow.wordList1.Rows[cellRow].Cells[cellCol].Value != null)
             {
-                cellStatus = (bool)mainWindow.wordList1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+				cellStatus = (bool)mainWindow.wordList1.Rows[cellRow].Cells[cellCol].Value;
             }
 
             if (cellStatus)
             {
-                mainWindow.wordList1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
+				mainWindow.wordList1.Rows[cellRow].Cells[cellCol].Value = false;
             }
             else
             {
-                mainWindow.wordList1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = true;
+				mainWindow.wordList1.Rows[cellRow].Cells[cellCol].Value = true;
             }            
         }
         

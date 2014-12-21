@@ -361,22 +361,23 @@ namespace AnnoTaskClient.Logic
 			
 		}
 
-        internal void cellContentCheck(DataGridViewCellEventArgs e, int tabNumber)
+		// 이승철 수정 20141220
+		internal void cellContentCheck(int cellRow, int cellCol, int tabNumber)
 		{
 			// set checkbox
 			switch (tabNumber)
 			{
                 case 1:
-                    UIHandler.Instance.NGram1.RefreshCheckbox(e);
+                    UIHandler.Instance.NGram1.RefreshCheckbox(cellRow, cellCol);
 					break;
 				case 2:
-                    UIHandler.Instance.NGram2.RefreshCheckbox(e);
+                    UIHandler.Instance.NGram2.RefreshCheckbox(cellRow, cellCol);
 					break;
 				case 3:
-                    UIHandler.Instance.NGram3.RefreshCheckbox(e);
+                    UIHandler.Instance.NGram3.RefreshCheckbox(cellRow, cellCol);
 					break;
 				case 4:
-                    UIHandler.Instance.NGram4.RefreshCheckbox(e);
+					UIHandler.Instance.NGram4.RefreshCheckbox(cellRow, cellCol);
 					break;
 				default:
 					break;
