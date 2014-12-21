@@ -389,14 +389,38 @@ namespace AnnoTaskClient.Logic
 			}
 		}
 
-        internal void sendDeleteList(List<string> list)
+		// 이승철 수정 20141220
+		// 리턴 있는 모양으로.
+        internal ReturnFromServer sendDeleteList(List<string> list)
         {
             Command.Client2Server.RequestAddDeleteList deleteListReq = new Command.Client2Server.RequestAddDeleteList();
             deleteListReq.addDeleteList = list;
             string json_addDeleteList = new JsonConverter<Command.Client2Server.RequestAddDeleteList>().Object2Json(deleteListReq);
             m_Writer.WriteLine(json_addDeleteList);
             m_Writer.Flush();
+
+			//리턴 받아보기.
+			string jsonRes = m_Reader.ReadLine();
+			Command.Server2Client.ReturnAddDeleteList returnFromServer = new JsonConverter<Command.Server2Client.ReturnAddDeleteList>().Json2Object(jsonRes);
+
+			return new ReturnFromServer(returnFromServer.returnValue, returnFromServer.message);
         }
+
+		internal ReturnFromServer sendDeleteListForce(List<string> list)
+		{
+			Command.Client2Server.RequestAddDeleteList deleteListReq = new Command.Client2Server.RequestAddDeleteList(true);
+            deleteListReq.addDeleteList = list;
+            string json_addDeleteList = new JsonConverter<Command.Client2Server.RequestAddDeleteList>().Object2Json(deleteListReq);
+            m_Writer.WriteLine(json_addDeleteList);
+            m_Writer.Flush();
+
+			//리턴 받아보기.
+			string jsonRes = m_Reader.ReadLine();
+			Command.Server2Client.ReturnAddDeleteList returnFromServer = new JsonConverter<Command.Server2Client.ReturnAddDeleteList>().Json2Object(jsonRes);
+
+			return new ReturnFromServer(returnFromServer.returnValue, returnFromServer.message);
+		}
+
 
         internal bool AddThesaurus(string conceptFrom, string conceptTo, string metaOntology)
         {

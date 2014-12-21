@@ -24,6 +24,8 @@ namespace AnnoTaskClient
             return this.logic;
         }
 
+		private AddThesaurusWindow addThesaurus = new AddThesaurusWindow();
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -34,6 +36,9 @@ namespace AnnoTaskClient
 
 			mainLogicWorker.Start();
 			UIHandler.Instance.runUIHandler(this);
+
+			// 이승철 추가 20141219
+			//addThesaurus.MdiParent = this;
 		}
 
 		// 종료 이벤트 핸들러
@@ -145,12 +150,15 @@ namespace AnnoTaskClient
                 }
             }
           
-            AddThesaurusWindow addThesaurus = new AddThesaurusWindow();
-            addThesaurus.Show();
-
+            // 20141219 이승철 수정.
+			// 멤버 변수로 이동.
+			// show는 제일 나중에 띄워줌.
+			
             logic.getConceptToList();
             logic.getTermList(selectedTerms);
             this.openAddThesaurusWindowButton.Enabled = false;
+			
+			addThesaurus.Show();
         }
 
 		private void cellClickHandler(string cellValue, int tabNumber)

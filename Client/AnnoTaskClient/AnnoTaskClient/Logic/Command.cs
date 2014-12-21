@@ -87,6 +87,12 @@ namespace AnnoTaskClient.Logic
                 public string linkedListTerm;
                 public string metaInfo;
             }
+
+			public class ReturnAddDeleteList
+			{
+				public string returnValue;
+				public string message;
+			}
 		}
 
 		public class Client2Server
@@ -127,6 +133,15 @@ namespace AnnoTaskClient.Logic
 
             public class RequestAddDeleteList
             {
+				public RequestAddDeleteList()
+				{
+
+				}
+				public RequestAddDeleteList(bool forced)
+				{
+					isForced = forced;
+				}
+				private bool isForced = false;
                 public List<String> addDeleteList;
             }
 

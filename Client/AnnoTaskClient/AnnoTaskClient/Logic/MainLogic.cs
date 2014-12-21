@@ -414,8 +414,38 @@ namespace AnnoTaskClient.Logic
 
         private void addDeleteList()
         {
-            clientWormHole.sendDeleteList(this.deleteList);
-            //MessageBox.Show("불용어 추가를 진행하였습니다.");
+			ReturnFromServer returnValue = clientWormHole.sendDeleteList(this.deleteList);
+
+			// 이승철 추가. 20141220
+			// 상황대처
+			switch (returnValue.ReturnValue)
+			{
+				case "ExistThesaururTable":
+					string msg = "이미 Thesaurus Table에 추가된 단어입니다. \r\n" + 
+								"DeleteList에 추가하시겠습니까? \r\n" + 
+								"(추가하시면, Thesaurus Table에서는 삭제됩니다.)\r\n" + 
+								returnValue.Message;
+					// 사용자 선택후 진행.
+					DialogResult result = MessageBox.Show(msg, "DeleteList 추가", MessageBoxButtons.OKCancel);
+					if (result == DialogResult.Yes)
+					{
+						// 강제로 다시 불용어 리스트에 넣기.
+						clientWormHole.sendDeleteListForce(this.deleteList);
+					}
+					else
+					{
+						// 그냥 사전에 두기, 사전에 둘때 사전정보를 찍어주는게 맞나?
+					}
+										
+					break;
+				case "ExistDeleteTable":
+					// 사용자에게 겹쳤다라고 알려줌.
+					MessageBox.Show("이전에 이미 추가된 단어 입니다.");
+					break;
+				case "Normal":
+					MessageBox.Show("불용어 추가를 진행하였습니다.");
+					break;
+			}
         }
 
         internal void clickedAddThesaurus()
