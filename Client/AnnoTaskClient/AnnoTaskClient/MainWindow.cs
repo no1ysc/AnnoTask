@@ -39,8 +39,8 @@ namespace AnnoTaskClient
 		// 종료 이벤트 핸들러
 		private void exitWindow(object sender, EventArgs e)
 		{
-			// 메인로직 쓰레드 끊어줌. 
-			//mainLogicWorker.Abort();
+			// 메인로직 쓰레드 끊어줌.
+			logic.KillLogicThread();
 			logic = null;
 		}
 

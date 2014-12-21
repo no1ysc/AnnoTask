@@ -58,6 +58,7 @@
     <Compile Include="Logic\Command.cs" />
     <Compile Include="Logic\ConceptToList.cs" />
     <Compile Include="Logic\DocMeta.cs" />
+    <Compile Include="Logic\InternalCommand.cs" />
     <Compile Include="Logic\ReturnFromServer.cs" />
     <Compile Include="Logic\TermFreqByDoc.cs" />
     <Compile Include="Logic\DocByTerm.cs" />

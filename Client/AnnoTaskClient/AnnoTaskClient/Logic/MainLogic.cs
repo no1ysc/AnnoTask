@@ -66,6 +66,12 @@ namespace AnnoTaskClient.Logic
 			running = false;
 			clientWormHole = null;
 		}
+
+		// 새로 구현
+		public void KillLogicThread()
+		{
+			this.running = false;
+		}
 		#endregion
 
 
