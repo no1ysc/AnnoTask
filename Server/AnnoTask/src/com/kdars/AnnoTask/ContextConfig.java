@@ -74,16 +74,16 @@ public class ContextConfig {
 //	public final String CONTENT_DB_USER_PASS = "1q2w3e4r";
 //	public final String CONTENT_DB_TABLE_NAME = "content_v01";
 
-//	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://128.2.213.162/ewok_v01";
-//	public final String CONTENT_DB_NAME = "ewok_v01"; 
-//	public final String CONTENT_DB_USER_ID = "kdars";
-//	public final String CONTENT_DB_USER_PASS = "kdarscom";
-//	public final String CONTENT_DB_contentTABLE_NAME = "contents";
-	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.9:3306/contentdb";
-	public final String CONTENT_DB_NAME = "contentdb";
-	public final String CONTENT_DB_USER_ID = "root";
-	public final String CONTENT_DB_USER_PASS = "1qaz@WSX";
-	public final String CONTENT_DB_contentTABLE_NAME = "content_v02";
+	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://128.2.213.162/ewok_v01";
+	public final String CONTENT_DB_NAME = "ewok_v01"; 
+	public final String CONTENT_DB_USER_ID = "kdars";
+	public final String CONTENT_DB_USER_PASS = "kdarscom";
+	public final String CONTENT_DB_contentTABLE_NAME = "contents";
+//	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.9:3306/contentdb";
+//	public final String CONTENT_DB_NAME = "contentdb";
+//	public final String CONTENT_DB_USER_ID = "root";
+//	public final String CONTENT_DB_USER_PASS = "1qaz@WSX";
+//	public final String CONTENT_DB_contentTABLE_NAME = "content_v02";
 	public final String CONTENT_DB_jobTABLE_NAME = "job_table";
 	
 	/* ContentProcessor Attributes */
@@ -119,8 +119,8 @@ public class ContextConfig {
 	public final String Thesaurus_DB_NAME = "thesaurusdb"; 
 	public final String Thesaurus_DB_USER_ID = "root";
 	public final String Thesaurus_DB_USER_PASS = "jinqkim69";
-	public final String Thesaurus_DB_TABLE_NAME1 = "conceptfromtable";
-	public final String Thesaurus_DB_TABLE_NAME2 = "concepttotable";
+	public final String Thesaurus_DB_TABLE_NAME1 = "conceptfromtable_test";
+	public final String Thesaurus_DB_TABLE_NAME2 = "concepttotable_test";
 	/* Thesaurus DB Connect Info*/
 		
 }

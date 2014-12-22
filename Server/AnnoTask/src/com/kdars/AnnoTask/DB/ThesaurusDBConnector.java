@@ -78,18 +78,19 @@ public class ThesaurusDBConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			String escapedConceptFrom = escape(deleteTerm);
-			resultset = stmt.executeQuery("select " + toColName1 + " from " + conceptToTable + " where " + toColName1 + " = \"" + escapedConceptFrom + "\";");
+			resultset = stmt.executeQuery("select * from " + conceptToTable + " where " + toColName1 + " = \"" + escapedConceptFrom + "\";");
 			if (resultset.next()){
-				ResultSet resultset1 = stmt.executeQuery("select * from " + conceptFromTable + ", " + conceptToTable + " where " + toColName1 + " = \"" + escapedConceptFrom + "\" and " + conceptFromTable + "." + foreignKeyColName + " = " + conceptToTable + "." + foreignKeyColName + ";");
-				while (resultset1.next()){
-					String deleteConceptFrom = resultset1.getString(2);
-					stmt.execute("delete from " + conceptFromTable + " where " + fromColName2 + " = \"" + deleteConceptFrom + "\";");
-				}
-				stmt.execute("delete from " + conceptToTable + " where " + toColName1 + " = \"" + escapedConceptFrom + "\";");
+				int conceptToID = resultset.getInt(1);
+				java.sql.Statement stmt2 = sqlConnection.createStatement();
+				stmt2.execute("delete from " + conceptFromTable + " where " + foreignKeyColName + " = " + conceptToID + ";");
+				stmt2.execute("delete from " + conceptToTable + " where " + foreignKeyColName + " = " + conceptToID + ";");
+				stmt2.close();
 			}else{
-				stmt.execute("delete from " + conceptFromTable + " where " + fromColName2 + " = \"" + escapedConceptFrom + "\";");
+				java.sql.Statement stmt3 = sqlConnection.createStatement();
+				stmt3.execute("delete from " + conceptFromTable + " where " + fromColName2 + " = \"" + escapedConceptFrom + "\";");
+				stmt3.close();
 			}
-
+			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

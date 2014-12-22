@@ -145,7 +145,7 @@ namespace AnnoTaskClient.Logic
 				{
 					isForced = forced;
 				}
-				private bool isForced = false;
+				public bool isForced;
                 public List<String> addDeleteList;
             }
 
@@ -155,7 +155,7 @@ namespace AnnoTaskClient.Logic
 				{
 					isForced = forced;
 				}
-				private bool isForced = false;
+				public bool isForced;
                 public string conceptFrom;
                 public string conceptTo;
                 public string metaOntology;

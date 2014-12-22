@@ -443,7 +443,7 @@ namespace AnnoTaskClient.Logic
 									"(추가하시면, Thesaurus Table에서는 삭제됩니다.)\r\n" +
 									returnValue.Message;
 						// 사용자 선택후 진행.
-						DialogResult result = MessageBox.Show(msg, "DeleteList 추가", MessageBoxButtons.OKCancel);
+						DialogResult result = MessageBox.Show(msg, "DeleteList 추가", MessageBoxButtons.YesNo);
 						if (result == DialogResult.Yes)
 						{
 							// 강제로 다시 불용어 리스트에 넣기.
@@ -485,7 +485,7 @@ namespace AnnoTaskClient.Logic
 									"(추가하시면, 기존입력사항은 삭제됩니다.)\r\n" +
 									returnValue.Message;
 						// 사용자 선택후 진행.
-						DialogResult result = MessageBox.Show(msg, "시소러스 추가", MessageBoxButtons.OKCancel);
+						DialogResult result = MessageBox.Show(msg, "시소러스 추가", MessageBoxButtons.YesNo);
 						if (result == DialogResult.Yes)
 						{
 							// 강제로 테이블에 넣기.
@@ -504,7 +504,7 @@ namespace AnnoTaskClient.Logic
 									"(추가하시면, Delete List에서는 삭제됩니다.)\r\n" +
 									returnValue.Message;
 						// 사용자 선택후 진행.
-						DialogResult result = MessageBox.Show(msg, "시소러스 추가", MessageBoxButtons.OKCancel);
+						DialogResult result = MessageBox.Show(msg, "시소러스 추가", MessageBoxButtons.YesNo);
 						if (result == DialogResult.Yes)
 						{
 							// 강제로 테이블에 넣기.

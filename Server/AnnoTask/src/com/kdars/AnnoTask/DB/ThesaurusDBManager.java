@@ -30,6 +30,15 @@ public class ThesaurusDBManager {
 		thesaurusDB.delete(deleteTerm);
 	}
 	
+	
+	public boolean checkTerm(String conceptFrom){
+		if (thesaurusDB.query(queryColumnName, conceptFrom) == null){
+			return false;
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * 
 	 * @param from 

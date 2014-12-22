@@ -304,7 +304,7 @@ public class UserControl extends Thread{
 	 * @return true : 있음, false : 없음.
 	 */
 	private boolean isExistDeleteList(String term){
-		return false;
+		return DeleteListDBManager.getInstance().CheckForDeleteTerm(term);
 	}
 	
 	/**
@@ -314,7 +314,7 @@ public class UserControl extends Thread{
 	 * @return true : 있음, false : 없음.
 	 */
 	private boolean isExistThesaurusTable(String term){
-		return false;
+		return ThesaurusDBManager.getInstance().checkTerm(term);
 	}
 	
 	/**
