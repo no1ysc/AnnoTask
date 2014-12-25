@@ -90,8 +90,7 @@ namespace AnnoTaskClient.Logic
             Command.Client2Server.RequestAnnoTaskWork data = new Command.Client2Server.RequestAnnoTaskWork();
             data.bRequestAnnoTaskWork = true;
             string json_RequestAnnoTaskWork = new JsonConverter<Command.Client2Server.RequestAnnoTaskWork>().Object2Json(data);
-            m_Writer.WriteLine(json_RequestAnnoTaskWork);
-            m_Writer.Flush();
+			_transferToServer(json_RequestAnnoTaskWork);
 
             // (기흥) 서버에서 보내온 작업량을 받아서...
             string json_ReceiveDocCount = m_Reader.ReadLine();
@@ -109,12 +108,11 @@ namespace AnnoTaskClient.Logic
             Command.Client2Server.RequestTermTransfer requestTermTransfer = new Command.Client2Server.RequestTermTransfer();
             requestTermTransfer.bTransfer = true;
             string json_requestTermTransfer = new JsonConverter<Command.Client2Server.RequestTermTransfer>().Object2Json(requestTermTransfer);
-            m_Writer.WriteLine(json_requestTermTransfer);
-            m_Writer.Flush();
-
+			_transferToServer(json_requestTermTransfer);
+           
             // (기흥) 서버는 먼저 보내올 총 단어 갯수를 Client에게 보내고, Client는 Progress Bar를 총 단어 갯수로 업데이트 준비함.
             string json_TotalTermCount = null;
-            json_TotalTermCount = m_Reader.ReadLine();
+			json_TotalTermCount = _receiveFromServer();
             Command.Server2Client.SendTermCount totalTermCount = new JsonConverter<Command.Server2Client.SendTermCount>().Json2Object(json_TotalTermCount);
             //UIHandler.Instance.CommonUI.TermCount = totalTermCount.totalTermCount;
             int totalTermsToReceive = totalTermCount.totalTermCount;
@@ -127,7 +125,7 @@ namespace AnnoTaskClient.Logic
                 string json_transferedTerm = null;
                 try
                 {
-                    json_transferedTerm = m_Reader.ReadLine();
+					json_transferedTerm = _receiveFromServer();
                     if (json_transferedTerm == null)
                     {
                         Console.WriteLine("서버로부터 받은 단어가 없습니다.");
@@ -152,7 +150,7 @@ namespace AnnoTaskClient.Logic
                 UIHandler.Instance.CommonUI.TermCount = transferCount;
             }
 
-            string json_isEndTransfer = m_Reader.ReadLine();
+			string json_isEndTransfer = _receiveFromServer();
             Command.Server2Client.NotifyTransferEnd end = new JsonConverter<Command.Server2Client.NotifyTransferEnd>().Json2Object(json_isEndTransfer);
 
             EndOfInstance: //완료...
@@ -248,124 +246,142 @@ namespace AnnoTaskClient.Logic
 //            return docByTerms;
 //        }
 
-        internal LinkedList[] ImportGetLinkedList(string conceptToId)
+		/// <summary>
+		/// 작성자 : 신효정
+		/// 수정자 : 이승철
+		/// 수정내용 : 리턴타입 바꿈 및 로드 로직 수정
+		/// </summary>
+		/// <param name="conceptToId"></param>
+		/// <returns></returns>
+		internal List<LinkedListItem> ImportGetLinkedList(string conceptToId)
 		{
-            Command.Client2Server.RequestLinkedList data = new Command.Client2Server.RequestLinkedList();
-            data.conceptToId = conceptToId;
-            string json1_1 = new JsonConverter<Command.Client2Server.RequestLinkedList>().Object2Json(data);
-            
-            m_Writer.WriteLine(json1_1);
-            m_Writer.Flush();
-            
-            string json1_2 = m_Reader.ReadLine();
-            Command.Server2Client.LinkedListCount linkedCount = new JsonConverter<Command.Server2Client.LinkedListCount>().Json2Object(json1_2);
+			Command.Client2Server.RequestLinkedList data = new Command.Client2Server.RequestLinkedList();
+			data.conceptToId = conceptToId;
+			string json1_1 = new JsonConverter<Command.Client2Server.RequestLinkedList>().Object2Json(data);
 
-            LinkedList[] linkedList = new LinkedList[linkedCount.linkedListCount];
-            for (int transferCount = 0; transferCount < linkedCount.linkedListCount; transferCount++)
-            {
-                string json1_4 = null;
-                try
-                {
-                    json1_4 = m_Reader.ReadLine();
-                    if (json1_4 == null)
-                    {
-                        // 타임아웃 걸리면 이쪽으로. 사용자에게 인지해 줄 필요가 있나?
-                        // 후행처리 필요, 서버와의 재연결이 필요함, 시점은 언제가 좋을지?
-                       // goto EndOfInstance;
-                    }
-                }
-                catch (IOException e)
-                {
-                    // 서버쪽에서 어떠한 이유든 병목걸리면 이 익셉션 뱃을 수 있음.
-                    // 이거 뜨면 연결 끊어진거라 보면되고, 프로그램이 종료될 익셉션임.
-                    // 여기서 잡아주면 여지껏 받아온 텀들은 보여줄 수는 있음.
-                    // 단, 후행작업(Thesaurus 처리 등)을 하기 위해서는 재커넥션 하는 로직이 필요함.
-                   // goto EndOfInstance;
-                }
+			_transferToServer(json1_1);
 
-                Command.Server2Client.LinkedListResponse linked = new JsonConverter<Command.Server2Client.LinkedListResponse>().Json2Object(json1_4);
+			string json1_2 = _receiveFromServer();
+			Command.Server2Client.LinkedListCount linkedCount = new JsonConverter<Command.Server2Client.LinkedListCount>().Json2Object(json1_2);
 
-                linkedList[transferCount] = new LinkedList();
-                linkedList[transferCount].linkedTerms = linked.linkedListTerm;
-              }
+			List<LinkedListItem> linkedList = new List<LinkedListItem>();
+			for (int transferCount = 0; transferCount < linkedCount.linkedListCount; transferCount++)
+			{
+				string json1_4 = null;
+				json1_4 = _receiveFromServer();
+				
+				Command.Server2Client.LinkedListResponse linked = new JsonConverter<Command.Server2Client.LinkedListResponse>().Json2Object(json1_4);
 
-            string json1_5 = m_Reader.ReadLine();
-            Command.Server2Client.LinkedListResponse temp = new JsonConverter<Command.Server2Client.LinkedListResponse>().Json2Object(json1_5);
+				linkedList.Add(new LinkedListItem(linked.linkedListTerm));
+			}
 
-            if (temp.metaInfo == null || linkedCount.linkedListCount == 0)
-            {
-                return linkedList;
-            }
+			string json1_5 = _receiveFromServer();
+			Command.Server2Client.LinkedListResponse temp = new JsonConverter<Command.Server2Client.LinkedListResponse>().Json2Object(json1_5);
 
-            linkedList[0].metaInfos = temp.metaInfo;
+			//linkedList[0].metaInfos = temp.metaInfo;
 
-            return linkedList;
+			return linkedList;
 		}
+		//internal LinkedList[] ImportGetLinkedList(string conceptToId)
+		//{
+		//	Command.Client2Server.RequestLinkedList data = new Command.Client2Server.RequestLinkedList();
+		//	data.conceptToId = conceptToId;
+		//	string json1_1 = new JsonConverter<Command.Client2Server.RequestLinkedList>().Object2Json(data);
+
+		//	_transferToServer(json1_1);
+
+		//	string json1_2 = _receiveFromServer();
+		//	Command.Server2Client.LinkedListCount linkedCount = new JsonConverter<Command.Server2Client.LinkedListCount>().Json2Object(json1_2);
+
+		//	LinkedList[] linkedList = new LinkedList[linkedCount.linkedListCount];
+		//	for (int transferCount = 0; transferCount < linkedCount.linkedListCount; transferCount++)
+		//	{
+		//		string json1_4 = null;
+		//		try
+		//		{
+		//			json1_4 = _receiveFromServer();
+		//			if (json1_4 == null)
+		//			{
+		//				// 타임아웃 걸리면 이쪽으로. 사용자에게 인지해 줄 필요가 있나?
+		//				// 후행처리 필요, 서버와의 재연결이 필요함, 시점은 언제가 좋을지?
+		//				// goto EndOfInstance;
+		//			}
+		//		}
+		//		catch (IOException e)
+		//		{
+		//			// 서버쪽에서 어떠한 이유든 병목걸리면 이 익셉션 뱃을 수 있음.
+		//			// 이거 뜨면 연결 끊어진거라 보면되고, 프로그램이 종료될 익셉션임.
+		//			// 여기서 잡아주면 여지껏 받아온 텀들은 보여줄 수는 있음.
+		//			// 단, 후행작업(Thesaurus 처리 등)을 하기 위해서는 재커넥션 하는 로직이 필요함.
+		//			// goto EndOfInstance;
+		//		}
+
+		//		Command.Server2Client.LinkedListResponse linked = new JsonConverter<Command.Server2Client.LinkedListResponse>().Json2Object(json1_4);
+
+		//		linkedList[transferCount] = new LinkedList();
+		//		linkedList[transferCount].linkedTerms = linked.linkedListTerm;
+		//	}
+
+		//	string json1_5 = _receiveFromServer();
+		//	Command.Server2Client.LinkedListResponse temp = new JsonConverter<Command.Server2Client.LinkedListResponse>().Json2Object(json1_5);
+
+		//	if (temp.metaInfo == null || linkedCount.linkedListCount == 0)
+		//	{
+		//		return linkedList;
+		//	}
+
+		//	linkedList[0].metaInfos = temp.metaInfo;
+
+		//	return linkedList;
+		//}
 
 
-        internal ConceptTo[] ImportConceptToList()
+		/// <summary>
+		/// 작성자 : 신효정
+		/// 수정자 : 이승철, 20141222
+		/// 수정내용 : 리턴타입 바꿈, TODO : 쿼리 날릴 스트링(inputConceptTo 사용 구현 준비) 포함시켜서 올릴것. 윗단에서 시점 결정할것.
+		/// </summary>
+		/// <returns></returns>
+		internal List<ConceptTo> ImportConceptToList(string inputConceptTo)
         {
             Command.Client2Server.RequestConcetpToList data = new Command.Client2Server.RequestConcetpToList();
+			data.term = inputConceptTo;
             string json1_1 = new JsonConverter<Command.Client2Server.RequestConcetpToList>().Object2Json(data);
-            m_Reader = new StreamReader(m_ns, Encoding.UTF8);
-            m_Writer.WriteLine(json1_1);
-            m_Writer.Flush();
+			_transferToServer(json1_1);
 
-            string json1_2 = m_Reader.ReadLine();
+			string json1_2 = _receiveFromServer();
             Command.Server2Client.ConceptToCount conceptToCount = new JsonConverter<Command.Server2Client.ConceptToCount>().Json2Object(json1_2);
 
-            ConceptTo[] conceptToList = new ConceptTo[conceptToCount.conceptToCount];
+			List<ConceptTo> conceptToList = new List<ConceptTo>();
             for (int transferCount = 0; transferCount < conceptToCount.conceptToCount; transferCount++)
             {
-                string json1_4 = null;
-                try
-                {
-                    json1_4 = m_Reader.ReadLine();
-                    if (json1_4 == null)
-                    {
-                        // 타임아웃 걸리면 이쪽으로. 사용자에게 인지해 줄 필요가 있나?
-                        // 후행처리 필요, 서버와의 재연결이 필요함, 시점은 언제가 좋을지?
-                        // goto EndOfInstance;
-                    }
-                }
-                catch (IOException e)
-                {
-                    // 서버쪽에서 어떠한 이유든 병목걸리면 이 익셉션 뱃을 수 있음.
-                    // 이거 뜨면 연결 끊어진거라 보면되고, 프로그램이 종료될 익셉션임.
-                    // 여기서 잡아주면 여지껏 받아온 텀들은 보여줄 수는 있음.
-                    // 단, 후행작업(Thesaurus 처리 등)을 하기 위해서는 재커넥션 하는 로직이 필요함.
-                    // goto EndOfInstance;
-                }
+                string json1_4 = _receiveFromServer();
 
                 Command.Server2Client.ConceptToListResponse conceptTo = new JsonConverter<Command.Server2Client.ConceptToListResponse>().Json2Object(json1_4);
 
-                conceptToList[transferCount] = new ConceptTo();
-                conceptToList[transferCount].conceptToIds = conceptTo.conceptToId;
-                conceptToList[transferCount].conceptToTerms = conceptTo.ConceptToTerm;
+				conceptToList.Add(new ConceptTo(conceptTo.ConceptToTerm, conceptTo.conceptToId));
             }
-
-
+			
             return conceptToList;
         }
 
         // 트리뷰를 위해 요청하는 녀석
-        internal Logic.DocMeta getDocMeta(List<int> termLinkedDocIds)
+        internal DocMeta getDocMeta(List<int> termLinkedDocIds)
         {
             // (기흥) 해당 term이 출현한 doc_id들을 서버에 보냄.
             Command.Client2Server.RequestDocMeta requestDocMeta = new Command.Client2Server.RequestDocMeta();
             requestDocMeta.termLinkedDocIds = termLinkedDocIds;
             string json_requestDocMeta = new JsonConverter<Command.Client2Server.RequestDocMeta>().Object2Json(requestDocMeta);
-            m_Writer.WriteLine(json_requestDocMeta);
-            m_Writer.Flush();
+			_transferToServer(json_requestDocMeta);
 
             // (기흥) 서버로부터 category, doc_id, title을 받음.
             Command.Server2Client.DocMeta docMeta;
-            string json_getDocMeta = m_Reader.ReadLine();
+			string json_getDocMeta = _receiveFromServer();
             docMeta = new JsonConverter<Command.Server2Client.DocMeta>().Json2Object(json_getDocMeta);
             List<string> cat = new JsonConverter<List<string>>().Json2Object(docMeta.category);
             List<int> id = new JsonConverter<List<int>>().Json2Object(docMeta.docIdList);
             List<string> title = new JsonConverter<List<string>>().Json2Object(docMeta.title);
-            Logic.DocMeta receivedDataMeta = new DocMeta(cat, id, title);
+            DocMeta receivedDataMeta = new DocMeta(cat, id, title);
             return receivedDataMeta;
         }
 
@@ -379,11 +395,10 @@ namespace AnnoTaskClient.Logic
 			{
 				// 2-1 보냄.
 				string json = new JsonConverter<Command.Client2Server.DocumentRequest>().Object2Json(docReq);
-				m_Writer.WriteLine(json);
-				m_Writer.Flush();
+				_transferToServer(json);
 
 				// 2-2 받음.
-				string jsonRes = m_Reader.ReadLine();
+				string jsonRes = _receiveFromServer();
 				document = new JsonConverter<Command.Server2Client.DocumentResponse>().Json2Object(jsonRes);
 				
 				return document.body;
@@ -413,11 +428,10 @@ namespace AnnoTaskClient.Logic
 			Command.Client2Server.RequestAddDeleteList deleteListReq = new Command.Client2Server.RequestAddDeleteList(isForced);
 			deleteListReq.addDeleteList = list;
 			string json_addDeleteList = new JsonConverter<Command.Client2Server.RequestAddDeleteList>().Object2Json(deleteListReq);
-			m_Writer.WriteLine(json_addDeleteList);
-			m_Writer.Flush();
+			_transferToServer(json_addDeleteList);
 
 			//리턴 받아보기.
-			string jsonRes = m_Reader.ReadLine();
+			string jsonRes = _receiveFromServer();
 			List<Command.Server2Client.ReturnAddDeleteList> returnFromServer = new JsonConverter<List<Command.Server2Client.ReturnAddDeleteList>>().Json2Object(jsonRes);
 
 			foreach (Command.Server2Client.ReturnAddDeleteList item in returnFromServer)
@@ -446,15 +460,25 @@ namespace AnnoTaskClient.Logic
             entry.metaOntology = metaOntology;
 
 			string json_addThesaurus = new JsonConverter<Command.Client2Server.RequestAddThesaurus>().Object2Json(entry);
-			m_Writer.WriteLine(json_addThesaurus);
-			m_Writer.Flush();
+			_transferToServer(json_addThesaurus);
 
 			//리턴 받아보기.
-			string jsonRes = m_Reader.ReadLine();
+			string jsonRes = _receiveFromServer();
 			Command.Server2Client.ReturnAddThesaurus returnFromServer = new JsonConverter<Command.Server2Client.ReturnAddThesaurus>().Json2Object(jsonRes);
 
 			return new ReturnFromServer(returnFromServer.term, returnFromServer.returnValue, returnFromServer.message);
         }
+
+		private void _transferToServer(string data)
+		{
+			m_Writer.WriteLine(data);
+			m_Writer.Flush();
+		}
+
+		private string _receiveFromServer()
+		{
+			return m_Reader.ReadLine();
+		}
 
 		internal void Destroy()
 		{

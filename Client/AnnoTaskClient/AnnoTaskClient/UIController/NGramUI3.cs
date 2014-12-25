@@ -38,34 +38,24 @@ namespace AnnoTaskClient.UIController
 			mainWindow.wordList3.Rows[mainWindow.wordList3.RowCount-1].Cells[3].Value = termFreq.FreqInDocument;
 		}
 
-        // (기흥) 트리뷰 생성하는 동작 수정
-        private delegate void DocListRefresh(string term, Dictionary<string, Dictionary<int, string>> docMeta);
-        public void RefreshDocList(string str, Dictionary<string, Dictionary<int, string>> docMeta)
-        {
-            DocListRefresh docListRefresh = new DocListRefresh(refreshDocList);
-            mainWindow.Invoke(docListRefresh, new object[] { str, docMeta });
-        }
-        private void refreshDocList(string str, Dictionary<string, Dictionary<int, string>> docMeta)
-        {
-            mainWindow.docList3.Nodes.Clear();
-
-            TreeNode root = new TreeNode(str);
-            TreeNode child = new TreeNode();
-            root.ExpandAll();
-
-            foreach (string category in docMeta.Keys)
-            {
-                string content = category + "(" + docMeta[category].Count + ")";
-
-                child = root.Nodes.Add(content);
-                foreach (int doc_id in docMeta[category].Keys)
-                {
-                    child.Nodes.Add(docMeta[category][doc_id]);
-                }
-            }
-
-            mainWindow.docList3.Nodes.Add(root);
-        }
+		/// <summary>
+		/// 작성자 : 박기흥
+		/// // (기흥) 트리뷰 생성하는 동작 수정
+		/// 수정자 : 이승철, 20141223
+		/// 수정내용 : 재사용을 위해 공통부를 UIUtil로 이동.
+		/// </summary>
+		/// <param name="term"></param>
+		/// <param name="docMeta"></param>
+		private delegate void DocListRefresh(string term, Dictionary<string, Dictionary<int, string>> docMeta);
+		public void RefreshDocList(string str, Dictionary<string, Dictionary<int, string>> docMeta)
+		{
+			DocListRefresh docListRefresh = new DocListRefresh(refreshDocList);
+			mainWindow.Invoke(docListRefresh, new object[] { str, docMeta });
+		}
+		private void refreshDocList(string str, Dictionary<string, Dictionary<int, string>> docMeta)
+		{
+			UIHandler.Instance.UtilForUI.RefreshDocList(str, docMeta, mainWindow.docList3);
+		}
 
 
 		// 이승철 수정, 20141220

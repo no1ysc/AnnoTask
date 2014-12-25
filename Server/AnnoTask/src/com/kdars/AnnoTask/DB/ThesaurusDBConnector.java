@@ -192,15 +192,21 @@ public class ThesaurusDBConnector {
 		return result;
 	}
 	
-	public ArrayList<ConceptToList> queryConceptList() {
+	/**
+	 * @author ????
+	 * @param queryTerm
+	 * @return
+	 * 이승철 수정, 20141223, 컨셉투 쿼리방식 수정
+	 */
+	public ArrayList<ConceptToList> queryConceptList(String queryTerm) {
 		ArrayList<ConceptToList> ret = new ArrayList<ConceptToList>();
 		
 		ResultSet resultSet = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			resultSet = stmt.executeQuery("select * from " + conceptToTable);
+			resultSet = stmt.executeQuery("select * from " + conceptToTable + " where " + toColName1 + " like \"%" + queryTerm +"%\";");
 			while (resultSet.next()){
-				ret.add(new ConceptToList(resultSet.getInt(foreignKeyColName), resultSet.getString(toColName1)));	
+				ret.add(new ConceptToList(resultSet.getInt(foreignKeyColName), resultSet.getString(toColName1)));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

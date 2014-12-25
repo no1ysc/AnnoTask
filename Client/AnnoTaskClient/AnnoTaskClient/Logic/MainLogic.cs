@@ -16,14 +16,9 @@ namespace AnnoTaskClient.Logic
 
 		private ClientWormHole clientWormHole = new ClientWormHole();
 		private Dictionary<string, Frequency> termNFreq = new Dictionary<string, Frequency>(); // Term, Freq
-        private List<string> termList = new List<string>();
-        private ConceptTo[] conceptList;
-        private LinkedList[] linkedList;
-        private int selectedTabNumber;
 
-        //
-        private DocMeta documentMeta = new DocMeta(null, null, null);
-        private Dictionary<string, Dictionary<int, string>> dMeta = new Dictionary<string, Dictionary<int, string>>();
+		//private DocMeta documentMeta = new DocMeta(null, null, null);
+		//private Dictionary<string, Dictionary<int, string>> dMeta = new Dictionary<string, Dictionary<int, string>>(); //
         private Command.Server2Client.DocMeta docMeta = new Command.Server2Client.DocMeta();
         private TermFreqByDoc[] resultFromServer;
 
@@ -131,21 +126,22 @@ namespace AnnoTaskClient.Logic
                 case "AddThesaurus":
 					//logic.getConceptToList();
 					AddThesaurus addThesaurusParam = (AddThesaurus)internalCommand;
-					importConceptToList();
+					//importConceptToList();
 					addThesaurus(addThesaurusParam.ConceptFrom, addThesaurusParam.ConceptTo, addThesaurusParam.MetaOntology);
                     break;
 				case "GetConceptToList":
-					importConceptToList();
+					GetConceptToList getConceptToList = (GetConceptToList)internalCommand;
+					importConceptToList(getConceptToList.InputConceptTo);
 					break;
                 case "GetLinkedList":
 					GetLinkedList getLinkedList = (GetLinkedList)internalCommand;
 					importGetLinkedList(getLinkedList.Term);
-					UIHandler.Instance.ThesaurusUI.ConceptTo = getLinkedList.Term;
+					//UIHandler.Instance.ThesaurusUI.ConceptTo = getLinkedList.Term;
                     break;
-				case "OpenThesaurusWindow":
-					importConceptToList();
-					getTermList(((OpenThesaurusWindow)internalCommand).SelectedTerms);
-					break;
+				//case "OpenThesaurusWindow":
+				//	importConceptToList();
+				//	getTermList(((OpenThesaurusWindow)internalCommand).SelectedTerms);
+				//	break;
 				default:
 					break;
 			}
@@ -190,53 +186,39 @@ namespace AnnoTaskClient.Logic
 			UIHandler.Instance.CommonUI.ProgressBar = 100;
 		}
 
-        private void importConceptToList()
+		/// <summary>
+		/// 작성자 : 신효정
+		/// 수정자 : 이승철, 20141222
+		/// 수정내용 : 동작방식 변경, 데이터저장소 이동
+		/// </summary>
+		private void importConceptToList(string inputConceptTo)
         {
+			List<ConceptTo> conceptToList = new List<ConceptTo>();
+
+			conceptToList = clientWormHole.ImportConceptToList(inputConceptTo);
+
+			//if (conceptToList.Count == 0)
+			//{
+			//	// 승철 : 메시지 박스 찍어야함?
+			//	//MessageBox.Show("ConcepTo list가 없습니다.");
+			//	return;
+			//}
+          
+			// 승철 : 소팅이 꼭 필요한가?
+            //list.Sort();
             
-            conceptList = clientWormHole.ImportConceptToList();
-
-            List<String> list = new List<string>();
-
-            if (termList == null && termList.Count == 0)
-            {
-                return;
-            }
-
-            for (int i = 0; i < conceptList.Count(); ++i)
-            {
-                string temp = conceptList[i].conceptToTerms;
-                list.Add(temp);                
-            }
-            list.Sort();
-            UIHandler.Instance.ThesaurusUI.RefreshConceptToCombo(list);
-
-            if (conceptList == null)
-            {
-                MessageBox.Show("ConcepTo list가 없습니다.");
-                return;
-            }
+			//UIHandler.Instance.ThesaurusUI.RefreshConceptToCombo(list);
+			//UIHandler.Instance.ThesaurusUI.ConceptToList = null;
+			UIHandler.Instance.ThesaurusUI.ConceptToList = conceptToList;
+			//UIHandler.Instance.ThesaurusUI.ConceptTo = inputConceptTo;	// 승철, 이렇게 줄 수 밖에 없나.. 클린 이후에 뭘해야하지?
         }
 
-        private void importGetLinkedList(string term)
+		private void importGetLinkedList(string conceptToTerm)
         {
-            string conceptToId = "";
-            for (int i = 0; i < conceptList.Count(); ++i)
-            {
-                ConceptTo temp = conceptList[i];
-                if (temp.conceptToTerms.Equals(term))
-                {
-                    conceptToId = temp.conceptToIds;
-                }
-            }
-
-            if (conceptToId.Equals(""))
-            {
-                return;
-            }
-
-
-            linkedList = clientWormHole.ImportGetLinkedList(conceptToId);
-            UIHandler.Instance.ThesaurusUI.RefreshMeta(linkedList);
+			int termID = UIHandler.Instance.ThesaurusUI.findConceptToID(conceptToTerm);
+			UIHandler.Instance.ThesaurusUI.LinkedListBoxList = null;
+			UIHandler.Instance.ThesaurusUI.LinkedListBoxList = clientWormHole.ImportGetLinkedList(termID.ToString());
+			//UIHandler.Instance.ThesaurusUI.RefreshMeta(linkedList);
         }
 
 		private void clear()
@@ -254,9 +236,9 @@ namespace AnnoTaskClient.Logic
 			commandQ.AddLast(new JobStart());
 		}
 
-        internal void getConceptToList()
+        internal void getConceptToList(string term)
         {     
-            commandQ.AddLast(new GetConceptToList());
+            commandQ.AddLast(new GetConceptToList(term));
         }
 
         internal void getLinkedList(String term)
@@ -264,104 +246,69 @@ namespace AnnoTaskClient.Logic
             commandQ.AddLast(new GetLinkedList(term));
         }
 
-        // 단어 선택 시
-		internal void cellContentDoubleClick(string p, int tabNumber)
+        
+		/// <summary>
+		/// 작성자 : 박기흥
+		/// // 단어 선택 시
+		/// 수정자 : 이승철, 20141223
+		/// 수정내용 : 단위 동작으로 변경.
+		/// 트리뷰 업데이트 하는 코드 UI Util로 이동.
+		/// </summary>
+		/// <param name="p"></param>
+		/// <param name="tabNumber"></param>
+		internal void DocListUpdate(string p, int tabNumber)
 		{
+			Dictionary<string, Dictionary<int, string>> dMeta = new Dictionary<string, Dictionary<int, string>>(); //
 
-            foreach (TermFreqByDoc termByDoc in resultFromServer)
+			foreach (TermFreqByDoc termByDoc in resultFromServer)
             {
                 if (termByDoc.Term.Equals(p))
                 {
                     // 서버에 doc_id 리스트를 보내야함.
                     List<int> termLinkedDocIds = new List<int>(termByDoc.Terms.Keys);
-                    // 트리뷰를 생성.
+					DocMeta documentMeta = clientWormHole.getDocMeta(termLinkedDocIds);
+				
+					for (int index = 0; index < documentMeta.Category.Count; index++)
+					{
+						string cat = documentMeta.Category[index];
+						Dictionary<int, string> temp = new Dictionary<int, string>();
+						temp.Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
+						if (!dMeta.ContainsKey(cat))
+						{
+							dMeta.Add(cat, temp);
+						}
+						else
+						{
+							dMeta[cat].Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
+						}
+					}
+
+					// 트리뷰를 생성.
                     switch (tabNumber)
                     {
                         case 1:
-                            documentMeta = clientWormHole.getDocMeta(termLinkedDocIds);
-                            dMeta.Clear();
-                            for (int index = 0; index < documentMeta.Category.Count; index++)
-                            {
-                                string cat = documentMeta.Category[index];
-                                Dictionary<int, string> temp = new Dictionary<int,string>();
-                                temp.Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
-                                if (!dMeta.ContainsKey(cat))
-                                {
-                                    dMeta.Add(cat, temp);
-                                }
-                                else
-                                {
-                                    dMeta[cat].Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
-                                }
-                            }
-                            UIHandler.Instance.NGram1.RefreshDocList(p, dMeta);
+							UIHandler.Instance.NGram1.RefreshDocList(p, dMeta);
                             break;
                         
                         case 2:
-                            documentMeta = clientWormHole.getDocMeta(termLinkedDocIds);
-                            dMeta.Clear();
-                            for (int index = 0; index < documentMeta.Category.Count; index++)
-                            {
-                                string cat = documentMeta.Category[index];
-                                Dictionary<int, string> temp = new Dictionary<int,string>();
-                                temp.Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
-                                if (!dMeta.ContainsKey(cat))
-                                {
-                                    dMeta.Add(cat, temp);
-                                }
-                                else
-                                {
-                                    dMeta[cat].Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
-                                }
-                            }
                             UIHandler.Instance.NGram2.RefreshDocList(p, dMeta);
                             break;
 
                         case 3:
-                            documentMeta = clientWormHole.getDocMeta(termLinkedDocIds);
-                            dMeta.Clear();
-                            for (int index = 0; index < documentMeta.Category.Count; index++)
-                            {
-                                string cat = documentMeta.Category[index];
-                                Dictionary<int, string> temp = new Dictionary<int,string>();
-                                temp.Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
-                                if (!dMeta.ContainsKey(cat))
-                                {
-                                    dMeta.Add(cat, temp);
-                                }
-                                else
-                                {
-                                    dMeta[cat].Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
-                                }
-                            }
                             UIHandler.Instance.NGram3.RefreshDocList(p, dMeta);
                             break;
 
                         case 4:
-                            documentMeta = clientWormHole.getDocMeta(termLinkedDocIds);
-                            dMeta.Clear();
-                            for (int index = 0; index < documentMeta.Category.Count; index++)
-                            {
-                                string cat = documentMeta.Category[index];
-                                Dictionary<int, string> temp = new Dictionary<int,string>();
-                                temp.Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
-                                if (!dMeta.ContainsKey(cat))
-                                {
-                                    dMeta.Add(cat, temp);
-                                }
-                                else
-                                {
-                                    dMeta[cat].Add(documentMeta.DocIDList[index], documentMeta.Title[index]);
-                                }
-                            }
                             UIHandler.Instance.NGram4.RefreshDocList(p, dMeta);
                             break;
+						case 0:	// Thesaurus
+							UIHandler.Instance.ThesaurusUI.RefreshDocList(p, dMeta);
+							break;
                         default:
                             break;
                     }
-                }
+				}
             }
-			
 		}
 
 		// 이승철 수정 20141220
@@ -387,38 +334,47 @@ namespace AnnoTaskClient.Logic
 			}
 		}
 
+		
+		/// <summary>
+		/// 작성자 : ???
+		/// 수정자 : 이승철, 20141223
+		/// CommonUI 로 옮김.
+		/// 이승철, 의견 : Term 관리하는데에서는 안지우나?
+		/// </summary>
+		/// <param name="updateList"></param>
+		/// <param name="tabNumber"></param>
         internal void updateTermList(List<String> updateList, int tabNumber)
         {
-            switch (tabNumber)
-            {
-                case 1:
-                    UIHandler.Instance.NGram1.RefreshTermList(updateList);
-                    break;
-                case 2:
-                    UIHandler.Instance.NGram2.RefreshTermList(updateList);
-                    break;
-                case 3:
-                    UIHandler.Instance.NGram3.RefreshTermList(updateList);
-                    break;
-                case 4:
-                    UIHandler.Instance.NGram4.RefreshTermList(updateList);
-                    break;
-            }
+			UIHandler.Instance.CommonUI.UpdateTermList(updateList, tabNumber);
         }
 
-		internal string loadArticle(string term, string category, string title)
-		{
-			// find DOC ID
-			int targetID = -1;
-            foreach (int docID in dMeta[category].Keys)
-            {
-                if (dMeta[category][docID].Contains(title))
-                {
-                    targetID = docID;
-                }
-            }
+		//internal string loadArticle(string term, string category, string title)
+		//{
+		//	// find DOC ID
+		//	int targetID = -1;
+		//	foreach (int docID in dMeta[category].Keys)
+		//	{
+		//		if (dMeta[category][docID].Contains(title))
+		//		{
+		//			targetID = docID;
+		//			break;
+		//		}
+		//	}
 
-			return clientWormHole.getDocBodyFromID(targetID);
+		//	return clientWormHole.getDocBodyFromID(targetID);
+		//}
+
+		/// <summary>
+		/// 작성자 : 이승철, 20141223
+		/// ID로 DOC 바로 가져오기.
+		/// </summary>
+		/// <param name="term"></param>
+		/// <param name="category"></param>
+		/// <param name="title"></param>
+		/// <returns></returns>
+		internal string loadArticle(int docID)
+		{
+			return clientWormHole.getDocBodyFromID(docID);
 		}
 
         // (기흥) 불용어 추가 버튼 클릭시.
@@ -521,166 +477,46 @@ namespace AnnoTaskClient.Logic
 					break;
 			}
 
-
-			List<string> temp = new List<string>();
-            if (this.termList.Contains(conceptFrom))
-            {
-                this.termList.Remove(conceptFrom);
-                this.termList.Sort();
-                temp = this.termList;
-                UIHandler.Instance.ThesaurusUI.RefreshConceptFromCombo(temp);
-            }
-            List<string> selectedConceptFrom = new List<string>();
-            selectedConceptFrom.Add(conceptFrom);
-            updateTermList(selectedConceptFrom, this.selectedTabNumber);
+			// 시소러스창 Refresh,
+			UIHandler.Instance.ThesaurusUI.RefreshAfterAddThesaurus();
         }
 
-        public void setTabNumber(int value)
+		//public void setTabNumber(int value)
+		//{
+		//	this.selectedTabNumber = value;
+		//}
+
+		//internal void getTermList(List<string> selectedTerm)
+		//{
+		//	if (selectedTerm != null && selectedTerm.Count != 0)
+		//	{
+		//		for (int i = 0; i < selectedTerm.Count; ++i)
+		//			termList.Add(selectedTerm[i]);
+
+		//		selectedTerm.Sort();
+
+		//		UIHandler.Instance.ThesaurusUI.RefreshConceptFromCombo(termList);
+		//		return;
+		//	}
+
+		//	MessageBox.Show("단어를 선택해 주세요.");
+		//}
+
+		/// <summary>
+		/// 작성자 : 이승철
+		/// Thesaurus 윈도우의 트리뷰를 업데이트 하기 위함......
+		/// DB쿼리작업이라서, 이종류의 작업들 커멘드 처리해야되나,,,,,
+		/// 조금 시간이 오래걸리면 응답없음이 뜰 수도,
+		/// </summary>
+		/// <param name="p"></param>
+        internal void treeViewForThesaurusWindow(string term)
         {
-            this.selectedTabNumber = value;
+			DocListUpdate(term, 0);
         }
 
-        public void emptyTermList()
-        {
-            this.termList.Clear();
-        }
-
-        internal void getTermList(List<string> selectedTerm)
-        {
-            if (selectedTerm != null && selectedTerm.Count != 0)
-            {
-                for (int i = 0; i < selectedTerm.Count; ++i)
-                    termList.Add(selectedTerm[i]);
-
-                selectedTerm.Sort();
-
-                UIHandler.Instance.ThesaurusUI.RefreshConceptFromCombo(termList);
-                return;
-            }
-
-            MessageBox.Show("단어를 선택해 주세요.");
-        }
-
-        internal void treeViewForThesaurusWindow(string p)
-        {
-            UIHandler.Instance.ThesaurusUI.RefreshDocList(termNFreq[p]);         
-        }
-
-        internal void getColoredArticle(String article, object sender, RichTextBox articleView)
-        {
-            articleView.Clear();
-
-            TreeNode node = (sender as TreeView).SelectedNode;
-            string term = node.Parent.Parent.Text;
-
-            int Ncnt = 1;
-            int line = 0;
-            bool lineF = false;
-            for (int i = 0; i < term.Length; ++i)
-            {
-                char temp = term[i];
-                if (temp.Equals(' '))
-                {
-                    Ncnt++;
-                }
-            }
-
-            String[] lineTokenList = article.Split('\n');
-            string word = "";
-            string word1 = "";
-            string word2 = "";
-            ArrayList list = new ArrayList();
-            foreach (string lineToken in lineTokenList)
-            {
-                String[] wordtokenList = lineToken.Split(' ');
-
-                foreach (string wordToken in wordtokenList)
-                {
-                    if (word.Contains(term))
-                    {
-                        if (!lineF)
-                        {
-                            String[] lineList = word.Split('\n');
-                            line = lineList.Count();
-                            lineF = true;
-                        }
-                        
-                        String[] result = word.Split(' ');
-
-                        for (int i = 0; i < (result.Count() - Ncnt); ++i)
-                        {
-                            word1 += result[i] + " ";
-                        }
-
-                        for (int j = (result.Count() - Ncnt); j < result.Count(); ++j)
-                        {
-                            word2 += result[j] + " ";
-                        }
-
-                        articleView.SelectionColor = System.Drawing.Color.Black;
-                        articleView.SelectionBackColor = System.Drawing.Color.White;
-                        articleView.SelectedText = word1;
-                        
-                        articleView.SelectionColor = System.Drawing.Color.Black;
-                        articleView.SelectionBackColor = System.Drawing.Color.Yellow;
-                        articleView.SelectedText = word2;
-
-                        word = "";
-                        word1 = "";
-                        word2 = "";
-                    }
-                    word += " " + wordToken;
-                }
-                word += "\n";
-            }
-
-            if (word.Contains(term))
-            {
-                if (!lineF)
-                {
-                    String[] lineList = word.Split('\n');
-                    line = lineList.Count();
-                    lineF = true;
-                }
-                word1 = "";
-                word2 = "";
-
-                String[] result = word.Split(' ');
-                for (int i = 0; i < (result.Count() - Ncnt); ++i)
-                {
-                    word1 += result[i] + " ";
-                }
-
-                for (int j = (result.Count() - Ncnt); j < result.Count(); ++j)
-                {
-                    word2 += result[j] + " ";
-                }
-
-                articleView.SelectionColor = System.Drawing.Color.Black;
-                articleView.SelectionBackColor = System.Drawing.Color.White;
-                articleView.SelectedText = word1;
-
-                articleView.SelectionColor = System.Drawing.Color.Black;
-                articleView.SelectionBackColor = System.Drawing.Color.Yellow;
-                articleView.SelectedText = word2;
-
-                articleView.SelectionStart = line;
-                articleView.ScrollToCaret();
-
-                return;           
-            }
-
-            articleView.SelectionColor = System.Drawing.Color.Black;
-            articleView.SelectionBackColor = System.Drawing.Color.White;
-            articleView.SelectedText = word;
-
-            articleView.SelectionStart = line;
-            articleView.ScrollToCaret();
-        }
-
-		internal void OpenThesaurusWindow(List<string> paramSelectedTerms)
-		{
-			commandQ.AddLast(new OpenThesaurusWindow(paramSelectedTerms));
-		}
+		//internal void OpenThesaurusWindow(List<string> paramSelectedTerms)
+		//{
+		//	commandQ.AddLast(new OpenThesaurusWindow(paramSelectedTerms));
+		//}
 	}
 }

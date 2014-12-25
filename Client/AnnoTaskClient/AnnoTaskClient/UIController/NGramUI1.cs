@@ -38,8 +38,15 @@ namespace AnnoTaskClient.UIController
 			mainWindow.wordList1.Rows[mainWindow.wordList1.RowCount-1].Cells[3].Value = termFreq.FreqInDocument;
 		}
 
-        // (기흥) 트리뷰 생성하는 동작 수정
-        private delegate void DocListRefresh(string term, Dictionary<string, Dictionary<int, string>> docMeta);
+        /// <summary>
+		/// 작성자 : 박기흥
+		/// // (기흥) 트리뷰 생성하는 동작 수정
+		/// 수정자 : 이승철
+		/// 수정내용 : 재사용을 위해 공통부를 UIUtil로 이동.
+		/// </summary>
+		/// <param name="term"></param>
+		/// <param name="docMeta"></param>
+		private delegate void DocListRefresh(string term, Dictionary<string, Dictionary<int, string>> docMeta);
         public void RefreshDocList(string str, Dictionary<string, Dictionary<int, string>> docMeta)
 		{
 			DocListRefresh docListRefresh = new DocListRefresh(refreshDocList);
@@ -47,24 +54,7 @@ namespace AnnoTaskClient.UIController
 		}
         private void refreshDocList(string str, Dictionary<string, Dictionary<int, string>> docMeta)
 		{
-			mainWindow.docList1.Nodes.Clear();
-
-			TreeNode root = new TreeNode(str);
-            TreeNode child = new TreeNode();
-            root.ExpandAll();
-
-            foreach (string category in docMeta.Keys)
-            {
-                string content = category + "(" + docMeta[category].Count + ")";
-
-                child = root.Nodes.Add(content);
-                foreach (int doc_id in docMeta[category].Keys)
-                {
-                    child.Nodes.Add(docMeta[category][doc_id]);
-                }
-            }
-
-			mainWindow.docList1.Nodes.Add(root);
+			UIHandler.Instance.UtilForUI.RefreshDocList(str, docMeta, mainWindow.docList1);
 		}
 
 		// 이승철 수정, 20141220
@@ -93,8 +83,7 @@ namespace AnnoTaskClient.UIController
         }
         
         delegate void RefreshTermListDelegate(List<string> updateList);
-
-        internal void RefreshTermList(List<string> updateList)
+		internal void RefreshTermList(List<string> updateList)
         {
             if (mainWindow.InvokeRequired)
             {

@@ -161,9 +161,16 @@ namespace AnnoTaskClient.Logic
                 public string metaOntology;
             }
 			
+
+			/// <summary>
+			/// 작성자 : ??????
+			/// 수정자 : 이승철
+			/// 파라미터 추가
+			/// </summary>
 			public class RequestConcetpToList
             {
-                public string cmd = "RequestConceptToList";
+				public string cmd = "RequestConceptToList";
+				public string term;
             }
 
             public class RequestLinkedList

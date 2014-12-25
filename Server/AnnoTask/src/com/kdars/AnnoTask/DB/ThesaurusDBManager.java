@@ -65,8 +65,14 @@ public class ThesaurusDBManager {
 		return thesaurusDB.add(thes);
 	}
 	
-	public ArrayList<ConceptToList> getConceptToList(){
-		return thesaurusDB.queryConceptList();
+	/**
+	 * @author ???
+	 * @param term
+	 * @return
+	 * 이승철 수정, 20141223, 컨셉투 로드방식 변경
+	 */
+	public ArrayList<ConceptToList> getConceptToList(String term){
+		return thesaurusDB.queryConceptList(term);
 	}	
 	
 	public ArrayList<LinkedList> getLinkedList(String id){

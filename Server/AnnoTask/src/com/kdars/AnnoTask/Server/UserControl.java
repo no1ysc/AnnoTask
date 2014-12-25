@@ -7,20 +7,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.kdars.AnnoTask.ContextConfig;
 import com.kdars.AnnoTask.DB.ConceptToList;
 import com.kdars.AnnoTask.DB.ContentDBManager;
 import com.kdars.AnnoTask.DB.DeleteListDBManager;
-import com.kdars.AnnoTask.DB.DocTermFreqByTerm;
 import com.kdars.AnnoTask.DB.Document;
 import com.kdars.AnnoTask.DB.LinkedList;
 import com.kdars.AnnoTask.DB.TermFreqByDoc;
@@ -32,21 +24,21 @@ import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddDeleteList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddThesaurus;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAnnoTaskWork;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestByDate;
+import com.kdars.AnnoTask.Server.Command.Client2Server.RequestConceptToList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestDocMeta;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestGetLinkedList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestTermTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.ConceptListResponse;
-import com.kdars.AnnoTask.Server.Command.Server2Client.DocMetaTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.DocumentResponse;
+import com.kdars.AnnoTask.Server.Command.Server2Client.LinkedListResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.MetaResponse;
 import com.kdars.AnnoTask.Server.Command.Server2Client.NotifyTransferEnd;
 import com.kdars.AnnoTask.Server.Command.Server2Client.ReturnAddDeleteList;
 import com.kdars.AnnoTask.Server.Command.Server2Client.ReturnAddThesaurus;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendConceptToCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendDocumentCount;
-import com.kdars.AnnoTask.Server.Command.Server2Client.TermTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendLinkedListCount;
-import com.kdars.AnnoTask.Server.Command.Server2Client.LinkedListResponse;
+import com.kdars.AnnoTask.Server.Command.Server2Client.TermTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.TotalTermCount;
 
 import flexjson.JSONDeserializer;
@@ -62,7 +54,7 @@ public class UserControl extends Thread{
 	private boolean bValidConnection = true;
 	
 	private ArrayList<Document> 		requestDocs;
-	private ArrayList<ConceptToList>	conceptLists;
+//	private ArrayList<ConceptToList>	conceptLists;	// 이승철 : 단일 동작에서만 쓰는데 왜 멤버필드에 놓았나요?
 	private ArrayList<LinkedList> 		linkedLists;
 	private ArrayList<Integer>			workingDocIds;
 	
@@ -156,8 +148,10 @@ public class UserControl extends Thread{
 		}
 		
 		// concept to list 요청시
+		// 이승철 수정, 20141223
 		if(commandFromUser.contains("RequestConceptToList")){
-			requestConceptToList();
+			RequestConceptToList requestConceptToList = new JSONDeserializer<RequestConceptToList>().deserialize(commandFromUser, RequestConceptToList.class); 
+			requestConceptToList(requestConceptToList);
 		}
 		
 		// linked list 요청시
@@ -485,22 +479,46 @@ public class UserControl extends Thread{
 			transferObject(sendDocumentCount);
 	}
 	
-	private void requestConceptToList() {
-
-		this.conceptLists = ThesaurusDBManager.getInstance().getConceptToList();
+	/**
+	 * @author ???
+	 * @param requestConceptToList
+	 * 이승철 수정, 20141223, 컨셉리스트 쿼리는 입력된 단어로만 함. 올라온 리스트 개수 및 정렬방식은 설정에 따름.
+	 */
+	private void requestConceptToList(RequestConceptToList requestConceptToList) {
+		ArrayList<ConceptToList>	originConceptLists = ThesaurusDBManager.getInstance().getConceptToList(requestConceptToList.term);
+		ArrayList<ConceptToList>	processedConceptLists = new ArrayList<ConceptToList>();
+		
+		outputScheme(originConceptLists, processedConceptLists);
 
 		SendConceptToCount sendConceptToCount = new SendConceptToCount();
-		sendConceptToCount.conceptToCount = conceptLists.size();
+		sendConceptToCount.conceptToCount = processedConceptLists.size();
 		transferObject(sendConceptToCount);
 		
 		
 		for(int idx = 0; idx <sendConceptToCount.conceptToCount; ++idx){
-			ConceptToList conceptTo = conceptLists.get(idx);		
+			ConceptToList conceptTo = processedConceptLists.get(idx);		
 			ConceptListResponse temp = new ConceptListResponse(conceptTo.conceptToId, conceptTo.conceptToTerm);
 			transferObject(temp);
 		}
 	}
 	
+	/**
+	 * @author JS
+	 * @param originConceptLists : source
+	 * @param processedConceptLists : dst
+	 * 20141223, 설정한 정책대로 정리,가공, 현재는 카운드만 제한을 둠.
+	 */
+	private void outputScheme(ArrayList<ConceptToList> originConceptLists, ArrayList<ConceptToList> processedConceptLists) {
+		if (originConceptLists.size() < ContextConfig.getInstance().getLimitConceptToCount()){
+			processedConceptLists = originConceptLists;
+			return;
+		}
+		
+		for (int count = 0; count < ContextConfig.getInstance().getLimitConceptToCount(); count++){
+			processedConceptLists.add(originConceptLists.get(count));
+		}
+	}
+
 	private void requestLinkedList(RequestGetLinkedList requestedLinkedList) {
 
 		String id = requestedLinkedList.conceptToId;

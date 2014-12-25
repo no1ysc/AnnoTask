@@ -118,5 +118,39 @@ namespace AnnoTaskClient.UIController
 		{
 			get{return mainWindow.bNate.Checked;}
 		}
+
+
+		/// <summary>
+		/// 작성자 : ???
+		/// 수정자 : 이승철
+		/// CommonUI로 옴김.
+		/// // 이승철, 의견 : Term 관리하는데에서는 안지우나?
+		/// </summary>
+		/// <param name="updateList"></param>
+		/// <param name="tabNumber"></param>
+		internal void UpdateTermList(List<string> updateList, int tabNumber)
+		{
+			switch (tabNumber)
+			{
+				case 1:
+					UIHandler.Instance.NGram1.RefreshTermList(updateList);
+					break;
+				case 2:
+					UIHandler.Instance.NGram2.RefreshTermList(updateList);
+					break;
+				case 3:
+					UIHandler.Instance.NGram3.RefreshTermList(updateList);
+					break;
+				case 4:
+					UIHandler.Instance.NGram4.RefreshTermList(updateList);
+					break;
+			}
+		}
+		internal void UpdateTerm(string term, int tabNumber)
+		{
+			List<string> updateList = new List<string>();
+			updateList.Add(term);
+			UpdateTermList(updateList, tabNumber);
+		}
 	}
 }

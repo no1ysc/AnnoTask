@@ -11,6 +11,13 @@ public class ContextConfig {
 	//TODO: 처음에 프로그램 시작할때, DB 전부 연결될때까지 대기하는 부분,
 	// TODO : TermDB Lock 걸린거 전부 풀어주고 초기화 하는 부분.,
 	
+	/* 사용자에게 보여줄 관련 컨셉투 리스트 제한 개수 */
+	private int LIMIT_CONCEPT_TO_COUNT = 20;
+	public int getLimitConceptToCount(){
+		return LIMIT_CONCEPT_TO_COUNT;
+	}
+	/* 사용자에게 보여줄 관련 컨셉투 리스트 제한 개수 */
+	
 	/* 각 프로세스 작업제한 시간 */
 	private int LIMIT_TIME_SEC = 1000;
 	public int getLimitTimeSec(){
@@ -74,16 +81,16 @@ public class ContextConfig {
 //	public final String CONTENT_DB_USER_PASS = "1q2w3e4r";
 //	public final String CONTENT_DB_TABLE_NAME = "content_v01";
 
-	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://128.2.213.162/ewok_v01";
-	public final String CONTENT_DB_NAME = "ewok_v01"; 
-	public final String CONTENT_DB_USER_ID = "kdars";
-	public final String CONTENT_DB_USER_PASS = "kdarscom";
-	public final String CONTENT_DB_contentTABLE_NAME = "contents";
-//	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.9:3306/contentdb";
-//	public final String CONTENT_DB_NAME = "contentdb";
-//	public final String CONTENT_DB_USER_ID = "root";
-//	public final String CONTENT_DB_USER_PASS = "1qaz@WSX";
-//	public final String CONTENT_DB_contentTABLE_NAME = "content_v02";
+//	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://128.2.213.162/ewok_v01";
+//	public final String CONTENT_DB_NAME = "ewok_v01"; 
+//	public final String CONTENT_DB_USER_ID = "kdars";
+//	public final String CONTENT_DB_USER_PASS = "kdarscom";
+//	public final String CONTENT_DB_contentTABLE_NAME = "contents";
+	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.7:3306/contentdb";
+	public final String CONTENT_DB_NAME = "contentdb";
+	public final String CONTENT_DB_USER_ID = "root";
+	public final String CONTENT_DB_USER_PASS = "1qaz@WSX";
+	public final String CONTENT_DB_contentTABLE_NAME = "content_v02";
 	public final String CONTENT_DB_jobTABLE_NAME = "job_table";
 	
 	/* ContentProcessor Attributes */
@@ -96,7 +103,7 @@ public class ContextConfig {
 	/* Content DB Connect Info */
 	
 	/* DeleteList DB Connect Info*/
-	public final String DeleteList_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/deletelistdb";
+	public final String DeleteList_DB_JDBC_URL = "jdbc:mysql://192.168.1.4:3306/deletelistdb";
 //	public final String DeleteList_DB_JDBC_URL = "jdbc:mysql://localhost:3306/deletelistdb";
 	public final String DeleteList_DB_NAME = "deletelistdb"; 
 	public final String DeleteList_DB_USER_ID = "root";
@@ -105,7 +112,7 @@ public class ContextConfig {
 	/* DeleteList DB Connect Info*/
 
 	/* TermFreq DB Connect Info*/
-	public final String TermFreq_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/termfreqdb";
+	public final String TermFreq_DB_JDBC_URL = "jdbc:mysql://192.168.1.4:3306/termfreqdb";
 //	public final String TermFreq_DB_JDBC_URL = "jdbc:mysql://localhost:3306/termfreqdb";
 	public final String TermFreq_DB_NAME = "termfreqdb"; 
 	public final String TermFreq_DB_USER_ID = "root";
@@ -114,7 +121,7 @@ public class ContextConfig {
 	/* TermFreq DB Connect Info*/
 	
 	/* Thesaurus DB Connect Info*/
-	public final String Thesaurus_DB_JDBC_URL = "jdbc:mysql://192.168.1.12:3306/thesaurusdb";
+	public final String Thesaurus_DB_JDBC_URL = "jdbc:mysql://192.168.1.4:3306/thesaurusdb";
 //	public final String Thesaurus_DB_JDBC_URL = "jdbc:mysql://localhost:3306/thesaurusdb";
 	public final String Thesaurus_DB_NAME = "thesaurusdb"; 
 	public final String Thesaurus_DB_USER_ID = "root";

@@ -7,7 +7,7 @@ namespace AnnoTaskClient.Logic
 {
     public class DocMeta
     {
-        public DocMeta(List<string> category, List<int> doc_id, List<string> title)
+		public DocMeta(List<string> category, List<int> doc_id, List<string> title)
 		{
 			this.category = category;
             this.docIDList = doc_id;
