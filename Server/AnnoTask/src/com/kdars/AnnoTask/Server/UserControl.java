@@ -509,12 +509,7 @@ public class UserControl extends Thread{
 	 * 20141223, 설정한 정책대로 정리,가공, 현재는 카운드만 제한을 둠.
 	 */
 	private void outputScheme(ArrayList<ConceptToList> originConceptLists, ArrayList<ConceptToList> processedConceptLists) {
-		if (originConceptLists.size() < ContextConfig.getInstance().getLimitConceptToCount()){
-			processedConceptLists = originConceptLists;
-			return;
-		}
-		
-		for (int count = 0; count < ContextConfig.getInstance().getLimitConceptToCount(); count++){
+		for (int count = 0; count < originConceptLists.size(); count++){
 			processedConceptLists.add(originConceptLists.get(count));
 		}
 	}

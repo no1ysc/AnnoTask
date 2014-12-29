@@ -57,16 +57,17 @@ namespace AnnoTaskClient.UIController
 		{
 			if (conceptTo != null)
 			{
-				//addThesaurusWindow.ConceptToComboBox.Items.AddRange(conceptTo.ToArray());
-				//addThesaurusWindow.ConceptToComboBox.Items. = conceptTo;
-				// 리스트 대신 오토컴플리션할 수 있게 붙여줌.
-				AutoCompleteStringCollection stringCollection = new AutoCompleteStringCollection();
-				foreach (ConceptTo concept in conceptTo)
-				{
-					stringCollection.Add(concept.ConceptToTerm);
-				}
-				//addThesaurusWindow.ConceptToComboBox.AutoCompleteCustomSource.Remove("");
-				//addThesaurusWindow.ConceptToComboBox.AutoCompleteCustomSource = stringCollection;
+				addThesaurusWindow.ConceptToComboBox.Items.Clear();
+				addThesaurusWindow.ConceptToComboBox.Items.AddRange(conceptTo.ToArray());
+				//// 리스트 대신 오토컴플리션할 수 있게 붙여줌.
+				//AutoCompleteStringCollection stringCollection = new AutoCompleteStringCollection();
+				//foreach (ConceptTo concept in conceptTo)
+				//{
+				//	stringCollection.Add(concept.ConceptToTerm);
+				//}
+				////addThesaurusWindow.ConceptToComboBox.AutoCompleteCustomSource.Remove("");
+				////addThesaurusWindow.ConceptToComboBox.AutoCompleteCustomSource = stringCollection;
+				addThesaurusWindow.ConceptToComboBox.DroppedDown = true;
 			}
 			else
 			{

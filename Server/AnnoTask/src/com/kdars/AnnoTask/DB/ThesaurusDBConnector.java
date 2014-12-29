@@ -205,8 +205,12 @@ public class ThesaurusDBConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			resultSet = stmt.executeQuery("select * from " + conceptToTable + " where " + toColName1 + " like \"%" + queryTerm +"%\";");
+			int queryCount = ContextConfig.getInstance().getLimitConceptToCount();
 			while (resultSet.next()){
 				ret.add(new ConceptToList(resultSet.getInt(foreignKeyColName), resultSet.getString(toColName1)));
+				if (--queryCount == 0){
+					break;
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
