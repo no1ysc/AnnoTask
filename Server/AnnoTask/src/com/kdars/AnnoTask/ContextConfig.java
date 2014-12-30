@@ -86,7 +86,7 @@ public class ContextConfig {
 //	public final String CONTENT_DB_USER_ID = "kdars";
 //	public final String CONTENT_DB_USER_PASS = "kdarscom";
 //	public final String CONTENT_DB_contentTABLE_NAME = "contents";
-	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.7:3306/contentdb";
+	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://192.168.1.8:3306/contentdb";
 	public final String CONTENT_DB_NAME = "contentdb";
 	public final String CONTENT_DB_USER_ID = "root";
 	public final String CONTENT_DB_USER_PASS = "1qaz@WSX";
