@@ -21,6 +21,10 @@ namespace AnnoTaskClient
         public AddThesaurusWindow(List<string> selectedTerms, int selectedTabofMainWindow)
         {
             InitializeComponent();
+			// 컨트롤 속성 사용자 정의.
+			this.Controls.Add(ConceptToTextBox);
+			this.Controls.Add(ConceptToComboBox);
+
             UIHandler.Instance.runUIHandler_Thesaurus(this);
 			
 			//이승철 추가 20141222.
