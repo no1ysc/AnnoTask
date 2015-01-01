@@ -146,7 +146,7 @@ namespace AnnoTaskClient.Logic
                 termFreqByDoc[transferCount].Terms = new JsonConverter<Dictionary<int, int>>().Json2Object(term.termsJson);
                 
                 // ProgressBar 업데이트
-                UIHandler.Instance.CommonUI.ProgressBar = (transferCount / totalTermsToReceive) * 100;
+				UIHandler.Instance.CommonUI.ProgressBar = (int)((double)transferCount / (double)totalTermsToReceive * 100.0d) - 1;
                 UIHandler.Instance.CommonUI.TermCount = transferCount;
             }
 

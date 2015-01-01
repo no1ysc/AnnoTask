@@ -57,19 +57,16 @@ public class UserControl extends Thread{
 //	private ArrayList<ConceptToList>	conceptLists;	// 이승철 : 단일 동작에서만 쓰는데 왜 멤버필드에 놓았나요?
 	private ArrayList<LinkedList> 		linkedLists;
 	private ArrayList<Integer>			workingDocIds;
+	private AddLocker locker;		// 시소러스, 딜리트 테이블 다른 유저가 안잡았는지 체크하고 싱크를 맞추기 위한 용도.
 	
-	public UserControl(Socket socket, int userID){
+	public UserControl(Socket socket, int userID, AddLocker locker){
 		this.socket = socket;
 		this.userID = userID;
-//		this.userID = socket.getInetAddress().getAddress();
+		this.locker = locker;
 		System.out.println(socket.getInetAddress().getAddress().toString() + "은 User ID " + userID + "로 접속하였습니다.");
 		try {
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//			input = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF8"));
-//			input = new DataInputStream(socket.getInputStream());
-//			output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF8"));
-//			output = new DataOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -196,27 +193,31 @@ public class UserControl extends Thread{
 		if (requestedDeleteList.isForced){
 			// 강제로 Delete List로 넣기. 다른 테이블(현재는 Thesaurus Table만 있음)은 다지워줌.
 			for (String deleteTerm : requestedDeleteList.addDeleteList) {
-				if (isExistThesaurusTable(deleteTerm)){
-					removeThesaurusTable(deleteTerm);
+				synchronized (this.locker) {
+					if (isExistThesaurusTable(deleteTerm)){
+						removeThesaurusTable(deleteTerm);
+					}
+					addDeleteList(deleteTerm);
+					returnList.add(new ReturnAddDeleteList(deleteTerm, "Normal", "Normal"));
 				}
-				addDeleteList(deleteTerm);
-				returnList.add(new ReturnAddDeleteList(deleteTerm, "Normal", "Normal"));
 			}
 		} else {
 			// Thesaurus Table, DeleteList Table 체크해서 둘다 없을 경우만 작업. 
 			// 둘중하나 라도 있을 경우는 작업하지 않고 클라에게 알려줌.
 			// 해당사항 없는 애들은 작업 바로 작업..
 			for (String deleteTerm : requestedDeleteList.addDeleteList) {
-				if (isExistDeleteList(deleteTerm)){
-					// 이미 있으면 아무것도 안하고 리턴만.
-					returnList.add(new ReturnAddDeleteList(deleteTerm, "ExistDeleteTable", "ExistDeleteTable"));
-				} else if (isExistThesaurusTable(deleteTerm)){
-					// 시소러스 테이블로부터 텀정보를 얻어와서 메세지로 전달. 작업은 안함.
-					returnList.add(new ReturnAddDeleteList(deleteTerm, "ExistThesaurusTable", readThesaurus(deleteTerm)));
-				} else {
-					// 어느 테이블에도 속하지 않은 경우는 그냥 작업.
-					addDeleteList(deleteTerm);
-					returnList.add(new ReturnAddDeleteList(deleteTerm, "Normal", "Normal"));
+				synchronized (this.locker) {
+					if (isExistDeleteList(deleteTerm)){
+						// 이미 있으면 아무것도 안하고 리턴만.
+						returnList.add(new ReturnAddDeleteList(deleteTerm, "ExistDeleteTable", "ExistDeleteTable"));
+					} else if (isExistThesaurusTable(deleteTerm)){
+						// 시소러스 테이블로부터 텀정보를 얻어와서 메세지로 전달. 작업은 안함.
+						returnList.add(new ReturnAddDeleteList(deleteTerm, "ExistThesaurusTable", readThesaurus(deleteTerm)));
+					} else {
+						// 어느 테이블에도 속하지 않은 경우는 그냥 작업.
+						addDeleteList(deleteTerm);
+						returnList.add(new ReturnAddDeleteList(deleteTerm, "Normal", "Normal"));
+					}
 				}
 			}
 		}
@@ -231,32 +232,33 @@ public class UserControl extends Thread{
 		
 		// 이승철 수정, 20141220
 		ReturnAddThesaurus returnAddThesaurus;
-		
-		if (entryComponents.isForced){
-			// 강제로 Thesaurus Table로 넣기. 다른 테이블(현재는 Thesaurus Table, Delete List만 있음)은 다지워줌.
-			if (isExistDeleteList(conceptFrom)){
-				removeDeleteList(conceptFrom);
-				addThesaurus(conceptFrom, conceptTo, metaOntology);
-				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "ExistDeleteList");
-			} else if (isExistThesaurusTable(conceptFrom)){
-				removeThesaurusTable(conceptFrom);
-				addThesaurus(conceptFrom, conceptTo, metaOntology);
-				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "ExistThesaurusTable");
+		synchronized (this.locker) {
+			if (entryComponents.isForced){
+				// 강제로 Thesaurus Table로 넣기. 다른 테이블(현재는 Thesaurus Table, Delete List만 있음)은 다지워줌.
+				if (isExistDeleteList(conceptFrom)){
+					removeDeleteList(conceptFrom);
+					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "ExistDeleteList");
+				} else if (isExistThesaurusTable(conceptFrom)){
+					removeThesaurusTable(conceptFrom);
+					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "ExistThesaurusTable");
+				} else {
+					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "Normal");
+				}			
 			} else {
-				addThesaurus(conceptFrom, conceptTo, metaOntology);
-				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "Normal");
-			}			
-		} else {
-			if (isExistDeleteList(conceptFrom)){
-				// 이미 있으면 아무것도 안하고 리턴만.
-				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "ExistDeleteTable", "ExistDeleteTable");
-			} else if (isExistThesaurusTable(conceptFrom)){
-				// 시소러스 테이블로부터 텀정보를 얻어와서 메세지로 전달. 작업은 안함.
-				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "ExistThesaurusTable", readThesaurus(conceptFrom));
-			} else {
-				// 어느 테이블에도 속하지 않은 경우는 그냥 작업.
-				addThesaurus(conceptFrom, conceptTo, metaOntology);
-				returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "Normal");
+				if (isExistDeleteList(conceptFrom)){
+					// 이미 있으면 아무것도 안하고 리턴만.
+					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "ExistDeleteTable", "ExistDeleteTable");
+				} else if (isExistThesaurusTable(conceptFrom)){
+					// 시소러스 테이블로부터 텀정보를 얻어와서 메세지로 전달. 작업은 안함.
+					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "ExistThesaurusTable", readThesaurus(conceptFrom));
+				} else {
+					// 어느 테이블에도 속하지 않은 경우는 그냥 작업.
+					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "Normal");
+				}
 			}
 		}
 		

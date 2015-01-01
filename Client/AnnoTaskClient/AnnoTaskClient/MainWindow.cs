@@ -63,6 +63,29 @@ namespace AnnoTaskClient
 			this.article4.Text = "";
 		}
 
+		/// <summary>
+		/// 작성자 : 이승철
+		/// 작성일 : 20141231
+		/// 메인 윈도우 모든 버튼을 활성화로
+		/// </summary>
+		public void AllButtonEnable()
+		{
+			this.btnJobStart.Enabled = true;
+			this.openAddThesaurusWindowButton.Enabled = true;
+			this.addDeleteListButton.Enabled = true;
+		}
+
+		/// <summary>
+		/// 작성자 : 이승철
+		/// 작성일 : 20141231
+		/// 메인 윈도우 모든 버튼을 비활성화로
+		/// </summary>
+		public void AllButtonDisable()
+		{
+			this.btnJobStart.Enabled = false;
+			this.openAddThesaurusWindowButton.Enabled = false;
+			this.addDeleteListButton.Enabled = false;
+		}
 
 		//private string getArticle(string term, string category, string title)
 		//{
@@ -71,7 +94,6 @@ namespace AnnoTaskClient
 
 		private void btnJobStartHandler()
 		{
-			btnJobStart.Enabled = false;
 			clearUIContents();
 			logic.clickedJobStart();
 		}
@@ -79,9 +101,21 @@ namespace AnnoTaskClient
         // (기흥) "작업 시작하기" 버튼 클릭 시
 		private void btnJobStart_Click(object sender, EventArgs e)
 		{
-            // (기흥) btnImportDoc -> btnJobStart 수정함.
-			this.btnJobStart.Enabled = false;
-			btnJobStartHandler();
+			// 이승철 추가, 20141231, 시작버튼 눌렀을때 정말 할껀지 안내창 띄워줌.
+			// 사용자 선택후 진행.
+			string msg = "새로운 작업을 시작하시겠습니까?\r\n" +
+						 "('예'를 클릭하시면 화면에 보이는 모든 사항이 초기화 됩니다.)";
+			DialogResult result = MessageBox.Show(msg, "새로운 작업 시작", MessageBoxButtons.YesNo);
+			if (result == DialogResult.Yes)
+			{
+				// (기흥) btnImportDoc -> btnJobStart 수정함.
+				AllButtonDisable();
+				btnJobStartHandler();
+			}
+			else
+			{
+				// 아무작업안함.
+			}
 		}
 
 		/// <summary>
@@ -92,6 +126,9 @@ namespace AnnoTaskClient
 		/// <param name="e"></param>
         private void openAddThesaurusWindowButton_Click(object sender, EventArgs e)
         {
+			// 메인 윈도우 비활성화
+			this.Enabled = false;
+
 			int selectedTab = -1;
             List<string> selectedTerms = new List<string>();
             if (this.tabControl1.SelectedTab == this.tabPage1)
@@ -167,7 +204,15 @@ namespace AnnoTaskClient
 			// 이승철 추가 20141219
 			AddThesaurusWindow addThesaurus = new AddThesaurusWindow(selectedTerms, selectedTab);
 			addThesaurus.Owner = this;
-			this.Enabled = false;
+			
+			// 시소러스 창 위치 지정.			
+			// 창 겹치는 부분에서의 내부 옵셋 구함.
+			int x = (this.Size.Width - addThesaurus.Size.Width) / 2;
+			int y = (this.Size.Height - addThesaurus.Size.Height) / 2;
+			// 메인창 위치를 기준으로 위에서 구한 옵셋 더함.
+			x += this.Location.X;
+			y += this.Location.Y;
+			addThesaurus.Location = new Point(x, y);
 
 			// 자식창 쓰레드 분리 지점.
 			addThesaurus.Show();
@@ -270,6 +315,8 @@ namespace AnnoTaskClient
 
         private void addDeleteListButton_Click(object sender, EventArgs e)
         {
+			AllButtonDisable();
+
             List<string> selectedTerms = new List<string>();
             int tabNum = 0;
 

@@ -13,6 +13,7 @@ public class UserListener extends Thread{
 	private ArrayList<UserControl>	connectUserList = new  ArrayList<UserControl>();	// TODO : 이거 쓰레드로 변형해서 주기적 커넥션 체크. 현재 쓰래드는 죽으나, 인스턴스는 종료하지 않음.
 	private ServerSocket serverSocket = null;
 	private int userIdGenerator = 0;
+	private AddLocker addLocker;	// 이승철 추가 20141231, Bug25, 유저들이 동시에 delete, 시소러스 테이블에 접근할 수 없도록 막을 공유자원.
 	
 	public UserListener(DocumentAnalyzer documentAnalyzer) {
 		// TODO Auto-generated constructor stub
@@ -47,7 +48,7 @@ public class UserListener extends Thread{
 				continue;
 			}
 	        
-	        UserControl user = new UserControl(socket, ++userIdGenerator); 
+	        UserControl user = new UserControl(socket, ++userIdGenerator, addLocker); 
 	        connectUserList.add(user);
 			user.start();
 		}

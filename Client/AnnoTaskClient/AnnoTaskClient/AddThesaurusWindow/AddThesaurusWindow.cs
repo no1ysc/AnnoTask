@@ -21,6 +21,10 @@ namespace AnnoTaskClient
         public AddThesaurusWindow(List<string> selectedTerms, int selectedTabofMainWindow)
         {
             InitializeComponent();
+			// 컨트롤 속성 사용자 정의.
+			this.Controls.Add(ConceptToTextBox);
+			this.Controls.Add(ConceptToComboBox);
+
             UIHandler.Instance.runUIHandler_Thesaurus(this);
 			
 			//이승철 추가 20141222.
@@ -64,28 +68,20 @@ namespace AnnoTaskClient
 		/// <param name="e"></param>
         private void addThesaurusButton_Click_1(object sender, EventArgs e)
         {
+			// 버튼 막이 먼저
+			this.Enabled = false;
+
 			if (this.ConceptFromComboBox.Text.Trim().Equals("") ||
-				this.ConceptToComboBox.Text.Trim().Equals("") ||
+				this.ConceptToTextBox.Text.Trim().Equals("") ||
 				this.MetaOntologyComboBox.Text.Trim().Equals(""))
 			{
 				MessageBox.Show("시소러스 추가에 필요한 모든 필드를 적어주셔야 합니다.");
+				this.Enabled = true;
 				return;
 			}
-			this.Enabled = false;
-            logic.clickedAddThesaurus(this.ConceptFromComboBox.Text, this.ConceptToComboBox.Text, this.MetaOntologyComboBox.Text);
-			//if (ConceptFromComboBox.Items.Count == 0)
-			//{
-			//	ConceptFromComboBox.Text = "";
-			//}
+			logic.clickedAddThesaurus(this.ConceptFromComboBox.Text, this.ConceptToTextBox.Text, this.MetaOntologyComboBox.Text);
         }
 
-		//internal bool SupressSelectIndexChanged { get; set; }
-		//private void showSelectedTerm(String text)
-		//{
-		//	this.SupressSelectIndexChanged = true;
-		//	ConceptFromComboBox.Text = text;
-		//	this.SupressSelectIndexChanged = false;
-		//}
 
         private void ConceptFromComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -101,22 +97,6 @@ namespace AnnoTaskClient
 			UIHandler.Instance.UtilForUI.AfterDocListClickHandler((sender as TreeView).SelectedNode, this.richTextBox1);
         }
 
-		//private string getArticle(object sender)
-		//{
-		//	TreeNode node = (sender as TreeView).SelectedNode;
-
-		//	if (node.Level != 2)
-		//	{
-		//		return null;
-		//	}
-
-		//	string title = node.Text;
-		//	string category = node.Parent.Text.Substring(0, node.Parent.Text.IndexOf('('));
-		//	string term = node.Parent.Parent.Text;
-
-		//	return logic.loadArticle(term, category, title);
-		//}
-
         private void ConceptToComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox comb = (ComboBox)sender;
@@ -127,13 +107,13 @@ namespace AnnoTaskClient
 
         private void ConceptToComboBox_KeyDown(object sender, KeyEventArgs e)
         {
-            ComboBox comb = (ComboBox)sender;
-            string text = comb.Text;
+			//ComboBox comb = (ComboBox)sender;
+			//string text = comb.Text;
 
-            if(e.KeyCode == Keys.Enter)
-            {
-                logic.getLinkedList(text);
-            }            
+			//if(e.KeyCode == Keys.Enter)
+			//{
+			//	logic.getLinkedList(text);
+			//}            
         }
 
 		/// <summary>

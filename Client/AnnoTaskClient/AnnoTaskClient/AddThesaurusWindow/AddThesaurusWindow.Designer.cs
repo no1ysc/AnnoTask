@@ -134,9 +134,10 @@
 			// 
 			// treeView1
 			// 
-			this.treeView1.Location = new System.Drawing.Point(4, 4);
+			this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeView1.Location = new System.Drawing.Point(0, 0);
 			this.treeView1.Name = "treeView1";
-			this.treeView1.Size = new System.Drawing.Size(196, 203);
+			this.treeView1.Size = new System.Drawing.Size(203, 210);
 			this.treeView1.TabIndex = 0;
 			this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_DoubleClick);
 			// 
@@ -144,8 +145,10 @@
 			// 
 			this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.richTextBox1.BackColor = System.Drawing.SystemColors.Window;
 			this.richTextBox1.Location = new System.Drawing.Point(3, 4);
 			this.richTextBox1.Name = "richTextBox1";
+			this.richTextBox1.ReadOnly = true;
 			this.richTextBox1.Size = new System.Drawing.Size(264, 203);
 			this.richTextBox1.TabIndex = 0;
 			this.richTextBox1.Text = "";
@@ -253,7 +256,7 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.Name = "AddThesaurusWindow";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Add Thesaurus Window";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AddThesaurusWindow_FormClosed);
 			this.panel1.ResumeLayout(false);

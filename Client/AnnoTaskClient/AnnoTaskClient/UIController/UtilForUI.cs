@@ -141,6 +141,13 @@ namespace AnnoTaskClient.UIController
 		/// <param name="articleView"></param>
 		internal void AfterDocListClickHandler(TreeNode selectedNode, RichTextBox articleView)
 		{
+			// 트리노드 타입이 맞는지. 잘못들어오는 버그 발생하였음. BugID 13.
+			if (selectedNode == null)
+			{
+				return;
+			}
+			
+			// 원하는 뎁스의 노드인지 확인.
 			if (selectedNode.Level != 2)
 			{
 				return;
