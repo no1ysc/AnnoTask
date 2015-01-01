@@ -189,21 +189,32 @@ namespace AnnoTaskClient.UIController
 		private delegate void RefreshAfterThesaurusWindow();
 		private void refreshAfterAddThesaurus()
 		{
+			ConceptFrom referenceItem = addThesaurusWindow.ConceptFromComboBox.SelectedItem as ConceptFrom;
+
+			// 메인윈도우 탭에서 작업한 단어 삭제할 수 있도록.
+			UIHandler.Instance.CommonUI.UpdateTerm(referenceItem.ConceptFromTerm, addThesaurusWindow.SelectedTabofMainWindow);
+
 			// Concept from 처리다했던 상황, 사용자가 할일 없음.
-			if (addThesaurusWindow.ConceptFromComboBox.Items.Count == 0)
+			if (addThesaurusWindow.ConceptFromComboBox.Items.Count == 1)
 			{
+				MessageBox.Show("선택된 단어를 모두 추가하였습니다.");
+				addThesaurusWindow.Close();
 				return;
 			}
-
-			ConceptFrom refferenceItem = addThesaurusWindow.ConceptFromComboBox.SelectedItem as ConceptFrom;
 	
 			// Concept From 다음 아이템 선택,
-			// 버그나면 여기확인 필요, 선택된 아이템을 삭제하면 곧바로 다음아이템이 선택된걸로 나올까?
-			addThesaurusWindow.ConceptFromComboBox.Items.Remove(refferenceItem);
+			// 선택된 아이템을 삭제, 다음아이템이 선택.
+			addThesaurusWindow.ConceptFromComboBox.Items.Remove(referenceItem);
+			foreach (ConceptFrom item in addThesaurusWindow.ConceptFromComboBox.Items)
+			{
+				addThesaurusWindow.ConceptFromComboBox.SelectedItem = item;
+				break;
+			}
 
 			// ConceptTo 클리어
 			ConceptToList = null;
 			addThesaurusWindow.ConceptToComboBox.Text = "";
+			addThesaurusWindow.ConceptToTextBox.Text = "";
 
 			// MetaOntology 제자리로
 			addThesaurusWindow.MetaOntologyComboBox.SelectedItem = " ";
@@ -216,9 +227,6 @@ namespace AnnoTaskClient.UIController
 
 			// 기사전문 클리어
 			addThesaurusWindow.richTextBox1.Text = " ";
-
-			// 메인윈도우 탭에서 작업한 단어 삭제할 수 있도록.
-			UIHandler.Instance.CommonUI.UpdateTerm(refferenceItem.ConceptFromTerm, addThesaurusWindow.SelectedTabofMainWindow);
 
 			// 시소러스창 활성화
 			addThesaurusWindow.Enabled = true;
@@ -274,24 +282,6 @@ namespace AnnoTaskClient.UIController
             }
         }
 
-		//private delegate void ThesaurusWindowConceptToRefresh(List<String> termList);
-		//public void RefreshConceptToCombo(List<String> termList)
-		//{
-		//	ThesaurusWindowConceptToRefresh conceptToRefresh = new ThesaurusWindowConceptToRefresh(refreshThesaurusWindowConceptTo);
-		//	addThesaurusWindow.Invoke(conceptToRefresh, new object[] { termList });
-		//}
-		//private void refreshThesaurusWindowConceptTo(List<String> termList)
-		//{
-		//	addThesaurusWindow.ConceptToComboBox.Items.Clear();
-		//	//addThesaurusWindow.ConceptToComboBox.Text = termList[0];
-
-		//	for (int i = 0; i < termList.Count; ++i)
-		//	{
-		//		addThesaurusWindow.ConceptToComboBox.Items.Add(termList[i]);
-		//	}
-
-		//	//addThesaurusWindow.ConceptToComboBox.DroppedDown = true;
-		//}
 
 		/// <summary>
 		/// 작성자 : 신효정
@@ -312,29 +302,5 @@ namespace AnnoTaskClient.UIController
 		{
 			UIHandler.Instance.UtilForUI.RefreshDocList(str, docMeta, addThesaurusWindow.treeView1);
 		}
-
-
-        
-
-		//private delegate void MetaRefresh(LinkedList[] LinkedList);
-		//public void RefreshMeta(LinkedList[] LinkedList)
-		//{
-		//	MetaRefresh metaRefresh = new MetaRefresh(refreshMeta);
-		//	addThesaurusWindow.Invoke(metaRefresh, new object[] { LinkedList });
-		//}
-		//private void refreshMeta(LinkedList[] LinkedList)
-		//{
-		//	addThesaurusWindow.MetaOntologyComboBox.Text = "";
-		//	if (LinkedList.Count() != 0)
-		//	{ 
-		//		addThesaurusWindow.MetaOntologyComboBox.Text = LinkedList[0].metaInfos;
-		//	}
-		//	addThesaurusWindow.linkedList.Clear();
-
-		//	foreach (LinkedList temp in LinkedList)
-		//	{
-		//		addThesaurusWindow.linkedList.Text += temp.linkedTerms+Environment.NewLine;
-		//	}
-		//}        
     }
 }
