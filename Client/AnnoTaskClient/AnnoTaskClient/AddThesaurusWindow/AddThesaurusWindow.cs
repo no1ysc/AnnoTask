@@ -65,18 +65,14 @@ namespace AnnoTaskClient
         private void addThesaurusButton_Click_1(object sender, EventArgs e)
         {
 			if (this.ConceptFromComboBox.Text.Trim().Equals("") ||
-				this.ConceptToComboBox.Text.Trim().Equals("") ||
+				this.ConceptToTextBox.Text.Trim().Equals("") ||
 				this.MetaOntologyComboBox.Text.Trim().Equals(""))
 			{
 				MessageBox.Show("시소러스 추가에 필요한 모든 필드를 적어주셔야 합니다.");
 				return;
 			}
 			this.Enabled = false;
-            logic.clickedAddThesaurus(this.ConceptFromComboBox.Text, this.ConceptToComboBox.Text, this.MetaOntologyComboBox.Text);
-			//if (ConceptFromComboBox.Items.Count == 0)
-			//{
-			//	ConceptFromComboBox.Text = "";
-			//}
+			logic.clickedAddThesaurus(this.ConceptFromComboBox.Text, this.ConceptToTextBox.Text, this.MetaOntologyComboBox.Text);
         }
 
 		//internal bool SupressSelectIndexChanged { get; set; }
@@ -127,13 +123,13 @@ namespace AnnoTaskClient
 
         private void ConceptToComboBox_KeyDown(object sender, KeyEventArgs e)
         {
-            ComboBox comb = (ComboBox)sender;
-            string text = comb.Text;
+			//ComboBox comb = (ComboBox)sender;
+			//string text = comb.Text;
 
-            if(e.KeyCode == Keys.Enter)
-            {
-                logic.getLinkedList(text);
-            }            
+			//if(e.KeyCode == Keys.Enter)
+			//{
+			//	logic.getLinkedList(text);
+			//}            
         }
 
 		/// <summary>
