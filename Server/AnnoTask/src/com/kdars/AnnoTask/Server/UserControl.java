@@ -396,7 +396,7 @@ public class UserControl extends Thread{
 	 */
 	private ArrayList<TermFreqByDoc> nGramFilter(ArrayList<Integer> docIdList){
 		
-		ArrayList<TermFreqByDoc> filtering = TermFreqDBManager.getInstance().getTermConditional(docIdList.get(0));
+		ArrayList<TermFreqByDoc> filtering = TermFreqDBManager.getInstance().getTermConditional(docIdList);
 		TermFreqDBManager.getInstance().termLock(docIdList, userID);
 
 		for (int i = filtering.size()-1; i >= 0; i--){
