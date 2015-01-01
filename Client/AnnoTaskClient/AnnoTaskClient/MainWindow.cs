@@ -114,6 +114,9 @@ namespace AnnoTaskClient
 		/// <param name="e"></param>
         private void openAddThesaurusWindowButton_Click(object sender, EventArgs e)
         {
+			// 메인 윈도우 비활성화
+			this.Enabled = false;
+
 			int selectedTab = -1;
             List<string> selectedTerms = new List<string>();
             if (this.tabControl1.SelectedTab == this.tabPage1)
@@ -189,7 +192,15 @@ namespace AnnoTaskClient
 			// 이승철 추가 20141219
 			AddThesaurusWindow addThesaurus = new AddThesaurusWindow(selectedTerms, selectedTab);
 			addThesaurus.Owner = this;
-			this.Enabled = false;
+			
+			// 시소러스 창 위치 지정.			
+			// 창 겹치는 부분에서의 내부 옵셋 구함.
+			int x = (this.Size.Width - addThesaurus.Size.Width) / 2;
+			int y = (this.Size.Height - addThesaurus.Size.Height) / 2;
+			// 메인창 위치를 기준으로 위에서 구한 옵셋 더함.
+			x += this.Location.X;
+			y += this.Location.Y;
+			addThesaurus.Location = new Point(x, y);
 
 			// 자식창 쓰레드 분리 지점.
 			addThesaurus.Show();

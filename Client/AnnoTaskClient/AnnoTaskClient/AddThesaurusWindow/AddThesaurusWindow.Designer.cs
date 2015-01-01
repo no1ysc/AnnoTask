@@ -256,7 +256,7 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.Name = "AddThesaurusWindow";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Add Thesaurus Window";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AddThesaurusWindow_FormClosed);
 			this.panel1.ResumeLayout(false);
