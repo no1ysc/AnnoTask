@@ -101,9 +101,21 @@ namespace AnnoTaskClient
         // (기흥) "작업 시작하기" 버튼 클릭 시
 		private void btnJobStart_Click(object sender, EventArgs e)
 		{
-            // (기흥) btnImportDoc -> btnJobStart 수정함.
-			AllButtonDisable();
-			btnJobStartHandler();
+			// 이승철 추가, 20141231, 시작버튼 눌렀을때 정말 할껀지 안내창 띄워줌.
+			// 사용자 선택후 진행.
+			string msg = "새로운 작업을 시작하시겠습니까?\r\n" +
+						 "('예'를 클릭하시면 화면에 보이는 모든 사항이 초기화 됩니다.)";
+			DialogResult result = MessageBox.Show(msg, "새로운 작업 시작", MessageBoxButtons.YesNo);
+			if (result == DialogResult.Yes)
+			{
+				// (기흥) btnImportDoc -> btnJobStart 수정함.
+				AllButtonDisable();
+				btnJobStartHandler();
+			}
+			else
+			{
+				// 아무작업안함.
+			}
 		}
 
 		/// <summary>
