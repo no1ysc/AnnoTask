@@ -145,8 +145,10 @@
 			// 
 			this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.richTextBox1.BackColor = System.Drawing.SystemColors.Window;
 			this.richTextBox1.Location = new System.Drawing.Point(3, 4);
 			this.richTextBox1.Name = "richTextBox1";
+			this.richTextBox1.ReadOnly = true;
 			this.richTextBox1.Size = new System.Drawing.Size(264, 203);
 			this.richTextBox1.TabIndex = 0;
 			this.richTextBox1.Text = "";
