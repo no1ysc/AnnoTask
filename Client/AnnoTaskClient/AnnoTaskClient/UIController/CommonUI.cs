@@ -33,8 +33,17 @@ namespace AnnoTaskClient.UIController
 
 		private void setProgressBar(int value)
 		{
-			mainWindow.progressBar.Value = value;
-			mainWindow.progressLabel.Text = value.ToString() + "%";
+			// 값보정
+			int valueTo = (value < 0) ? 0 : value;
+			valueTo = (value > 100) ? 100 : valueTo;
+
+			if (mainWindow.progressBar.Value == valueTo)
+			{
+				return;
+			}
+
+			mainWindow.progressBar.Value = valueTo;
+			mainWindow.progressLabel.Text = mainWindow.progressBar.Value.ToString() + "%";
 		}
 
 		private void setButtonEnableState(bool bState)
