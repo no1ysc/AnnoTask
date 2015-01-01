@@ -16,8 +16,8 @@ public class TermFreqDBManager {
 		return	thisClass;
 	}
 	
-	public ArrayList<TermFreqByDoc> getTermConditional(int firstDocId){
-		return termFreqDB.queryTermConditional(firstDocId);
+	public ArrayList<TermFreqByDoc> getTermConditional(ArrayList<Integer> docIdList){
+		return termFreqDB.queryTermConditional(docIdList);
 	}
 	
 	public boolean deleteTerm(String term){

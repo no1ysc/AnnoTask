@@ -335,7 +335,7 @@ public class ContentDBConnector {
 			resultSet = stmt.executeQuery(sb.toString());
 			
 			while(resultSet.next()){
-				titleList.add(resultSet.getString(1));
+				titleList.add(unescape(resultSet.getString(1)));
 			}
 			stmt.close();
 			} catch (SQLException e) {

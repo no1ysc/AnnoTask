@@ -25,11 +25,12 @@ namespace AnnoTaskClient.UIController
 		/// <param name="articleView"></param>
 		private void getColoredArticle(String article, string term, RichTextBox articleView)
 		{
-			articleView.Clear();
-
-			int Ncnt = 1;
-			int line = 0;
-			bool lineF = false;
+            //int line = 0;
+            //bool lineF = false;
+			            
+            articleView.Clear();
+            
+            int Ncnt = 1;
 			for (int i = 0; i < term.Length; ++i)
 			{
 				char temp = term[i];
@@ -50,14 +51,15 @@ namespace AnnoTaskClient.UIController
 
 				foreach (string wordToken in wordtokenList)
 				{
-					if (word.Contains(term))
+                    String temp1 = word.ToLower();
+                    if (temp1.Contains(term))
 					{
-						if (!lineF)
-						{
-							String[] lineList = word.Split('\n');
-							line = lineList.Count();
-							lineF = true;
-						}
+						//if (!lineF)
+						//{
+						//	String[] lineList = word.Split('\n');
+						//	line = lineList.Count();
+						//	lineF = true;
+						//}
 
 						String[] result = word.Split(' ');
 
@@ -88,14 +90,15 @@ namespace AnnoTaskClient.UIController
 				word += "\n";
 			}
 
-			if (word.Contains(term))
+            String temp2 = word.ToLower();
+            if (temp2.Contains(term))
 			{
-				if (!lineF)
-				{
-					String[] lineList = word.Split('\n');
-					line = lineList.Count();
-					lineF = true;
-				}
+				//if (!lineF)
+				//{
+				//	String[] lineList = word.Split('\n');
+				//	line = lineList.Count();
+				//	lineF = true;
+				//}
 				word1 = "";
 				word2 = "";
 
@@ -118,8 +121,8 @@ namespace AnnoTaskClient.UIController
 				articleView.SelectionBackColor = System.Drawing.Color.Yellow;
 				articleView.SelectedText = word2;
 
-				articleView.SelectionStart = line;
-				articleView.ScrollToCaret();
+				//articleView.SelectionStart = line;
+				//articleView.ScrollToCaret();
 
 				return;
 			}
@@ -128,8 +131,8 @@ namespace AnnoTaskClient.UIController
 			articleView.SelectionBackColor = System.Drawing.Color.White;
 			articleView.SelectedText = word;
 
-			articleView.SelectionStart = line;
-			articleView.ScrollToCaret();
+			//articleView.SelectionStart = line;
+			//articleView.ScrollToCaret();
 		}
 
 		/// <summary>

@@ -40,7 +40,6 @@ public class TermFreqDBConnector {
 		int docID = docByTerm.getDocID();
 		int nGram = docByTerm.getNGram();
 
-		ResultSet resultSet = null;
 		String addTerm = null;
 		try {
 			for (String addTermCheck : docByTerm.keySet()){
@@ -120,8 +119,15 @@ public class TermFreqDBConnector {
 	public boolean updateTermLockState(ArrayList<Integer> doc_id, int termHolder){
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			//String escapedTerm = escape(term);
-			stmt.execute("update TFtable set TermStatus = " + termHolder + " where docid between " + doc_id.get(0) + " and " + doc_id.get(doc_id.size()-1) +";");
+			StringBuilder queryMaker = new StringBuilder();
+			queryMaker.append("update " + termFreqTable + " set " + colName7 + " = " + termHolder + " where ");
+			for (int docID : doc_id){
+				queryMaker.append(colName2 + " = " + Integer.toString(docID) + " OR ");
+			}
+			queryMaker.replace(queryMaker.length()-4, queryMaker.length(), ";");
+
+			stmt.execute(queryMaker.toString());
+			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -132,7 +138,8 @@ public class TermFreqDBConnector {
 	public boolean resetTermState(int termHolder){
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.execute("update TFtable set TermStatus = 0 where TermStatus = " + termHolder + ";");			
+			stmt.execute("update " + termFreqTable + " set " + colName7 + " = 0 where " + colName7 + " = " + termHolder + ";");
+			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -171,14 +178,18 @@ public class TermFreqDBConnector {
 	 * 구현 계획 1: client로부터 요청된 docID list를 받아서, 해당 docID들에 포함된 term들을 query하고 termFreqByDoc 채운 후, 이들을 묶어서 list로 return.
 	 * 구현 계획 2: connector레벨에서 termFreqByDoc을 만들 경우, 나중에 DB단이 바뀔 때 코드가 복잡해지므로 connector레벨에서는 docID, term, ngram, termFrequency, termHolder를 manager로 보내주고, manager에서 termFreqByDoc list를 만드는 구조로 바꿀 예정.
 	 */
-	public ArrayList<TermFreqByDoc> queryTermConditional(int firstDocId){
+	public ArrayList<TermFreqByDoc> queryTermConditional(ArrayList<Integer> docIdList){
 		ArrayList<TermFreqByDoc> termFreqByDocList = new ArrayList<TermFreqByDoc>();
-		int lastDocId = firstDocId + ContextConfig.getInstance().getClientJobUnit() - 1;
 		ResultSet resultSet = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			String query = "select " + colName2 + ", " + colName4 + ", " + colName5 + ", " + colName6 + " from " + termFreqTable + " where " + colName2 + " between " + firstDocId + "  and " + lastDocId + ";";
-			resultSet = stmt.executeQuery(query);
+			StringBuilder queryMaker = new StringBuilder();
+			queryMaker.append("select " + colName2 + ", " + colName4 + ", " + colName5 + ", " + colName6 + " from " + termFreqTable + " where ");
+			for (int docID : docIdList){
+				queryMaker.append(colName2 + " = " + String.valueOf(docID) + " OR ");
+			}
+			queryMaker.replace(queryMaker.length()-4, queryMaker.length(), ";");
+			resultSet = stmt.executeQuery(queryMaker.toString());
 			
 			boolean forLoopBreaker;
 			while (resultSet.next()){
@@ -256,7 +267,7 @@ public class TermFreqDBConnector {
 			resultSet = stmt.executeQuery("select * from " + termFreqTable + " where " + colName2 + " = " + docID + " AND " + colName5 + " = " + nGram + " AND TermStatus = 0;");
 			
 			while(resultSet.next()){
-				docByTerm.put(resultSet.getString(colName4), resultSet.getInt(colName6)); //colName4는 term, colName6는 term freq.
+				docByTerm.put(unescape(resultSet.getString(colName4)), resultSet.getInt(colName6)); //colName4는 term, colName6는 term freq.
 			}
 			
 			stmt.close();
