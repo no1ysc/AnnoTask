@@ -388,6 +388,9 @@ namespace AnnoTaskClient.Logic
         {
 			List<ReturnFromServer> returnValues = clientWormHole.sendDeleteList(deleteList);
 
+			int normalCount = 0;	// 정상 동작
+			int dupleCount = 0;		// 딜리트 겹친것
+			int exceptionCount = 0;	// 시소러스에서 딜리트로 옮긴것.
 			// 이승철 추가. 20141220
 			// 상황대처
 			foreach (ReturnFromServer returnValue in returnValues)
@@ -405,6 +408,7 @@ namespace AnnoTaskClient.Logic
 						{
 							// 강제로 다시 불용어 리스트에 넣기.
 							clientWormHole.sendDeleteListForce(deleteList);
+							exceptionCount++;
 						}
 						else
 						{
@@ -414,13 +418,24 @@ namespace AnnoTaskClient.Logic
 						break;
 					case "ExistDeleteTable":
 						// 사용자에게 겹쳤다라고 알려줌.
-						MessageBox.Show("이전에 이미 추가된 단어 입니다.");
+						//MessageBox.Show("이전에 이미 추가된 단어 입니다.");
+						dupleCount++;
 						break;
 					case "Normal":
-						MessageBox.Show("불용어 추가를 진행하였습니다.");
+						normalCount++;
+						//MessageBox.Show("불용어 추가를 진행하였습니다.");
 						break;
 				}
 			}
+
+			int procCount = normalCount + dupleCount + exceptionCount;
+			string message = "선택된 단어 " + returnValues.Count.ToString() + "개 중 " + procCount.ToString() + "개를 불용어사전에 반영하였습니다.\r\n"
+							+"(새로추가 : " + normalCount.ToString() + "개,\r\n"
+							+"이미 추가된 단어 : " + dupleCount.ToString() + "개,\r\n"
+							+"시소러스에서 옮긴 단어 : " + exceptionCount.ToString() + "개,\r\n"
+							+"처리하지 않은 단어 : " + (returnValues.Count - procCount).ToString() + "개)"
+			
+			MessageBox.Show(message);
         }
 
 		internal void clickedAddThesaurus(string conceptFrom, string conceptToTerm, string metaOntology)
