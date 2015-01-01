@@ -36,15 +36,19 @@ namespace AnnoTaskClient.UIController
 			mainWindow.progressBar.Value = value;
 			mainWindow.progressLabel.Text = value.ToString() + "%";
 		}
+
 		private void setButtonEnableState(bool bState)
 		{
-			mainWindow.btnJobStart.Enabled = bState;
+			if (bState)
+			{
+				mainWindow.AllButtonEnable();
+			}
+			else
+			{
+				mainWindow.AllButtonDisable();
+			}
 		}
 
-        public void setAddThesaurusWindowButtonEnable()
-        {
-            mainWindow.openAddThesaurusWindowButton.Enabled = true;
-        }
 
 
 		
@@ -89,7 +93,7 @@ namespace AnnoTaskClient.UIController
 			}
 			get { return progressBar; }
 		}
-		public bool ButtonEnable
+		public bool AllButtonEnabledInMainWindow
 		{
 			set
 			{

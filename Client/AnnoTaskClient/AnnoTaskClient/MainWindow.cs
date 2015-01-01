@@ -63,6 +63,29 @@ namespace AnnoTaskClient
 			this.article4.Text = "";
 		}
 
+		/// <summary>
+		/// 작성자 : 이승철
+		/// 작성일 : 20141231
+		/// 메인 윈도우 모든 버튼을 활성화로
+		/// </summary>
+		public void AllButtonEnable()
+		{
+			this.btnJobStart.Enabled = true;
+			this.openAddThesaurusWindowButton.Enabled = true;
+			this.addDeleteListButton.Enabled = true;
+		}
+
+		/// <summary>
+		/// 작성자 : 이승철
+		/// 작성일 : 20141231
+		/// 메인 윈도우 모든 버튼을 비활성화로
+		/// </summary>
+		public void AllButtonDisable()
+		{
+			this.btnJobStart.Enabled = false;
+			this.openAddThesaurusWindowButton.Enabled = false;
+			this.addDeleteListButton.Enabled = false;
+		}
 
 		//private string getArticle(string term, string category, string title)
 		//{
@@ -71,7 +94,6 @@ namespace AnnoTaskClient
 
 		private void btnJobStartHandler()
 		{
-			btnJobStart.Enabled = false;
 			clearUIContents();
 			logic.clickedJobStart();
 		}
@@ -80,7 +102,7 @@ namespace AnnoTaskClient
 		private void btnJobStart_Click(object sender, EventArgs e)
 		{
             // (기흥) btnImportDoc -> btnJobStart 수정함.
-			this.btnJobStart.Enabled = false;
+			AllButtonDisable();
 			btnJobStartHandler();
 		}
 
@@ -270,6 +292,8 @@ namespace AnnoTaskClient
 
         private void addDeleteListButton_Click(object sender, EventArgs e)
         {
+			AllButtonDisable();
+
             List<string> selectedTerms = new List<string>();
             int tabNum = 0;
 

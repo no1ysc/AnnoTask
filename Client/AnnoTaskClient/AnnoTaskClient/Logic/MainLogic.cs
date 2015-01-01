@@ -81,7 +81,7 @@ namespace AnnoTaskClient.Logic
 			{
 				// 서버 연결 안내문.
 				//MessageBox.Show("서버 연결완료");
-				UIHandler.Instance.CommonUI.ButtonEnable = true;
+				UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true;
 			}
 			else
 			{
@@ -116,12 +116,13 @@ namespace AnnoTaskClient.Logic
 			{
 				case "JobStart":
 					jobStart();
-					UIHandler.Instance.CommonUI.ButtonEnable = true;
+					UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true;
 					break;
                 case "AddDeleteList":
 					AddDeleteList addDeleteListParam = (AddDeleteList)internalCommand;
 					addDeleteList(addDeleteListParam.SelectedTerms);
 					updateTermList(addDeleteListParam.SelectedTerms, addDeleteListParam.TabNum); //불용어에 추가할 단어들은 현재 단어 리스트에서 제거하는 동작
+					UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true;
                     break;
                 case "AddThesaurus":
 					//logic.getConceptToList();
