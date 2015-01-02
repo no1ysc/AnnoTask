@@ -178,6 +178,16 @@ namespace AnnoTaskClient.Logic
                 public string cmd = "RequestLinkedList";
                 public string conceptToId;
             }
+
+			/// <summary>
+			/// 작성자 : 이승철
+			/// Idle Time에 서버로 보낼 HeartBeat,
+			/// 서버단에서는 Check 할 필요 없음. 시간기록용.
+			/// </summary>
+			public class HeartBeat
+			{
+				public string cmd = "HeartBeat";
+			}
 		}
 	}
 }
