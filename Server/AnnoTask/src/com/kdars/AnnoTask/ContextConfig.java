@@ -25,6 +25,13 @@ public class ContextConfig {
 	}
 	/* 각 프로세스 작업제한 시간 */
 	
+	/* 커넥션 HeartBeat 체크를 위한 기준시간 */
+	private int TIMEOUT_LIMITATION = 20000;
+	public long getTimeoutLimitation() {
+		return TIMEOUT_LIMITATION;
+	}
+	/* 커넥션 HeartBeat 체크를 위한 기준시간 */
+	
 	/* N-Gram Setting */
 	private int N_Gram = 4;	// 최대 N-gram
 	public int getN_Gram(){
@@ -129,5 +136,6 @@ public class ContextConfig {
 	public final String Thesaurus_DB_TABLE_NAME1 = "conceptfromtable_test";
 	public final String Thesaurus_DB_TABLE_NAME2 = "concepttotable_test";
 	/* Thesaurus DB Connect Info*/
+
 		
 }

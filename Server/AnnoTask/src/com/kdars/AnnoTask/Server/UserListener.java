@@ -14,6 +14,7 @@ public class UserListener extends Thread{
 	private ServerSocket serverSocket = null;
 	private int userIdGenerator = 0;
 	private AddLocker addLocker;	// 이승철 추가 20141231, Bug25, 유저들이 동시에 delete, 시소러스 테이블에 접근할 수 없도록 막을 공유자원.
+	private HeartBeatChecker heartbeatChecker;
 	
 	public UserListener(DocumentAnalyzer documentAnalyzer) {
 		// TODO Auto-generated constructor stub
@@ -23,6 +24,8 @@ public class UserListener extends Thread{
 	public void run(){
 		try {
 			serverSocket = new ServerSocket(50000);
+			heartbeatChecker =  new HeartBeatChecker(connectUserList);
+			heartbeatChecker.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -48,13 +51,15 @@ public class UserListener extends Thread{
 				continue;
 			}
 	        
-	        UserControl user = new UserControl(socket, ++userIdGenerator, addLocker); 
-	        connectUserList.add(user);
+	        UserControl user = new UserControl(socket, ++userIdGenerator, addLocker);
+	        synchronized(connectUserList){
+		        connectUserList.add(user);	        	
+	        }
 			user.start();
 		}
 	}
 	
-	private void disConnect(UserControl user){
-		connectUserList.remove(user);
-	}
+//	public void disConnect(UserControl user){
+//		connectUserList.remove(user);
+//	}
 }

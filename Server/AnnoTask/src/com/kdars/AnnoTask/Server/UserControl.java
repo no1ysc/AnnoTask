@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import com.kdars.AnnoTask.DB.TermFreqByDoc;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 import com.kdars.AnnoTask.DB.ThesaurusDBManager;
 import com.kdars.AnnoTask.MapReduce.DocMetaSet;
+import com.kdars.AnnoTask.MapReduce.Monitor;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddDeleteList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddThesaurus;
@@ -52,6 +54,13 @@ public class UserControl extends Thread{
 //	private DataOutputStream output;
 	private int userID;
 	private boolean bValidConnection = true;
+	public boolean getbValidConnection(){
+		return this.bValidConnection;
+	}
+//	public void setbValidConnection(boolean flag){
+//		this.bValidConnection = flag;
+//	}
+	private long lastHeartBeat = System.currentTimeMillis();;
 	
 	private ArrayList<Document> 		requestDocs;
 //	private ArrayList<ConceptToList>	conceptLists;	// 이승철 : 단일 동작에서만 쓰는데 왜 멤버필드에 놓았나요?
@@ -87,14 +96,41 @@ public class UserControl extends Thread{
 			if(commandFromUser == null){
 				break;
 			}
+			lastHeartBeat = System.currentTimeMillis();
 			commandParser(commandFromUser);
+			
 		}
 		termUnlock(userID);
 		System.out.println("유저 " + userID + "(" + socket.getInetAddress().toString() + ")이  접속을 종료하였습니다.");
+		
 	}
-
+	
+	/**
+	 * @author kihpark
+	 * @description sending out the timestamp of last received command from user
+	 * @return long
+	 */
+	public long getLastHeartBeat(){
+		return this.lastHeartBeat;
+	}
 	private void commandToUser(Object commandToUser) {
 		
+	}
+	
+	/**
+	 * @author kihpark
+	 * 현재 쓰레드 강제종료 준비. 다른쓰레드만 사용함.
+	 */
+	public void forceDown(){
+		this.bValidConnection = false;
+		try {
+//			this.socket.setSoTimeout(10);
+			this.socket.close();
+			while(this.isAlive());	// 죽을때까지 대기.
+			System.out.println("유저 " + userID + "(" + socket.getInetAddress().toString() + ")의  접속이 강제로 종료되었습니다.");
+		} catch (IOException e) {
+//			e.printStackTrace();
+		}
 	}
 
 	private void commandParser(String commandFromUser) {
@@ -113,7 +149,6 @@ public class UserControl extends Thread{
 			termUnlock(userID); // 기흥: Client에서 작업 요청 시 이전 Lock되었던 Term들을 모두 Unlock 하도록 한다.
 			requestAnnoTaskWork(requestAnnoTaskWork);	
 		}
-		
 		
 		// 문서 제목 및 카테고리 요청시
 		if (commandFromUser.contains("termLinkedDocIds")){
@@ -561,6 +596,8 @@ public class UserControl extends Thread{
 //			output.writeUTF(json);
 			output.write(json + "\r\n");
 			output.flush();
+			lastHeartBeat = System.currentTimeMillis();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -600,6 +637,5 @@ public class UserControl extends Thread{
 		}
 		return command;
 	}
-	
 	
 }
