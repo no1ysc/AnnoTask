@@ -14,6 +14,8 @@ namespace AnnoTaskClient.Logic
 	{
 		private bool running = true;
 
+		private HeartBeat heartBeat;
+
 		private ClientWormHole clientWormHole = new ClientWormHole();
 		private Dictionary<string, Frequency> termNFreq = new Dictionary<string, Frequency>(); // Term, Freq
 
@@ -66,6 +68,7 @@ namespace AnnoTaskClient.Logic
 		public void KillLogicThread()
 		{
 			this.running = false;
+			heartBeat.destroyHeartBeat();
 		}
 		#endregion
 
@@ -89,24 +92,15 @@ namespace AnnoTaskClient.Logic
 				MessageBox.Show("서버 연결실패");
 			}
 
-			// 이승철 추가, 20150101, 핫빗 보내기 위한 시간측정
-			System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
-			stopWatch.Reset();
-			stopWatch.Start();
+			heartBeat = new HeartBeat(clientWormHole);
+			heartBeat.run();
+			
 
 			while (running)
 			{
 				while(commandQ.Count != 0)
 				{
 					CommandParser();
-				}
-
-				// HeartBeat 보내야 할 시간이 되면 보냄.
-				if (stopWatch.ElapsedMilliseconds > Configure.Instance.HeartBeatDurationS)
-				{
-					clientWormHole.sendHeartBeat();
-					stopWatch.Reset();
-					stopWatch.Start();
 				}
 
 				Thread.Sleep(10);

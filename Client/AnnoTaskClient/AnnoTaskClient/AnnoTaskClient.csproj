@@ -61,6 +61,7 @@
     <Compile Include="Logic\ClientWormHole.cs" />
     <Compile Include="Logic\Command.cs" />
     <Compile Include="Logic\DocMeta.cs" />
+    <Compile Include="Logic\HeartBeat.cs" />
     <Compile Include="Logic\InternalCommand.cs" />
     <Compile Include="Logic\ReturnFromServer.cs" />
     <Compile Include="Logic\TermFreqByDoc.cs" />

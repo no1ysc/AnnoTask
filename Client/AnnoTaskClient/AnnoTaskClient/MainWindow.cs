@@ -32,7 +32,7 @@ namespace AnnoTaskClient
 			this.Disposed += exitWindow;
 
 			mainLogicWorker = new Thread(new ThreadStart(logic.doWork));
-
+			mainLogicWorker.Name = "MainLogic";
 			mainLogicWorker.Start();
 			UIHandler.Instance.runUIHandler(this);
 		}

@@ -472,13 +472,19 @@ namespace AnnoTaskClient.Logic
 
 		private void _transferToServer(string data)
 		{
-			m_Writer.WriteLine(data);
-			m_Writer.Flush();
+			lock (m_Writer) // 이승철 추가, 20150102, HeartBeat Thread 분기로 인해.
+			{
+				m_Writer.WriteLine(data);
+				m_Writer.Flush();
+			}
 		}
 
 		private string _receiveFromServer()
 		{
-			return m_Reader.ReadLine();
+			lock (m_Reader)	// 이승철 추가, 20150102, HeartBeat Thread 분기로 인해.
+			{
+				return m_Reader.ReadLine();
+			}
 		}
 
 		internal void Destroy()
