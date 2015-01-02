@@ -18,7 +18,7 @@ namespace AnnoTaskClient
 		private int serverPort = 50000;
 		private int connectionWaitTimeS = 10;
 		private int limitDocumentCount = 5000;
-
+		private int heartBeatDurationS = 10;	// HeartBeat 보내는 주기.
 
 		public string ServerIP
 		{
@@ -35,6 +35,10 @@ namespace AnnoTaskClient
 		public int LimitDocumentCount
 		{
 			get { return limitDocumentCount; }
+		}
+		public int HeartBeatDurationS
+		{
+			get { return heartBeatDurationS; }
 		}
 	}
 }

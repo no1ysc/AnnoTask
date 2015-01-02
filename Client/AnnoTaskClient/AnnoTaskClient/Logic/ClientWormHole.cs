@@ -490,5 +490,18 @@ namespace AnnoTaskClient.Logic
 				m_client.Close();
 			}
 		}
+
+
+		/// <summary>
+		/// 작성자 : 이승철
+		/// 작성일 : 20150101
+		/// 서버로 HeartBeat 보냄.
+		/// </summary>
+		internal void sendHeartBeat()
+		{
+			Command.Client2Server.HeartBeat heartBeat = new Command.Client2Server.HeartBeat();
+			string json_addDeleteList = new JsonConverter<Command.Client2Server.HeartBeat>().Object2Json(heartBeat);
+			_transferToServer(json_addDeleteList);
+		}
 	}
 }
