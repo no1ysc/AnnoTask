@@ -22,7 +22,9 @@ namespace AnnoTaskClient
         {
             InitializeComponent();
 			// 컨트롤 속성 사용자 정의.
-			this.Controls.Add(ConceptToTextBox);
+			//this.ConceptToTextBox.Controls.Add(ConceptToComboBox);
+			//this.Controls.Add(ConceptToTextBox);
+			//this.ConceptToComboBox.Controls.Add(ConceptToTextBox);
 			this.Controls.Add(ConceptToComboBox);
 
             UIHandler.Instance.runUIHandler_Thesaurus(this);
@@ -85,11 +87,14 @@ namespace AnnoTaskClient
 
         private void ConceptFromComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-			//if (this.SupressSelectIndexChanged) { return; }
-			//ComboBox comb = (ComboBox)sender;
-			//string text = comb.Text;
+			// 모두 클리어, 이승철, 20150102, BugID 32
+			ConceptToTextBox.Text = "";
+			ConceptToComboBox.Items.Clear();
+			MetaOntologyComboBox.SelectedIndex = 0;
+			linkedList.Items.Clear();
+			richTextBox1.Text = "";
+
             logic.treeViewForThesaurusWindow(this.ConceptFromComboBox.SelectedItem.ToString());
-			//showSelectedTerm(text);
         }
 
         private void treeView1_DoubleClick(object sender, EventArgs e)
@@ -97,48 +102,48 @@ namespace AnnoTaskClient
 			UIHandler.Instance.UtilForUI.AfterDocListClickHandler((sender as TreeView).SelectedNode, this.richTextBox1);
         }
 
-        private void ConceptToComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-			//ComboBox comb = (ComboBox)sender;
-			//string text = comb.Text;
+		//private void ConceptToComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		//{
+		//	//ComboBox comb = (ComboBox)sender;
+		//	//string text = comb.Text;
 
-			//logic.getLinkedList(text);
-        }
+		//	//logic.getLinkedList(text);
+		//}
 
-        private void ConceptToComboBox_KeyDown(object sender, KeyEventArgs e)
-        {
-			//ComboBox comb = (ComboBox)sender;
-			//string text = comb.Text;
+		//private void ConceptToComboBox_KeyDown(object sender, KeyEventArgs e)
+		//{
+		//	//ComboBox comb = (ComboBox)sender;
+		//	//string text = comb.Text;
 
-			//if(e.KeyCode == Keys.Enter)
-			//{
-			//	logic.getLinkedList(text);
-			//}            
-        }
+		//	//if(e.KeyCode == Keys.Enter)
+		//	//{
+		//	//	logic.getLinkedList(text);
+		//	//}            
+		//}
 
-		/// <summary>
-		/// 작성자 : 이승철, 20141223
-		/// 매순간 타자를 입력할때마다, 컨셉투 리스트를 가져올것임. 갯수 및 쿼리정책은 서버에 따름.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void ConceptToComboBox_TextChanged(object sender, EventArgs e)
-		{
-			//ComboBox comb = (ComboBox)sender;
-			//comb.EndUpdate();
+		///// <summary>
+		///// 작성자 : 이승철, 20141223
+		///// 매순간 타자를 입력할때마다, 컨셉투 리스트를 가져올것임. 갯수 및 쿼리정책은 서버에 따름.
+		///// </summary>
+		///// <param name="sender"></param>
+		///// <param name="e"></param>
+		//private void ConceptToComboBox_TextChanged(object sender, EventArgs e)
+		//{
+		//	//ComboBox comb = (ComboBox)sender;
+		//	//comb.EndUpdate();
 
-			//if (!ConceptToChangedEventControl)
-			//{
-			//	return;
-			//}
+		//	//if (!ConceptToChangedEventControl)
+		//	//{
+		//	//	return;
+		//	//}
 
-			//string text = comb.Text;
-			//LastInputConceptTo = text;
-			//ConceptToChangedEventControl = false; // 이벤트 막이.
-			////comb.DroppedDown = true;	// 펼치기.
-			//logic.getConceptToList(text);
-			//comb.EndUpdate();
-		}
+		//	//string text = comb.Text;
+		//	//LastInputConceptTo = text;
+		//	//ConceptToChangedEventControl = false; // 이벤트 막이.
+		//	////comb.DroppedDown = true;	// 펼치기.
+		//	//logic.getConceptToList(text);
+		//	//comb.EndUpdate();
+		//}
 		public string LastInputConceptTo;	//위함수에서만 쓰는 변수임, 마지막 입력을 기준으로 이벤트 제어할것임.
 		public bool ConceptToChangedEventControl = true;
 
@@ -169,7 +174,7 @@ namespace AnnoTaskClient
 				return;
 			}
 
-			ConceptToChangedEventControl = false; // 이벤트 막이.
+			//ConceptToChangedEventControl = false; // 이벤트 막이.
 			logic.getConceptToList(text);
 		}
 
@@ -179,13 +184,19 @@ namespace AnnoTaskClient
 			switch (e.KeyCode)
 			{
 				case Keys.Enter:
-					if (ConceptToComboBox.Items.Count == 0)
+					this.linkedList.Items.Clear();
+					if (!_checkContainConceptToListAndSelect(this.ConceptToTextBox.Text))
 					{
 						return;
 					}
 					_selectConceptTo();
+					
 					break;
 				case Keys.Up:
+					if (!ConceptToComboBox.DroppedDown)
+					{
+						break;
+					}
 					if (this.ConceptToComboBox.SelectedIndex <= 0)
 					{
 						break;
@@ -196,6 +207,10 @@ namespace AnnoTaskClient
 					ConceptToChangedEventControl = true;
 					break;
 				case Keys.Down:
+					if (!ConceptToComboBox.DroppedDown)
+					{
+						break;
+					}
 					if (this.ConceptToComboBox.SelectedIndex >= this.ConceptToComboBox.Items.Count - 1)
 					{
 						break;
@@ -210,33 +225,49 @@ namespace AnnoTaskClient
 			}
 		}
 
-		private void ConceptToComboBox_MouseClick(object sender, MouseEventArgs e)
+		private void ConceptToComboBox_SelectionChangeCommitted(object sender, EventArgs e)
 		{
-			if (ConceptToComboBox.Items.Count == 0)
-			{
-				return;
-			}
 			_selectConceptTo();
 		}
-		
+
+
 		/// <summary>
 		/// ConceptTo를 선택했을때 처리루틴.
 		/// </summary>
 		private void _selectConceptTo()
 		{
 			ConceptToChangedEventControl = false;
+			// DB에 기존의 ConceptTo가 있는 경우
 			string selectedTerm = this.ConceptToComboBox.SelectedItem.ToString();
 			this.ConceptToTextBox.Text = selectedTerm;		// 선택된 텀 적어줌.
 			__changeMetaOntology(this.ConceptToComboBox.SelectedItem as ConceptTo);
+			logic.getLinkedList(selectedTerm);
 			ConceptToComboBox.DroppedDown = false;
 			ConceptToChangedEventControl = true;
-			logic.getLinkedList(selectedTerm);
 		}
 
 		private void __changeMetaOntology(ConceptTo conceptTo)
 		{
 			int metaIndexInCombobox = this.MetaOntologyComboBox.Items.IndexOf(conceptTo.MetaOntology);
 			this.MetaOntologyComboBox.SelectedIndex = metaIndexInCombobox;
+		}
+
+		private bool _checkContainConceptToListAndSelect(string inputTerm)
+		{
+			bool ret = false;
+
+			foreach (ConceptTo conceptTo in this.ConceptToComboBox.Items)
+			{
+				if (conceptTo.ConceptToTerm.Equals(inputTerm))
+				{
+					// 일치하는 것으로 아이템 선택.
+					this.ConceptToComboBox.SelectedItem = conceptTo;
+					ret = true;
+					break;
+				}
+			}
+
+			return ret;
 		}
 
 

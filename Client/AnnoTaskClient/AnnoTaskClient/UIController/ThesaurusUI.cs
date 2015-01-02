@@ -67,7 +67,10 @@ namespace AnnoTaskClient.UIController
 				//}
 				////addThesaurusWindow.ConceptToComboBox.AutoCompleteCustomSource.Remove("");
 				////addThesaurusWindow.ConceptToComboBox.AutoCompleteCustomSource = stringCollection;
-				addThesaurusWindow.ConceptToComboBox.DroppedDown = true;
+				if (addThesaurusWindow.ConceptToComboBox.Items.Count > 0)
+				{
+					addThesaurusWindow.ConceptToComboBox.DroppedDown = true;
+				}
 			}
 			else
 			{
@@ -157,6 +160,7 @@ namespace AnnoTaskClient.UIController
 				// null 입력시 클린동작.
 				addThesaurusWindow.linkedList.Items.Clear();
 			}
+			addThesaurusWindow.ConceptToComboBox.DroppedDown = false;
 		}
 
 		public string LinkedListBox

@@ -64,6 +64,7 @@
 			// 
 			// ConceptToComboBox
 			// 
+			this.ConceptToComboBox.AccessibleRole = System.Windows.Forms.AccessibleRole.DropList;
 			this.ConceptToComboBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
 			this.ConceptToComboBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
 			this.ConceptToComboBox.FormattingEnabled = true;
@@ -71,8 +72,7 @@
 			this.ConceptToComboBox.Name = "ConceptToComboBox";
 			this.ConceptToComboBox.Size = new System.Drawing.Size(206, 21);
 			this.ConceptToComboBox.TabIndex = 1;
-			this.ConceptToComboBox.TextChanged += new System.EventHandler(this.ConceptToComboBox_TextChanged);
-			this.ConceptToComboBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ConceptToComboBox_MouseClick);
+			this.ConceptToComboBox.SelectionChangeCommitted += new System.EventHandler(this.ConceptToComboBox_SelectionChangeCommitted);
 			// 
 			// MetaOntologyComboBox
 			// 
@@ -226,8 +226,6 @@
 			// 
 			// ConceptToTextBox
 			// 
-			this.ConceptToTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-			this.ConceptToTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
 			this.ConceptToTextBox.Location = new System.Drawing.Point(38, 124);
 			this.ConceptToTextBox.Name = "ConceptToTextBox";
 			this.ConceptToTextBox.Size = new System.Drawing.Size(206, 20);
