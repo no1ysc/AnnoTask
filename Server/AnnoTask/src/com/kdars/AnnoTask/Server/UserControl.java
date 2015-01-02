@@ -111,7 +111,7 @@ public class UserControl extends Thread{
 		if (commandFromUser.contains("bRequestAnnoTaskWork")){
 			RequestAnnoTaskWork requestAnnoTaskWork = new JSONDeserializer<RequestAnnoTaskWork>().deserialize(commandFromUser, RequestAnnoTaskWork.class);
 			termUnlock(userID); // 기흥: Client에서 작업 요청 시 이전 Lock되었던 Term들을 모두 Unlock 하도록 한다.
-			requestAnnoTaskWork(requestAnnoTaskWork);			
+			requestAnnoTaskWork(requestAnnoTaskWork);	
 		}
 		
 		
