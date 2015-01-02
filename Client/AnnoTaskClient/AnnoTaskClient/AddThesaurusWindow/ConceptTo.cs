@@ -8,14 +8,17 @@ namespace AnnoTaskClient
 {
 	class ConceptTo
 	{
-		public ConceptTo(string conceptTo, string conceptToId)
+		// 이승철 Meta 관련 추가, 20150101
+		public ConceptTo(string conceptTo, string conceptToId, string meta)
 		{
 			conceptToTerm = conceptTo;
 			this.conceptToId = conceptToId;
+			this.meta = meta;
 		}
 
 		private string conceptToId;
 		private string conceptToTerm;
+		private string meta;
 
 		public string ConceptToID
 		{
@@ -27,6 +30,15 @@ namespace AnnoTaskClient
 			get { return conceptToTerm; }
 			set { conceptToTerm = value; }
 		}
+		public string MetaOntology
+		{
+			get
+			{
+				return meta;
+			}
+		}
+
+
 
 		public override string ToString()
 		{

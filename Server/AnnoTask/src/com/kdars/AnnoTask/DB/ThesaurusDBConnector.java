@@ -207,7 +207,7 @@ public class ThesaurusDBConnector {
 			resultSet = stmt.executeQuery("select * from " + conceptToTable + " where " + toColName1 + " like \"%" + queryTerm +"%\";");
 			int queryCount = ContextConfig.getInstance().getLimitConceptToCount();
 			while (resultSet.next()){
-				ret.add(new ConceptToList(resultSet.getInt(foreignKeyColName), resultSet.getString(toColName1)));
+				ret.add(new ConceptToList(resultSet.getInt(foreignKeyColName), resultSet.getString(toColName1), resultSet.getString(toColName2)));
 				if (--queryCount == 0){
 					break;
 				}

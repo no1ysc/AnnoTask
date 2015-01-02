@@ -359,7 +359,8 @@ namespace AnnoTaskClient.Logic
 
                 Command.Server2Client.ConceptToListResponse conceptTo = new JsonConverter<Command.Server2Client.ConceptToListResponse>().Json2Object(json1_4);
 
-				conceptToList.Add(new ConceptTo(conceptTo.ConceptToTerm, conceptTo.conceptToId));
+				// 이승철 Meta 관련 수정, 20150101
+				conceptToList.Add(new ConceptTo(conceptTo.ConceptToTerm, conceptTo.conceptToId, conceptTo.MetaOntology));
             }
 			
             return conceptToList;

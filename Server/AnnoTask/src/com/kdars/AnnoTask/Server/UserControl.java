@@ -559,7 +559,7 @@ public class UserControl extends Thread{
 		
 		for(int idx = 0; idx <sendConceptToCount.conceptToCount; ++idx){
 			ConceptToList conceptTo = processedConceptLists.get(idx);		
-			ConceptListResponse temp = new ConceptListResponse(conceptTo.conceptToId, conceptTo.conceptToTerm);
+			ConceptListResponse temp = new ConceptListResponse(conceptTo.conceptToId, conceptTo.conceptToTerm, conceptTo.metaontology);
 			transferObject(temp);
 		}
 	}

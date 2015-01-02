@@ -80,12 +80,13 @@ namespace AnnoTaskClient.Logic
             {   
                 public string conceptToId;
                 public string ConceptToTerm;
+				public string MetaOntology;		// 이승철 추가, 20150101
             }
 
             public class LinkedListResponse
             {
                 public string linkedListTerm;
-                public string metaInfo;
+                public string metaInfo;		// 이거 필요한가요? (이승철), 20150101
             }
 
 			public class ReturnAddDeleteList

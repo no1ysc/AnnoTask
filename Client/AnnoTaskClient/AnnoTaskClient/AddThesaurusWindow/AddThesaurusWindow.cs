@@ -99,10 +99,10 @@ namespace AnnoTaskClient
 
         private void ConceptToComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ComboBox comb = (ComboBox)sender;
-            string text = comb.Text;
+			//ComboBox comb = (ComboBox)sender;
+			//string text = comb.Text;
 
-            logic.getLinkedList(text);
+			//logic.getLinkedList(text);
         }
 
         private void ConceptToComboBox_KeyDown(object sender, KeyEventArgs e)
@@ -183,12 +183,7 @@ namespace AnnoTaskClient
 					{
 						return;
 					}
-					ConceptToChangedEventControl = false;
-					string selectedTerm = this.ConceptToComboBox.SelectedItem.ToString();
-					this.ConceptToTextBox.Text = selectedTerm;
-					ConceptToComboBox.DroppedDown = false;
-					ConceptToChangedEventControl = true;
-					logic.getLinkedList(selectedTerm);
+					_selectConceptTo();
 					break;
 				case Keys.Up:
 					if (this.ConceptToComboBox.SelectedIndex <= 0)
@@ -221,12 +216,30 @@ namespace AnnoTaskClient
 			{
 				return;
 			}
+			_selectConceptTo();
+		}
+		
+		/// <summary>
+		/// ConceptTo를 선택했을때 처리루틴.
+		/// </summary>
+		private void _selectConceptTo()
+		{
 			ConceptToChangedEventControl = false;
 			string selectedTerm = this.ConceptToComboBox.SelectedItem.ToString();
-			this.ConceptToTextBox.Text = selectedTerm;
+			this.ConceptToTextBox.Text = selectedTerm;		// 선택된 텀 적어줌.
+			__changeMetaOntology(this.ConceptToComboBox.SelectedItem as ConceptTo);
 			ConceptToComboBox.DroppedDown = false;
 			ConceptToChangedEventControl = true;
 			logic.getLinkedList(selectedTerm);
 		}
+
+		private void __changeMetaOntology(ConceptTo conceptTo)
+		{
+			int metaIndexInCombobox = this.MetaOntologyComboBox.Items.IndexOf(conceptTo.MetaOntology);
+			this.MetaOntologyComboBox.SelectedIndex = metaIndexInCombobox;
+		}
+
+
+
     }
 }
