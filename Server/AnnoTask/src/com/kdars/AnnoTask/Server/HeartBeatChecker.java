@@ -1,20 +1,43 @@
 package com.kdars.AnnoTask.Server;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.kdars.AnnoTask.ContextConfig;
 
 public class HeartBeatChecker extends Thread {
 	private ArrayList<UserControl> userList;
+	private ExecutorService eservice;
 	
 	public HeartBeatChecker(ArrayList<UserControl> connectUserList) {
 		this.userList = connectUserList;
 	}
+	
+	@Override
+	protected void finalize() throws Throwable{
+		this.eservice.shutdownNow();
+		this.eservice = null;
+	}
+
+	/**
+	 * @author JS
+	 * 병렬로 처리할지 말지를 결정하여 현재 쓰레드 시작. 20150101
+	 */
+	public void runForThreadScheme(){
+		if (ContextConfig.getInstance().isMultiCore()){
+			eservice = Executors.newSingleThreadExecutor();
+			this.eservice.submit(this);
+		} else {
+			this.start();
+		}
+	}
 
 	public void run(){
-		UserControl target = null;
+		
 		while(true){
+			UserControl target = null;
+			
 			for(UserControl user : userList){
 				long timeSpan = System.currentTimeMillis() - user.getLastHeartBeat();
 				if(timeSpan > ContextConfig.getInstance().getTimeoutLimitation()){
@@ -47,6 +70,9 @@ public class HeartBeatChecker extends Thread {
 		} else {
 			// 정상 접속종료.
 		}
+		
+		// 쓰레드 해제
+		user.destroyThread();
 		
 		// 인스턴스 삭제.
         synchronized(userList){

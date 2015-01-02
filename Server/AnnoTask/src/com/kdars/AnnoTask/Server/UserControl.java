@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.kdars.AnnoTask.ContextConfig;
 import com.kdars.AnnoTask.DB.ConceptToList;
@@ -50,23 +52,18 @@ public class UserControl extends Thread{
 	private Socket	socket;
 	private BufferedReader input;
 	private BufferedWriter output;
-//	private DataInputStream input;
-//	private DataOutputStream output;
 	private int userID;
 	private boolean bValidConnection = true;
 	public boolean getbValidConnection(){
 		return this.bValidConnection;
 	}
-//	public void setbValidConnection(boolean flag){
-//		this.bValidConnection = flag;
-//	}
 	private long lastHeartBeat = System.currentTimeMillis();;
 	
 	private ArrayList<Document> 		requestDocs;
-//	private ArrayList<ConceptToList>	conceptLists;	// 이승철 : 단일 동작에서만 쓰는데 왜 멤버필드에 놓았나요?
 	private ArrayList<LinkedList> 		linkedLists;
 	private ArrayList<Integer>			workingDocIds;
 	private AddLocker locker;		// 시소러스, 딜리트 테이블 다른 유저가 안잡았는지 체크하고 싱크를 맞추기 위한 용도.
+	private ExecutorService eservice = null;	// 코어할당 받아 쓰레딩하기 위함.
 	
 	public UserControl(Socket socket, int userID, AddLocker locker){
 		this.socket = socket;
@@ -88,6 +85,34 @@ public class UserControl extends Thread{
 		output.close();
 		socket.close();
 		super.finalize();
+	}
+	
+	/**
+	 * @author JS
+	 * 병렬로 처리할지 말지를 결정하여 현재 쓰레드 시작. 20150101
+	 */
+	public void runForThreadScheme(){
+		if (ContextConfig.getInstance().isMultiCore()){
+			eservice = Executors.newSingleThreadExecutor();
+			this.eservice.submit(this);
+		} else {
+			this.start();
+		}
+	}
+	
+	/**
+	 * @author JS
+	 * 쓰레드를 종료한다.
+	 * 반드시 쓰레드가 멈춘걸 확인하고 사용.
+	 */
+	public void destroyThread(){
+		if (ContextConfig.getInstance().isMultiCore()){
+			// 쓰레드 풀 삭제.
+			eservice.shutdownNow();
+			eservice = null;	
+		}
+		
+		// 멀티 코어가 아닌 경우 별다른 작업 없음.
 	}
 	
 	public void run(){

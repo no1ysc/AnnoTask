@@ -11,6 +11,14 @@ public class ContextConfig {
 	//TODO: 처음에 프로그램 시작할때, DB 전부 연결될때까지 대기하는 부분,
 	// TODO : TermDB Lock 걸린거 전부 풀어주고 초기화 하는 부분.,
 	
+	/* 서버 병렬 코어로 처리할지 여부 */
+	// 현재 병렬 처리 구현된 부분 : HeartBeat, 각 UserControl
+	private boolean MULTI_CORE = true;
+	public boolean isMultiCore(){
+		return MULTI_CORE;
+	}
+	/* 서버 병렬 코어로 처리할지 여부 */
+	
 	/* 사용자에게 보여줄 관련 컨셉투 리스트 제한 개수 */
 	private int LIMIT_CONCEPT_TO_COUNT = 20;
 	public int getLimitConceptToCount(){

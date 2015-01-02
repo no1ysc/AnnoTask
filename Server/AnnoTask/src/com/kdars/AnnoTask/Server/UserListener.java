@@ -25,7 +25,8 @@ public class UserListener extends Thread{
 		try {
 			serverSocket = new ServerSocket(50000);
 			heartbeatChecker =  new HeartBeatChecker(connectUserList);
-			heartbeatChecker.start();
+//			heartbeatChecker.start();
+			heartbeatChecker.runForThreadScheme();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,7 +56,7 @@ public class UserListener extends Thread{
 	        synchronized(connectUserList){
 		        connectUserList.add(user);	        	
 	        }
-			user.start();
+	        user.runForThreadScheme();
 		}
 	}
 	
