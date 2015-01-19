@@ -11,9 +11,7 @@ public class Driver {
 	
 	public void run(){
 		DocumentAnalyzer	documentAnalyzer = new DocumentAnalyzer();
-		UserListener			userListener = new UserListener(documentAnalyzer);
-		
-		//userListener.start();
+
 		documentAnalyzer.run();
 	}
 }
