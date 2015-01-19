@@ -3,7 +3,9 @@ package com.kdars.AnnoTask.DB;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -112,6 +114,7 @@ public class TermFreqDBConnector {
 	
 	/**
 	 * 홀더 변경...... 아무도 안잡고 있으면 0
+	 * @author 기무진규
 	 * @param term
 	 * @param termHolder
 	 * @return 락에 성공하면 true, 실패하면 False
@@ -138,7 +141,8 @@ public class TermFreqDBConnector {
 	public boolean resetTermState(int termHolder){
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.execute("update " + termFreqTable + " set " + colName7 + " = 0 where " + colName7 + " = " + termHolder + ";");
+			String sql = "update " + termFreqTable + " set " + colName7 + " = 0 where " + colName7 + " = " + termHolder + ";";
+			stmt.execute(sql);
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -182,22 +186,50 @@ public class TermFreqDBConnector {
 		ArrayList<TermFreqByDoc> termFreqByDocList = new ArrayList<TermFreqByDoc>();
 		ResultSet resultSet = null;
 		try {
-			java.sql.Statement stmt = sqlConnection.createStatement();
 			StringBuilder queryMaker = new StringBuilder();
+			queryMaker.append("select count(*) from " + termFreqTable + " where ");
+			for (int docID : docIdList){
+				queryMaker.append(colName2 + " = " + String.valueOf(docID) + " OR ");
+			}
+			queryMaker.replace(queryMaker.length()-4, queryMaker.length(), ";");
+			
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			resultSet = stmt.executeQuery(queryMaker.toString());
+			resultSet.next();
+			int rowCnt = resultSet.getInt(1);
+			
+			
+			queryMaker = new StringBuilder();
 			queryMaker.append("select " + colName2 + ", " + colName4 + ", " + colName5 + ", " + colName6 + " from " + termFreqTable + " where ");
 			for (int docID : docIdList){
 				queryMaker.append(colName2 + " = " + String.valueOf(docID) + " OR ");
 			}
 			queryMaker.replace(queryMaker.length()-4, queryMaker.length(), ";");
+			stmt = sqlConnection.createStatement();
+			
+			
+			
 			resultSet = stmt.executeQuery(queryMaker.toString());
 			
+			int a=0;
 			boolean forLoopBreaker;
+
+			
+			
+			
+			resultSet.setFetchSize(rowCnt);
 			while (resultSet.next()){
+	
+				a++;
+				
+				
 				forLoopBreaker = false;
-				int docID = resultSet.getInt(1);
+				int docID = resultSet.getInt(1);				
 				String term = unescape(resultSet.getString(2));
 				int nGram = resultSet.getInt(3);
 				int termFreq = resultSet.getInt(4);
+				
+			
 				
 				for (TermFreqByDoc appendTermFreqByDoc : termFreqByDocList){
 					if (appendTermFreqByDoc.getTerm().equals(term)){
@@ -207,16 +239,16 @@ public class TermFreqDBConnector {
 					}
 				}
 				
+				
 				if (forLoopBreaker){
 					continue;
 				}
 				
 				TermFreqByDoc newTermFreqByDoc = new TermFreqByDoc(term, nGram);
 				newTermFreqByDoc.put(docID, termFreq);
-				termFreqByDocList.add(newTermFreqByDoc);				
+				termFreqByDocList.add(newTermFreqByDoc);
+	
 			}
-			
-			stmt.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
