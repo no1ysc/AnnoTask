@@ -114,6 +114,7 @@ public class TermFreqDBConnector {
 	
 	/**
 	 * 홀더 변경...... 아무도 안잡고 있으면 0
+	 * @author 기무진규
 	 * @param term
 	 * @param termHolder
 	 * @return 락에 성공하면 true, 실패하면 False
@@ -140,7 +141,8 @@ public class TermFreqDBConnector {
 	public boolean resetTermState(int termHolder){
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.execute("update " + termFreqTable + " set " + colName7 + " = 0 where " + colName7 + " = " + termHolder + ";");
+			String sql = "update " + termFreqTable + " set " + colName7 + " = 0 where " + colName7 + " = " + termHolder + ";";
+			stmt.execute(sql);
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -216,7 +218,6 @@ public class TermFreqDBConnector {
 			
 			
 			resultSet.setFetchSize(rowCnt);
-			int duplication =0;
 			while (resultSet.next()){
 	
 				a++;
@@ -234,7 +235,6 @@ public class TermFreqDBConnector {
 					if (appendTermFreqByDoc.getTerm().equals(term)){
 						appendTermFreqByDoc.put(docID, termFreq);
 						forLoopBreaker = true;
-						duplication++;
 						continue;
 					}
 				}

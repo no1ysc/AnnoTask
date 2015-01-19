@@ -125,7 +125,7 @@ public class UserControl extends Thread{
 			commandParser(commandFromUser);
 			
 		}
-		termUnlock(userID);
+		//termUnlock(userID);
 		System.out.println("유저 " + userID + "(" + socket.getInetAddress().toString() + ")이  접속을 종료하였습니다.");
 		
 	}
@@ -171,7 +171,7 @@ public class UserControl extends Thread{
 		// 구현 계획 1
 		if (commandFromUser.contains("bRequestAnnoTaskWork")){
 			RequestAnnoTaskWork requestAnnoTaskWork = new JSONDeserializer<RequestAnnoTaskWork>().deserialize(commandFromUser, RequestAnnoTaskWork.class);
-			termUnlock(userID); // 기흥: Client에서 작업 요청 시 이전 Lock되었던 Term들을 모두 Unlock 하도록 한다.
+			//termUnlock(userID); // 기흥: Client에서 작업 요청 시 이전 Lock되었던 Term들을 모두 Unlock 하도록 한다.
 			requestAnnoTaskWork(requestAnnoTaskWork);	
 		}
 		
@@ -457,7 +457,7 @@ public class UserControl extends Thread{
 	private ArrayList<TermFreqByDoc> nGramFilter(ArrayList<Integer> docIdList){
 		
 		ArrayList<TermFreqByDoc> filtering = TermFreqDBManager.getInstance().getTermConditional(docIdList);
-		TermFreqDBManager.getInstance().termLock(docIdList, userID);
+		//TermFreqDBManager.getInstance().termLock(docIdList, userID);		// 김진규가 지워야된대.
 
 		for (int i = filtering.size()-1; i >= 0; i--){
 			TermFreqByDoc termFreqByDocFilter = filtering.get(i);
