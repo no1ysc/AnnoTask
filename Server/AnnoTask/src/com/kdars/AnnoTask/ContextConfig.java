@@ -103,9 +103,18 @@ public class ContextConfig {
 		return this.maxContentProcessor;
 	}
 	
-	
-	/* Content DB Connect Info */
-	
+	/**
+	 * @author kihpark
+	 * @date 1/21/2015
+	 */
+	/*User DB UserAccount Info */
+	public final String UserAccounts_DB_JDBC_URL = "jdbc:mysql://128.2.213.162/annotask";
+	public final String UserAccounts_DB_NAME = "annotask"; 
+	public final String UserAccounts_DB_USER_ID = "kdars";
+	public final String UserAccounts_DB_USER_PASS = "kdarscom";
+	public final String UserAccounts_DB_TABLE_NAME = "useraccounts";
+	/*User DB UserAccount Info */
+
 	/* DeleteList DB Connect Info*/
 	public final String DeleteList_DB_JDBC_URL = "jdbc:mysql://localhost/annotask";
 	public final String DeleteList_DB_NAME = "annotask"; 

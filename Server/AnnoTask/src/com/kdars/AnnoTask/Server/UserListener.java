@@ -12,7 +12,6 @@ public class UserListener extends Thread{
 //	private DocumentAnalyzer documentAnalyzer;
 	private ArrayList<UserControl>	connectUserList = new  ArrayList<UserControl>();	// TODO : 이거 쓰레드로 변형해서 주기적 커넥션 체크. 현재 쓰래드는 죽으나, 인스턴스는 종료하지 않음.
 	private ServerSocket serverSocket = null;
-	private int userIdGenerator = 0;
 	private AddLocker addLocker = new AddLocker();	// 이승철 추가 20141231, Bug25, 유저들이 동시에 delete, 시소러스 테이블에 접근할 수 없도록 막을 공유자원.
 	private HeartBeatChecker heartbeatChecker;
 	
@@ -51,14 +50,27 @@ public class UserListener extends Thread{
 				e.printStackTrace();
 				continue;
 			}
-	        
-	        UserControl user = new UserControl(socket, ++userIdGenerator, addLocker);
-	        synchronized(connectUserList){
-		        connectUserList.add(user);	        	
-	        }
-	        user.runForThreadScheme();
+	    
+			/**
+			 * @author kihpark
+			 * @description 로그인 및 회원가입 procedure
+			 * @process 로그인 및 회원가입 처리 후 UserControl 생성하고 소멸
+			 */
+			UserAuthentication user = new UserAuthentication(socket, this);
+			user.start();
+		
 		}
 	}
+
+	public void createActiveUser(Socket socket, String userID) {
+		UserControl user = new UserControl(socket, userID, addLocker);
+		synchronized (connectUserList) {
+			connectUserList.add(user);
+		}
+		user.runForThreadScheme();
+	}
+	
+	
 	
 //	public void disConnect(UserControl user){
 //		connectUserList.remove(user);
