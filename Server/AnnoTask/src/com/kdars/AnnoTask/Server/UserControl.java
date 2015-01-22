@@ -380,7 +380,8 @@ public class UserControl extends Thread{
 	 */
 	private void addDeleteList(String term){
 		DeleteListDBManager.getInstance().AddTermToDelete(term);
-		TermFreqDBManager.getInstance().deleteTerm(term);
+		TermFreqDBManager.getInstance().flagDeleteTerm(term);
+//		TermFreqDBManager.getInstance().deleteTerm(term);
 	}
 	
 	/**
@@ -392,7 +393,8 @@ public class UserControl extends Thread{
 	 */
 	private void addThesaurus(String conceptFrom, String conceptTo, String metaOntology){
 		ThesaurusDBManager.getInstance().setEntry(conceptFrom, conceptTo, metaOntology);
-		TermFreqDBManager.getInstance().deleteTerm(conceptFrom);
+		TermFreqDBManager.getInstance().flagDeleteTerm(conceptFrom);
+//		TermFreqDBManager.getInstance().deleteTerm(conceptFrom);
 	}
 		
 	

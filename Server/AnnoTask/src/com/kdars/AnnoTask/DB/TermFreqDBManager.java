@@ -20,9 +20,11 @@ public class TermFreqDBManager {
 		return termFreqDB.queryTermConditional(docIdList);
 	}
 	
+	public boolean flagDeleteTerm(String term){
+		return termFreqDB.flagDeleteTerm(term);
+	}
+	
 	public boolean deleteTerm(String term){
-		// 소유자 확인해서 일치할때만 삭제.
-		
 		return	termFreqDB.deleteTerm(term);
 	}
 	
