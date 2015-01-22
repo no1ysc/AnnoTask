@@ -21,7 +21,9 @@ public class TermFreqDBConnector {
 	private String colName5 = "N_gram";
 	private String colName6 = "TermFrequency";
 	private String colName7 = "TermStatus";
-
+	private String colName8 = "Delete_Pending";
+	private Integer flag = 1;
+	
 	public TermFreqDBConnector(){
 		//TODO: Connector 생성되면 connect 시도해서 성공하면 ok, 실패하면 표시.
 //		java.sql.Connection sqlConnection;
@@ -154,6 +156,28 @@ public class TermFreqDBConnector {
 	}
 	
 	/**
+	 * 해당 Term 모두 flag. 
+	 * @param term
+	 * @return
+	 */
+	public boolean flagDeleteTerm(String term){
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			String deleteTerm = escape(term);
+			stmt.execute("update " + termFreqTable + " set " + colName8 + " = " + flag + " where " + colName4 + " = \"" + deleteTerm + "\";"); /* AND " + colName7 + " = '" + String.valueOf(termHolder) + "';");*/
+			stmt.close();
+//		disconnect(sqlConnectionLocal);
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+//		disconnect(sqlConnectionLocal);
+		return false;
+	}
+	
+	return true;
+	}
+	
+	/**
 	 * 해당 Term 모두 삭제. 
 	 * @param term
 	 * @return
@@ -187,11 +211,11 @@ public class TermFreqDBConnector {
 		ResultSet resultSet = null;
 		try {
 			StringBuilder queryMaker = new StringBuilder();
-			queryMaker.append("select count(*) from " + termFreqTable + " where ");
+			queryMaker.append("select count(*) from " + termFreqTable + " where " + colName8 + " != " + flag + " AND (");
 			for (int docID : docIdList){
 				queryMaker.append(colName2 + " = " + String.valueOf(docID) + " OR ");
 			}
-			queryMaker.replace(queryMaker.length()-4, queryMaker.length(), ";");
+			queryMaker.replace(queryMaker.length()-4, queryMaker.length(), ");");
 			
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			resultSet = stmt.executeQuery(queryMaker.toString());

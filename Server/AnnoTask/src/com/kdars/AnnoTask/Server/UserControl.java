@@ -382,7 +382,8 @@ public class UserControl extends Thread{
 	 */
 	private void addDeleteList(String term){
 		DeleteListDBManager.getInstance().AddTermToDelete(term);
-		TermFreqDBManager.getInstance().deleteTerm(term);
+		TermFreqDBManager.getInstance().flagDeleteTerm(term);
+//		TermFreqDBManager.getInstance().deleteTerm(term);
 		// (기흥) 유저의 불용어 추가 횟수 업데이트
 		UserDBManager.getInstance().increaseDeleteListAddedCount(userID);
 
@@ -397,7 +398,8 @@ public class UserControl extends Thread{
 	 */
 	private void addThesaurus(String conceptFrom, String conceptTo, String metaOntology){
 		ThesaurusDBManager.getInstance().setEntry(conceptFrom, conceptTo, metaOntology);
-		TermFreqDBManager.getInstance().deleteTerm(conceptFrom);
+		TermFreqDBManager.getInstance().flagDeleteTerm(conceptFrom);
+//		TermFreqDBManager.getInstance().deleteTerm(conceptFrom);
 		// (기흥) 유저의 사전 추가 횟수 업데이트
 		UserDBManager.getInstance().increaseThesaurusAddedCount(userID);
 
