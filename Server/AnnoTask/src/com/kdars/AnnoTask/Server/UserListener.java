@@ -62,8 +62,8 @@ public class UserListener extends Thread{
 		}
 	}
 
-	public void createActiveUser(Socket socket, String userID) {
-		UserControl user = new UserControl(socket, userID, addLocker);
+	public void createActiveUser(Socket socket, String userID, String userName) {
+		UserControl user = new UserControl(socket, userID, userName, addLocker);
 		synchronized (connectUserList) {
 			connectUserList.add(user);
 		}

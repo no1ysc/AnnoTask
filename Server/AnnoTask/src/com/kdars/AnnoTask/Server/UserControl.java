@@ -55,6 +55,7 @@ public class UserControl extends Thread{
 	private BufferedReader input;
 	private BufferedWriter output;
 	private String userID;
+	private String userName;
 	private boolean bValidConnection = true;
 	public boolean getbValidConnection(){
 		return this.bValidConnection;
@@ -67,11 +68,12 @@ public class UserControl extends Thread{
 	private AddLocker locker;		// 시소러스, 딜리트 테이블 다른 유저가 안잡았는지 체크하고 싱크를 맞추기 위한 용도.
 	private ExecutorService eservice = null;	// 코어할당 받아 쓰레딩하기 위함.
 	
-	public UserControl(Socket socket, String userID, AddLocker locker){
+	public UserControl(Socket socket, String userID, String userName, AddLocker locker){
 		this.socket = socket;
 		this.userID = userID;
+		this.userName = userName;
 		this.locker = locker;
-		System.out.println(socket.getInetAddress().getAddress().toString() + "은 User ID " + userID + "로 접속하였습니다.");
+
 		try {
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF8"));
@@ -130,7 +132,7 @@ public class UserControl extends Thread{
 		}
 		//termUnlock(userID);
 		UserDBManager.getInstance().userDeactivation(userID); // 유저 접속 상태 업데이트
-		System.out.println("유저 " + userID + "(" + socket.getInetAddress().toString() + ")이  접속을 종료하였습니다.");
+		System.out.println("유저 " + userName + "(" + userID + ")님이 정상적으로 AnnoTask를 종료하였습니다.");
 	}
 	
 	/**
@@ -141,9 +143,6 @@ public class UserControl extends Thread{
 	public long getLastHeartBeat(){
 		return this.lastHeartBeat;
 	}
-	private void commandToUser(Object commandToUser) {
-		
-	}
 	
 	/**
 	 * @author kihpark
@@ -152,11 +151,10 @@ public class UserControl extends Thread{
 	public void forceDown(){
 		this.bValidConnection = false;
 		try {
-//			this.socket.setSoTimeout(10);
 			this.socket.close();
 			while(this.isAlive());	// 죽을때까지 대기.
 			UserDBManager.getInstance().userDeactivation(userID); // 유저 접속 상태 업데이트
-			System.out.println("유저 " + userID + "(" + socket.getInetAddress().toString() + ")의  접속이 강제로 종료되었습니다.");
+			System.out.println("유저 " + userName + "(" + userID + ")의  접속이 서버로부터 강제 종료되었습니다.");
 		} catch (IOException e) {
 //			e.printStackTrace();
 		}
@@ -385,6 +383,9 @@ public class UserControl extends Thread{
 	private void addDeleteList(String term){
 		DeleteListDBManager.getInstance().AddTermToDelete(term);
 		TermFreqDBManager.getInstance().deleteTerm(term);
+		// (기흥) 유저의 불용어 추가 횟수 업데이트
+		UserDBManager.getInstance().increaseDeleteListAddedCount(userID);
+
 	}
 	
 	/**
@@ -397,6 +398,9 @@ public class UserControl extends Thread{
 	private void addThesaurus(String conceptFrom, String conceptTo, String metaOntology){
 		ThesaurusDBManager.getInstance().setEntry(conceptFrom, conceptTo, metaOntology);
 		TermFreqDBManager.getInstance().deleteTerm(conceptFrom);
+		// (기흥) 유저의 사전 추가 횟수 업데이트
+		UserDBManager.getInstance().increaseThesaurusAddedCount(userID);
+
 	}
 		
 	private void documentRequestHandler(DocumentRequest documentRequest) {

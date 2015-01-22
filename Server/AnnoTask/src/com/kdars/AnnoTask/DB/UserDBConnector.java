@@ -131,5 +131,35 @@ public class UserDBConnector {
 			e.printStackTrace();
 		}
 	}
+
+	public void increaseLoginCount(String userID) {
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute("update " + userAccountsTable + " set login_count = login_count+1 where email = \"" + userID + "\";");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+	}
+
+	public void increaseDeleteListAddedCount(String userID) {
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute("update " + userAccountsTable + " set deleteListAdded_count = deleteListAdded_count+1 where email = \"" + userID + "\";");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+	}
+
+	public void increaseThesaurusAddedCount(String userID) {
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute("update " + userAccountsTable + " set thesaurusAdded_count = thesaurusAdded_count+1 where email = \"" + userID + "\";");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+	}
 	
 }

@@ -124,23 +124,30 @@ public class UserAuthentication extends Thread{
 	private void login(UserInfo userInfo) {
 		userID = userInfo.userId;
 		userName = userInfo.userName;
-		userListener.createActiveUser(socket, userID);
+		userListener.createActiveUser(socket, userID, userName);
 		System.out.println(userName + "(" + userID + ")" + "님이 IP주소 " + socket.getInetAddress().getAddress().toString() + "로 접속하였습니다.");
 		//로그인 성공 packet 보내기
 		transferObject(userInfo);
 		
 		//유저 접속 상태 정보 업데이트 (활성화)
 		UserDBManager.getInstance().userActivation(userID);
+		//유저 로그인 횟수 업데이트
+		UserDBManager.getInstance().increaseLoginCount(userID);
 	}
 
 	private void automaticLogin(	RequestAddUserAccount requestAddUserAccount) {
 		UserInfo userInfo = new UserInfo();
 		userID = UserDBManager.getInstance().getUserInformation(requestAddUserAccount.emailAddress).userId;
 		userName = UserDBManager.getInstance().getUserInformation(requestAddUserAccount.emailAddress).userName;
-		userListener.createActiveUser(socket, userID);
+		userListener.createActiveUser(socket, userID, userName);
 		System.out.println(userName + "(" + userID + ")" + "님이 IP주소 " + socket.getInetAddress().getAddress().toString() + "로 접속하였습니다.");
 		//로그인 성공 packet 보내기
 		transferObject(userInfo);
+		
+		//유저 접속 상태 정보 업데이트 (활성화)
+		UserDBManager.getInstance().userActivation(userID);
+		//유저 로그인 횟수 업데이트
+		UserDBManager.getInstance().increaseLoginCount(userID);
 	}
 	
 	private boolean addNewUser(RequestAddUserAccount requestAddUserAccount) {

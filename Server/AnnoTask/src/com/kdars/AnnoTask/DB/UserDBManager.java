@@ -38,4 +38,16 @@ public class UserDBManager {
 	public void userDeactivation(String userID) {
 		userDB.deactivateUser(userID);		
 	}
+
+	public void increaseLoginCount(String userID) {
+		userDB.increaseLoginCount(userID);
+	}
+
+	public void increaseDeleteListAddedCount(String userID) {
+		userDB.increaseDeleteListAddedCount(userID);		
+	}
+
+	public void increaseThesaurusAddedCount(String userID) {
+		userDB.increaseThesaurusAddedCount(userID);		
+	}
 }
