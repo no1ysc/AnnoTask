@@ -83,6 +83,7 @@ public class UserControl extends Thread{
 	
 	@Override
 	protected void finalize() throws Throwable {
+		UserDBManager.getInstance().userDeactivation(userID); // 유저 접속 상태 업데이트
 		input.close();
 		output.close();
 		socket.close();
@@ -128,8 +129,8 @@ public class UserControl extends Thread{
 			
 		}
 		//termUnlock(userID);
+		UserDBManager.getInstance().userDeactivation(userID); // 유저 접속 상태 업데이트
 		System.out.println("유저 " + userID + "(" + socket.getInetAddress().toString() + ")이  접속을 종료하였습니다.");
-		
 	}
 	
 	/**
@@ -154,6 +155,7 @@ public class UserControl extends Thread{
 //			this.socket.setSoTimeout(10);
 			this.socket.close();
 			while(this.isAlive());	// 죽을때까지 대기.
+			UserDBManager.getInstance().userDeactivation(userID); // 유저 접속 상태 업데이트
 			System.out.println("유저 " + userID + "(" + socket.getInetAddress().toString() + ")의  접속이 강제로 종료되었습니다.");
 		} catch (IOException e) {
 //			e.printStackTrace();

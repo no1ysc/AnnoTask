@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.kdars.AnnoTask.ContextConfig;
+import com.kdars.AnnoTask.Server.Command.Server2Client.UserInfo;
 
 public class UserDBConnector {
 	private java.sql.Connection sqlConnection;
@@ -67,14 +68,15 @@ public class UserDBConnector {
 		return true;
 	}
 
-	public String getUserId(String emailAddress) {
+	public UserInfo getUserInfo(String emailAddress) {
+		UserInfo userInfo = new UserInfo();
 		ResultSet resultSet = null;
-		String userID = "";
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + emailAddress + "\";");
 			while(resultSet.next()){
-				userID = resultSet.getString(2); //email
+				userInfo.userId = resultSet.getString(2); //email
+				userInfo.userName = resultSet.getString(3); //user_name
 			}
 			stmt.close();
 
@@ -83,7 +85,51 @@ public class UserDBConnector {
 			e.printStackTrace();
 			return null;
 		}
-		return userID;
+		return userInfo;
+	}
+
+	public UserInfo loginCheck(String loginID, String password) {
+		UserInfo userInfo = new UserInfo();
+		ResultSet resultSet = null;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + loginID + "\";");
+			while(resultSet.next()){
+				if(password.equals(resultSet.getString(4))){
+					userInfo = getUserInfo(loginID);
+				}else{
+					return null;
+				}
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return userInfo;
+	}
+
+	// 유저 접속중 상태 flag 활성화
+	public void activateUser(String userID) {
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute("update " + userAccountsTable + " set isWorking = 1 where email = \"" + userID + "\";");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// 유저 접속중 상태 flag 비활성화
+	public void deactivateUser(String userID) {
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			stmt.execute("update " + userAccountsTable + " set isWorking = 0 where email = \"" + userID + "\";");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
