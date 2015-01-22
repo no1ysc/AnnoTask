@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.kdars.AnnoTask.ContextConfig;
+import com.kdars.AnnoTask.DB.ActivityLogDBManager;
 import com.kdars.AnnoTask.DB.ConceptToList;
 import com.kdars.AnnoTask.DB.ContentDBManager;
 import com.kdars.AnnoTask.DB.DeleteListDBManager;
@@ -257,9 +258,11 @@ public class UserControl extends Thread{
 			for (String deleteTerm : requestedDeleteList.addDeleteList) {
 				synchronized (this.locker) {
 					if (isExistThesaurusTable(deleteTerm)){
-						removeThesaurusTable(deleteTerm);
+						removeFromThesaurusTable(deleteTerm);
 					}
 					addDeleteList(deleteTerm);
+					// (기흥) 로그 남기기 -- 시소러스에서 불용어로 전환
+					ActivityLogDBManager.getInstance().changeThes2DeleteList(userID, deleteTerm);
 					returnList.add(new ReturnAddDeleteList(deleteTerm, "Normal", "Normal"));
 				}
 			}
@@ -278,6 +281,8 @@ public class UserControl extends Thread{
 					} else {
 						// 어느 테이블에도 속하지 않은 경우는 그냥 작업.
 						addDeleteList(deleteTerm);
+						// (기흥) 로그 남기기 -- 순수 불용어 추가
+						ActivityLogDBManager.getInstance().add_deletelist(userID, deleteTerm);
 						returnList.add(new ReturnAddDeleteList(deleteTerm, "Normal", "Normal"));
 					}
 				}
@@ -300,13 +305,19 @@ public class UserControl extends Thread{
 				if (isExistDeleteList(conceptFrom)){
 					removeDeleteList(conceptFrom);
 					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					// (기흥) 로그 남기기 -- 불용어에서 시소러스로 전환
+					ActivityLogDBManager.getInstance().change_DeleteList2Thes(userID, conceptFrom, conceptTo, metaOntology);
 					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "ExistDeleteList");
 				} else if (isExistThesaurusTable(conceptFrom)){
-					removeThesaurusTable(conceptFrom);
+					removeFromThesaurusTable(conceptFrom);
 					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					// (기흥) 로그 남기기 -- 시소러스 업데이트
+					ActivityLogDBManager.getInstance().update_thesaurus(userID, conceptFrom, conceptTo, metaOntology);
 					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "ExistThesaurusTable");
 				} else {
 					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					// (기흥) 로그 남기기 -- 순수 시소러스 추가
+					ActivityLogDBManager.getInstance().add_thesaurus(userID, conceptFrom, conceptTo, metaOntology);
 					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "Normal");
 				}			
 			} else {
@@ -319,6 +330,8 @@ public class UserControl extends Thread{
 				} else {
 					// 어느 테이블에도 속하지 않은 경우는 그냥 작업.
 					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					// (기흥) 로그 남기기 -- 순수 시소러스 추가
+					ActivityLogDBManager.getInstance().add_thesaurus(userID, conceptFrom, conceptTo, metaOntology);
 					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "Normal");
 				}
 			}
@@ -351,7 +364,7 @@ public class UserControl extends Thread{
 	 * @author JS
 	 * @param term
 	 */
-	private void removeThesaurusTable(String term) {
+	private void removeFromThesaurusTable(String term) {
 		ThesaurusDBManager.getInstance().deleteTerm(term);
 	}
 

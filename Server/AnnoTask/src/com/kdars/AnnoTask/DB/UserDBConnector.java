@@ -7,6 +7,12 @@ import java.sql.SQLException;
 import com.kdars.AnnoTask.ContextConfig;
 import com.kdars.AnnoTask.Server.Command.Server2Client.UserInfo;
 
+/**
+ * 
+ * @author kihpark
+ * @date 1/21/2015
+ * 
+ **/
 public class UserDBConnector {
 	private java.sql.Connection sqlConnection;
 	private String userAccountsTable = ContextConfig.getInstance().UserAccounts_DB_TABLE_NAME;

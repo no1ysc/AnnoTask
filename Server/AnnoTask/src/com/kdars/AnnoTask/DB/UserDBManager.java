@@ -2,6 +2,12 @@ package com.kdars.AnnoTask.DB;
 
 import com.kdars.AnnoTask.Server.Command.Server2Client.UserInfo;
 
+/**
+ * 
+ * @author kihpark
+ * @date 1/21/2015
+ * 
+ **/
 public class UserDBManager {
 	private static UserDBManager userDBManager = new UserDBManager();
 	private UserDBConnector userDB;
