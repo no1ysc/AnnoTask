@@ -164,7 +164,7 @@ public class TermFreqDBConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			String deleteTerm = escape(term);
-			stmt.execute("update " + termFreqTable + " set " + colName8 + " = 1 where " + colName4 + " = \"" + deleteTerm + "\";"); /* AND " + colName7 + " = '" + String.valueOf(termHolder) + "';");*/
+			stmt.execute("update " + termFreqTable + " set " + colName8 + " = " + flag + " where " + colName4 + " = \"" + deleteTerm + "\";"); /* AND " + colName7 + " = '" + String.valueOf(termHolder) + "';");*/
 			stmt.close();
 //		disconnect(sqlConnectionLocal);
 	} catch (SQLException e) {
