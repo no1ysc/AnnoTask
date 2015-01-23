@@ -18,7 +18,7 @@ namespace AnnoTaskClient
             InitializeComponent();
         }
 
-
+        // 유저가 창을 끌 경우
         private void LoginPage_FormClosed(object sender, FormClosedEventArgs e)
         {
             UIHandler.Instance.CommonUI.setMainWindowEnableStatus(true);
@@ -29,7 +29,7 @@ namespace AnnoTaskClient
         {
             RegisterPage registerPage = new RegisterPage();
             registerPage.Show();
-            UIHandler.Instance.CommonUI.setLoginPageEnableStatus(false);
+            //UIHandler.Instance.CommonUI.setLoginPageEnableStatus(false);
         }
 
         private void loginButton_Click(object sender, EventArgs e)

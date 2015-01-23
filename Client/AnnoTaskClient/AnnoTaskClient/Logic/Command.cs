@@ -10,19 +10,6 @@ namespace AnnoTaskClient.Logic
 	{
 		public class Server2Client
 		{
-            public class RegisterUserAccount
-            {
-                public string userID; // email address
-                public string password;
-                public string userName;
-            }
-
-            public class UserLogin
-            {
-                public string userID; // email address
-                public string password;
-            }
-
 			public class SendDocumentCount
 			{
 				// 문서갯수 이만큼임.1-2
@@ -119,6 +106,19 @@ namespace AnnoTaskClient.Logic
 
 		public class Client2Server
 		{
+            public class RegisterUserAccount
+            {
+                public string userID; // email address
+                public string password;
+                public string userName;
+            }
+
+            public class UserLogin
+            {
+                public string userID; // email address
+                public string password;
+            }
+
             //phase2.5 JobStart
             public class RequestAnnoTaskWork
             {

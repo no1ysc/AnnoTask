@@ -28,8 +28,6 @@ namespace AnnoTaskClient
 		public MainWindow()
 		{
 			InitializeComponent();
-            // (기흥) Login Page먼저 뛰우기
-            startLogin();
 
 			this.Disposed += exitWindow;
 
@@ -37,6 +35,10 @@ namespace AnnoTaskClient
 			mainLogicWorker.Name = "MainLogic";
 			mainLogicWorker.Start();
 			UIHandler.Instance.runUIHandler(this);
+
+            // (기흥) Login Page 뛰우기
+            startLogin();
+
 		}
 
 		// 종료 이벤트 핸들러

@@ -90,7 +90,7 @@ public class ContextConfig {
 	/* PostFix Setting */
 	
 	/* Content DB Connect Info(Running time is not changed.)*/   
-	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://localhost/ewok_v01";
+	public final String CONTENT_DB_JDBC_URL = "jdbc:mysql://128.2.213.162/ewok_v01";
 	public final String CONTENT_DB_NAME = "ewok_v01"; 
 	public final String CONTENT_DB_USER_ID = "kdars";
 	public final String CONTENT_DB_USER_PASS = "kdarscom";
@@ -128,7 +128,7 @@ public class ContextConfig {
 	/*ActivityLog DB Connect Info */
 	
 	/* DeleteList DB Connect Info*/
-	public final String DeleteList_DB_JDBC_URL = "jdbc:mysql://localhost/annotask";
+	public final String DeleteList_DB_JDBC_URL = "jdbc:mysql://128.2.213.162/annotask";
 	public final String DeleteList_DB_NAME = "annotask"; 
 	public final String DeleteList_DB_USER_ID = "kdars";
 	public final String DeleteList_DB_USER_PASS = "kdarscom";
@@ -136,7 +136,7 @@ public class ContextConfig {
 	/* DeleteList DB Connect Info*/
 
 	/* TermFreq DB Connect Info*/
-	public final String TermFreq_DB_JDBC_URL = "jdbc:mysql://localhost/annotask";
+	public final String TermFreq_DB_JDBC_URL = "jdbc:mysql://128.2.213.162/annotask";
 	public final String TermFreq_DB_NAME = "annotask"; 
 	public final String TermFreq_DB_USER_ID = "kdars";
 	public final String TermFreq_DB_USER_PASS = "kdarscom";
@@ -144,7 +144,7 @@ public class ContextConfig {
 	/* TermFreq DB Connect Info*/
 	
 	/* Thesaurus DB Connect Info*/
-	public final String Thesaurus_DB_JDBC_URL = "jdbc:mysql://localhost/annotask";
+	public final String Thesaurus_DB_JDBC_URL = "jdbc:mysql://128.2.213.162/annotask";
 	public final String Thesaurus_DB_NAME = "annotask"; 
 	public final String Thesaurus_DB_USER_ID = "kdars";
 	public final String Thesaurus_DB_USER_PASS = "kdarscom";

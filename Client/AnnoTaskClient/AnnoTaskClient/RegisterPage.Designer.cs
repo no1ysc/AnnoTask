@@ -31,21 +31,18 @@
             this.userIdTextBox = new System.Windows.Forms.TextBox();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.passwordConfirmTextBox = new System.Windows.Forms.TextBox();
-            this.nameTextBox = new System.Windows.Forms.TextBox();
+            this.userNameTextBox = new System.Windows.Forms.TextBox();
             this.registerButton = new System.Windows.Forms.Button();
             this.userID = new System.Windows.Forms.Label();
             this.password_lable = new System.Windows.Forms.Label();
             this.passwordConfirm_lable = new System.Windows.Forms.Label();
             this.userName = new System.Windows.Forms.Label();
-            this.userIdStatus = new System.Windows.Forms.Label();
-            this.passwordStatus = new System.Windows.Forms.Label();
-            this.passwordConfirmStatus = new System.Windows.Forms.Label();
             this.RegisterTitle_Lable = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // userIdTextBox
             // 
-            this.userIdTextBox.Location = new System.Drawing.Point(164, 84);
+            this.userIdTextBox.Location = new System.Drawing.Point(164, 129);
             this.userIdTextBox.Multiline = true;
             this.userIdTextBox.Name = "userIdTextBox";
             this.userIdTextBox.Size = new System.Drawing.Size(229, 30);
@@ -53,7 +50,7 @@
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Location = new System.Drawing.Point(164, 124);
+            this.passwordTextBox.Location = new System.Drawing.Point(164, 169);
             this.passwordTextBox.Multiline = true;
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.Size = new System.Drawing.Size(229, 30);
@@ -62,20 +59,20 @@
             // 
             // passwordConfirmTextBox
             // 
-            this.passwordConfirmTextBox.Location = new System.Drawing.Point(164, 166);
+            this.passwordConfirmTextBox.Location = new System.Drawing.Point(164, 208);
             this.passwordConfirmTextBox.Multiline = true;
             this.passwordConfirmTextBox.Name = "passwordConfirmTextBox";
             this.passwordConfirmTextBox.Size = new System.Drawing.Size(229, 30);
             this.passwordConfirmTextBox.TabIndex = 2;
             this.passwordConfirmTextBox.UseSystemPasswordChar = true;
             // 
-            // nameTextBox
+            // userNameTextBox
             // 
-            this.nameTextBox.Location = new System.Drawing.Point(164, 207);
-            this.nameTextBox.Multiline = true;
-            this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(229, 30);
-            this.nameTextBox.TabIndex = 3;
+            this.userNameTextBox.Location = new System.Drawing.Point(164, 90);
+            this.userNameTextBox.Multiline = true;
+            this.userNameTextBox.Name = "userNameTextBox";
+            this.userNameTextBox.Size = new System.Drawing.Size(229, 30);
+            this.userNameTextBox.TabIndex = 3;
             // 
             // registerButton
             // 
@@ -128,38 +125,11 @@
             this.userName.TabIndex = 8;
             this.userName.Text = "이  름 :";
             // 
-            // userIdStatus
-            // 
-            this.userIdStatus.AutoSize = true;
-            this.userIdStatus.Location = new System.Drawing.Point(399, 132);
-            this.userIdStatus.Name = "userIdStatus";
-            this.userIdStatus.Size = new System.Drawing.Size(179, 15);
-            this.userIdStatus.TabIndex = 9;
-            this.userIdStatus.Text = "사용할 수 있는 아이디입니다.";
-            // 
-            // passwordStatus
-            // 
-            this.passwordStatus.AutoSize = true;
-            this.passwordStatus.Location = new System.Drawing.Point(399, 173);
-            this.passwordStatus.Name = "passwordStatus";
-            this.passwordStatus.Size = new System.Drawing.Size(175, 15);
-            this.passwordStatus.TabIndex = 10;
-            this.passwordStatus.Text = "사용 가능한 비밀번호입니다.";
-            // 
-            // passwordConfirmStatus
-            // 
-            this.passwordConfirmStatus.AutoSize = true;
-            this.passwordConfirmStatus.Location = new System.Drawing.Point(399, 213);
-            this.passwordConfirmStatus.Name = "passwordConfirmStatus";
-            this.passwordConfirmStatus.Size = new System.Drawing.Size(89, 15);
-            this.passwordConfirmStatus.TabIndex = 11;
-            this.passwordConfirmStatus.Text = "비밀번호 일치";
-            // 
             // RegisterTitle_Lable
             // 
             this.RegisterTitle_Lable.AutoSize = true;
             this.RegisterTitle_Lable.Font = new System.Drawing.Font("Verdana", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RegisterTitle_Lable.Location = new System.Drawing.Point(132, 26);
+            this.RegisterTitle_Lable.Location = new System.Drawing.Point(12, 9);
             this.RegisterTitle_Lable.Name = "RegisterTitle_Lable";
             this.RegisterTitle_Lable.Size = new System.Drawing.Size(293, 32);
             this.RegisterTitle_Lable.TabIndex = 12;
@@ -169,17 +139,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(589, 321);
+            this.ClientSize = new System.Drawing.Size(456, 319);
             this.Controls.Add(this.RegisterTitle_Lable);
-            this.Controls.Add(this.passwordConfirmStatus);
-            this.Controls.Add(this.passwordStatus);
-            this.Controls.Add(this.userIdStatus);
             this.Controls.Add(this.userName);
             this.Controls.Add(this.passwordConfirm_lable);
             this.Controls.Add(this.password_lable);
             this.Controls.Add(this.userID);
             this.Controls.Add(this.registerButton);
-            this.Controls.Add(this.nameTextBox);
+            this.Controls.Add(this.userNameTextBox);
             this.Controls.Add(this.passwordConfirmTextBox);
             this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.userIdTextBox);
@@ -197,15 +164,12 @@
         private System.Windows.Forms.TextBox userIdTextBox;
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.TextBox passwordConfirmTextBox;
-        private System.Windows.Forms.TextBox nameTextBox;
+        private System.Windows.Forms.TextBox userNameTextBox;
         private System.Windows.Forms.Button registerButton;
         private System.Windows.Forms.Label userID;
         private System.Windows.Forms.Label password_lable;
         private System.Windows.Forms.Label passwordConfirm_lable;
         private System.Windows.Forms.Label userName;
-        private System.Windows.Forms.Label userIdStatus;
-        private System.Windows.Forms.Label passwordStatus;
-        private System.Windows.Forms.Label passwordConfirmStatus;
         private System.Windows.Forms.Label RegisterTitle_Lable;
     }
 }

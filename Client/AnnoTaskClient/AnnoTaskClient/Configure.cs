@@ -14,8 +14,9 @@ namespace AnnoTaskClient
 			get { return thisClass; }
 		}
 
-		private string serverIP = "128.2.213.162";
-		private int serverPort = 50000;
+        //private string serverIP = "128.2.213.162";
+        private string serverIP = "192.168.1.9";
+        private int serverPort = 50000;
 		private int connectionWaitTimeS = 10;
 		private int limitDocumentCount = 5000;
 		private int heartBeatDurationS = 10;	// HeartBeat 보내는 주기.
