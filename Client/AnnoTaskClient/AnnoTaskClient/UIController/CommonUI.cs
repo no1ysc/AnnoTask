@@ -47,7 +47,7 @@ namespace AnnoTaskClient.UIController
 			mainWindow.progressLabel.Text = mainWindow.progressBar.Value.ToString() + "%";
 		}
 
-		private void setButtonEnableState(bool bState)
+		public void setButtonEnableState(bool bState)
 		{
 			if (bState)
 			{

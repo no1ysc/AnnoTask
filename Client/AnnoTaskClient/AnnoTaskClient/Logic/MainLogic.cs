@@ -250,6 +250,11 @@ namespace AnnoTaskClient.Logic
 			UIHandler.Instance.CommonUI.ProgressBar = 0;
 		}
 
+        internal bool isUserIDExist(string userID)
+        {
+            return clientWormHole.isUserIDExist(userID);
+        }
+
         internal void registerNewUser(string userName, string userID, string password)
         {
             commandQ.AddLast(new RegisterUserAccount(userName, userID, password));
@@ -557,5 +562,6 @@ namespace AnnoTaskClient.Logic
 		//{
 		//	commandQ.AddLast(new OpenThesaurusWindow(paramSelectedTerms));
 		//}
+
     }
 }

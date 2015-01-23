@@ -162,6 +162,7 @@ public class UserControl extends Thread{
 	}
 
 	private void commandParser(String commandFromUser) {
+
 		/*
 		 * (기흥) phase2.5 새로 정책을 바꿔서 짤 코드
 		 * 구현 계획 1: Client로 부터 작업 요청시 서버는 contentdb.job_table에서 client_jobstatus가 0인 녀석 중 10개의 doc_id를 가져오도록 한다. 가져오면 해당 status를 1로 업데이트.
@@ -220,7 +221,6 @@ public class UserControl extends Thread{
 		}
 		
 	}
-	
 
 	// 트리뷰 요청 시
 	private void requestDocMetaHandler(RequestDocMeta requestDocMeta) {

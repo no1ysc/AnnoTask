@@ -10,8 +10,10 @@ import java.net.Socket;
 import com.kdars.AnnoTask.ContextConfig;
 import com.kdars.AnnoTask.DB.UserDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddUserAccount;
+import com.kdars.AnnoTask.Server.Command.Client2Server.RequestCheckUserID;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestLogin;
 import com.kdars.AnnoTask.Server.Command.Server2Client.LoginFail;
+import com.kdars.AnnoTask.Server.Command.Server2Client.SendUserIdCheckResult;
 import com.kdars.AnnoTask.Server.Command.Server2Client.UserInfo;
 
 import flexjson.JSONDeserializer;
@@ -48,11 +50,12 @@ public class UserAuthentication extends Thread{
 	}
 	
 	public void run(){
-		String commandFromUser = commandFromUser();
-		if (commandFromUser != null) {
-			commandParser(commandFromUser);
+		while(bValidConnection){
+			String commandFromUser = commandFromUser();
+			if (commandFromUser != null) {
+				commandParser(commandFromUser);
+			}
 		}
-		
 		// 인스턴스가 사라질 때 reference 다 끊어주기
 		socket = null;
 		input = null;
@@ -61,9 +64,14 @@ public class UserAuthentication extends Thread{
 	}
 	
 	private void commandParser(String commandFromUser) {
-
-		// 유저 회원가입 요청 시
-		if(commandFromUser.contains("addUserAccount")){
+		
+		// 계정 생성 전 중복 검사
+		if(commandFromUser.contains("checkUserID")){
+			RequestCheckUserID requestCheckUserID = new JSONDeserializer<RequestCheckUserID>().deserialize(commandFromUser, RequestCheckUserID.class);
+			requestCheckUserID(requestCheckUserID);
+		}
+		// 유저 계정 생성 요청
+		if(commandFromUser.contains("userName")){
 			RequestAddUserAccount requestAddUserAccount = new JSONDeserializer<RequestAddUserAccount>().deserialize(commandFromUser, RequestAddUserAccount.class);
 			requestAddUserAccount(requestAddUserAccount);
 		}
@@ -86,11 +94,19 @@ public class UserAuthentication extends Thread{
 	}
 	
 	/** Command 처리 함수들 (시작) **/
+	private void requestCheckUserID(RequestCheckUserID requestCheckUserID) {
+		String checkUserID = requestCheckUserID.checkUserID;
+		SendUserIdCheckResult sendUserIdCheckResult = new SendUserIdCheckResult();
+		sendUserIdCheckResult.isDuplicate = checkUserID(checkUserID);
+		transferObject(sendUserIdCheckResult);
+	}
+
 	private void requestAddUserAccount(	RequestAddUserAccount requestAddUserAccount) {
 		// 회원가입 성공 시
 		if(addNewUser(requestAddUserAccount)){
 			// 자동 로그인
 			automaticLogin(requestAddUserAccount);
+			bValidConnection = false;
 		}
 	}
 
@@ -98,6 +114,7 @@ public class UserAuthentication extends Thread{
 		// 로그인 인증
 		if(authentication(requestLogin)){
 			System.out.println(socket.getInetAddress().getAddress().toString() + " 로그인 성공!");
+			bValidConnection = false;
 		}else{
 			System.out.println(socket.getInetAddress().getAddress().toString() + " 로그인 인증 실패!");
 		}
@@ -121,6 +138,10 @@ public class UserAuthentication extends Thread{
 	}
 	/** Command 처리 함수들 (끝) **/
 
+	private boolean checkUserID(String checkUserID) {
+		return UserDBManager.getInstance().checkUserID(checkUserID);
+	}
+	
 	private void login(UserInfo userInfo) {
 		userID = userInfo.userId;
 		userName = userInfo.userName;
@@ -137,8 +158,8 @@ public class UserAuthentication extends Thread{
 
 	private void automaticLogin(	RequestAddUserAccount requestAddUserAccount) {
 		UserInfo userInfo = new UserInfo();
-		userID = UserDBManager.getInstance().getUserInformation(requestAddUserAccount.emailAddress).userId;
-		userName = UserDBManager.getInstance().getUserInformation(requestAddUserAccount.emailAddress).userName;
+		userID = UserDBManager.getInstance().getUserInformation(requestAddUserAccount.userID).userId;
+		userName = UserDBManager.getInstance().getUserInformation(requestAddUserAccount.userID).userName;
 		userListener.createActiveUser(socket, userID, userName);
 		System.out.println(userName + "(" + userID + ")" + "님이 IP주소 " + socket.getInetAddress().getAddress().toString() + "로 접속하였습니다.");
 		//로그인 성공 packet 보내기
@@ -151,7 +172,7 @@ public class UserAuthentication extends Thread{
 	}
 	
 	private boolean addNewUser(RequestAddUserAccount requestAddUserAccount) {
-		return UserDBManager.getInstance().registerNewUser(requestAddUserAccount.emailAddress, requestAddUserAccount.Password, requestAddUserAccount.userName);
+		return UserDBManager.getInstance().registerNewUser(requestAddUserAccount.userID, requestAddUserAccount.password, requestAddUserAccount.userName);
 	}
 	
 	private void transferObject(Object obj) {

@@ -56,4 +56,8 @@ public class UserDBManager {
 	public void increaseThesaurusAddedCount(String userID) {
 		userDB.increaseThesaurusAddedCount(userID);		
 	}
+
+	public boolean checkUserID(String checkUserID) {
+		return userDB.checkUserID(checkUserID);
+	}
 }

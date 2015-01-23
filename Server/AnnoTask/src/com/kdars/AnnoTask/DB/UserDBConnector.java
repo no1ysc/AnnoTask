@@ -167,5 +167,24 @@ public class UserDBConnector {
 			e.printStackTrace();
 		}		
 	}
+
+	public boolean checkUserID(String checkUserID) {
+		ResultSet resultSet = null;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + checkUserID + "\";");
+			while(resultSet.next()){
+				if(resultSet.getInt(1) == 1){
+					return true;
+				}
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return false;
+	}
 	
 }

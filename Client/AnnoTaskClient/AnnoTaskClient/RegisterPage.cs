@@ -17,10 +17,12 @@ namespace AnnoTaskClient
     public partial class RegisterPage : Form
     {
         private MainLogic logic = UIHandler.Instance.logic;
-        
-        protected string waterMarkTextName = "실명 입력";
-        protected string waterMarkTextUserName = "사용하실 이메일 주소 입력";
-        protected string waterMarkTextPassword = "알파벳+숫자 조합으로 6~10자리 입력";
+
+        private bool isSuccess;
+
+        protected string waterMarkTextName = "한글 실명";
+        protected string waterMarkTextUserName = "이메일 주소";
+        protected string waterMarkTextPassword = "영문ㆍ숫자 조합으로 6자리 이상";
         protected string waterMarkTextConfirmPassword = "비밀번호 재입력";
         private char passwordChar = '*';
         private char initChar = '\0';
@@ -30,66 +32,66 @@ namespace AnnoTaskClient
         public RegisterPage()
         {
             InitializeComponent();
-            usernameTextBox.Select();
+            userIDTextBox.Select();
 
-            nameTextBox.ForeColor = waterMarkColor;
-            nameTextBox.Text = waterMarkTextName;
+            userNameTextBox.ForeColor = waterMarkColor;
+            userNameTextBox.Text = waterMarkTextName;
 
-            usernameTextBox.ForeColor = waterMarkColor;
-            usernameTextBox.Text = waterMarkTextUserName;
+            userIDTextBox.ForeColor = waterMarkColor;
+            userIDTextBox.Text = waterMarkTextUserName;
 
             passwordTextBox.ForeColor = waterMarkColor;
             passwordTextBox.Text = waterMarkTextPassword;
 
-            confirmPasswordTextBox.ForeColor = waterMarkColor;
-            confirmPasswordTextBox.Text = waterMarkTextConfirmPassword;
+            passwordConfirmTextBox.ForeColor = waterMarkColor;
+            passwordConfirmTextBox.Text = waterMarkTextConfirmPassword;
 
-            this.nameTextBox.Leave += new System.EventHandler(this.nameTextBox_Leave);
-            this.nameTextBox.Enter += new System.EventHandler(this.nameTextBox_Enter);
+            this.userNameTextBox.Leave += new System.EventHandler(this.nameTextBox_Leave);
+            this.userNameTextBox.Enter += new System.EventHandler(this.nameTextBox_Enter);
 
-            this.usernameTextBox.Leave += new System.EventHandler(this.usernameTextBox_Leave);
-            this.usernameTextBox.Enter += new System.EventHandler(this.usernameTextBox_Enter);
+            this.userIDTextBox.Leave += new System.EventHandler(this.usernameTextBox_Leave);
+            this.userIDTextBox.Enter += new System.EventHandler(this.usernameTextBox_Enter);
 
             this.passwordTextBox.Leave += new System.EventHandler(this.passwordTextBox_Leave);
             this.passwordTextBox.Enter += new System.EventHandler(this.passwordTextBox_Enter);
 
-            this.confirmPasswordTextBox.Leave += new System.EventHandler(this.confirmPasswordTextBox_Leave);
-            this.confirmPasswordTextBox.Enter += new System.EventHandler(this.confirmPasswordTextBox_Enter);
+            this.passwordConfirmTextBox.Leave += new System.EventHandler(this.confirmPasswordTextBox_Leave);
+            this.passwordConfirmTextBox.Enter += new System.EventHandler(this.confirmPasswordTextBox_Enter);
         }
 
         private void nameTextBox_Leave(object sender, EventArgs e)
         {
-            if (nameTextBox.Text == "")
+            if (userNameTextBox.Text == "")
             {
-                nameTextBox.Text = waterMarkTextName;
-                nameTextBox.ForeColor = waterMarkColor;
+                userNameTextBox.Text = waterMarkTextName;
+                userNameTextBox.ForeColor = waterMarkColor;
             }
         }
 
         private void nameTextBox_Enter(object sender, EventArgs e)
         {
-            if (nameTextBox.Text == waterMarkTextName)
+            if (userNameTextBox.Text == waterMarkTextName)
             {
-                nameTextBox.Text = "";
-                nameTextBox.ForeColor = fontColor;
+                userNameTextBox.Text = "";
+                userNameTextBox.ForeColor = fontColor;
             }
         }
 
         private void usernameTextBox_Leave(object sender, EventArgs e)
         {
-            if (usernameTextBox.Text == "")
+            if (userIDTextBox.Text == "")
             {
-                usernameTextBox.Text = waterMarkTextUserName;
-                usernameTextBox.ForeColor = waterMarkColor;
+                userIDTextBox.Text = waterMarkTextUserName;
+                userIDTextBox.ForeColor = waterMarkColor;
             }
         }
 
         private void usernameTextBox_Enter(object sender, EventArgs e)
         {
-            if (usernameTextBox.Text == waterMarkTextUserName)
+            if (userIDTextBox.Text == waterMarkTextUserName)
             {
-                usernameTextBox.Text = "";
-                usernameTextBox.ForeColor = fontColor;
+                userIDTextBox.Text = "";
+                userIDTextBox.ForeColor = fontColor;
             }
         }
 
@@ -118,22 +120,22 @@ namespace AnnoTaskClient
         // 
         private void confirmPasswordTextBox_Enter(object sender, EventArgs e)
         {
-            if (confirmPasswordTextBox.Text == waterMarkTextConfirmPassword)
+            if (passwordConfirmTextBox.Text == waterMarkTextConfirmPassword)
             {
-                confirmPasswordTextBox.Text = "";
-                confirmPasswordTextBox.ForeColor = fontColor;
-                confirmPasswordTextBox.PasswordChar = passwordChar;
+                passwordConfirmTextBox.Text = "";
+                passwordConfirmTextBox.ForeColor = fontColor;
+                passwordConfirmTextBox.PasswordChar = passwordChar;
             }
         }
 
         // 
         private void confirmPasswordTextBox_Leave(object sender, EventArgs e)
         {
-            if (confirmPasswordTextBox.Text == "")
+            if (passwordConfirmTextBox.Text == "")
             {
-                confirmPasswordTextBox.Text = waterMarkTextConfirmPassword;
-                confirmPasswordTextBox.ForeColor = waterMarkColor;
-                confirmPasswordTextBox.PasswordChar = initChar;
+                passwordConfirmTextBox.Text = waterMarkTextConfirmPassword;
+                passwordConfirmTextBox.ForeColor = waterMarkColor;
+                passwordConfirmTextBox.PasswordChar = initChar;
             }
         }
 
@@ -143,16 +145,13 @@ namespace AnnoTaskClient
             UIHandler.Instance.CommonUI.setLoginPageEnableStatus(true);
         }
 
-
-
-
         // (기흥) 계정 등록 버튼 클릭
         private void registerButton_Click(object sender, EventArgs e)
         {
             this.Enabled = false;
 
             if (this.userNameTextBox.Text.Trim().Equals("") ||
-                this.userIdTextBox.Text.Trim().Equals("") ||
+                this.userIDTextBox.Text.Trim().Equals("") ||
                 this.passwordTextBox.Text.Trim().Equals("") ||
                 this.passwordConfirmTextBox.Text.Trim().Equals(""))
             {
@@ -167,7 +166,7 @@ namespace AnnoTaskClient
                 clearInputs("userName");
                 return;
             }
-            else if (!isValidUserID(this.userIdTextBox.Text.Trim()))
+            else if (!isValidUserID(this.userIDTextBox.Text.Trim()))
             {
                 MessageBox.Show("올바른 이메일 주소를 입력해 주시길 바랍니다.");
                 this.Enabled = true;
@@ -178,6 +177,7 @@ namespace AnnoTaskClient
                 MessageBox.Show("비밀번호에는 반드시 1개 이상의 영문과 숫자를 포함시켜 주셔야 합니다.");
                 this.Enabled = true;
                 clearInputs("password");
+                clearInputs("pass_confirm");
                 return;
             }
             else if (!isValidPasswordConfirm(this.passwordConfirmTextBox.Text.Trim()))
@@ -190,10 +190,27 @@ namespace AnnoTaskClient
 
             string userName, userID, password;
             userName = this.userNameTextBox.Text.Trim();
-            userID = this.userIdTextBox.Text.Trim();
+            userID = this.userIDTextBox.Text.Trim();
             password = this.passwordTextBox.Text.Trim();
-                
-            logic.registerNewUser(userName, userID, password);
+
+            // userID 중복 검사
+            if (logic.isUserIDExist(userID))
+            {
+                MessageBox.Show("이미 가입된 이메일 주소입니다.");
+                this.Enabled = true;
+                clearInputs("userName");
+                clearInputs("userID");
+                clearInputs("password");
+                clearInputs("pass_confirm");
+                return;
+            }
+            else
+            {
+                logic.registerNewUser(userName, userID, password);
+                this.Owner.Close();
+                this.Close();
+            }
+
         }
 
         private void clearInputs(string whichTextBox)
@@ -201,10 +218,10 @@ namespace AnnoTaskClient
             switch (whichTextBox)
             {
                 case "userName":
-                    this.userName.Text = string.Empty;
+                    this.userNameTextBox.Text = string.Empty;
                     break;
                 case "userID":
-                    this.userIdTextBox.Text = string.Empty;
+                    this.userIDTextBox.Text = string.Empty;
                     break;
                 case "password":
                     this.passwordTextBox.Text = string.Empty;

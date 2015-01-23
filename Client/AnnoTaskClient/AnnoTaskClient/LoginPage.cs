@@ -87,14 +87,15 @@ namespace AnnoTaskClient
         private void LoginPage_FormClosed(object sender, FormClosedEventArgs e)
         {
             UIHandler.Instance.CommonUI.setMainWindowEnableStatus(true);
+            UIHandler.Instance.CommonUI.setButtonEnableState(false);
         }
 
         // 유저 계정 생성을 위한 회원가입 페이지 이동
         private void registerNewUserButton_Click(object sender, EventArgs e)
         {
             RegisterPage registerPage = new RegisterPage();
+            registerPage.Owner = this;
             registerPage.Show();
-            //UIHandler.Instance.CommonUI.setLoginPageEnableStatus(false);
         }
 
         private void loginButton_Click(object sender, EventArgs e)
