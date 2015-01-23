@@ -41,27 +41,24 @@
             // 
             // userNameTextBox
             // 
-            this.userNameTextBox.Location = new System.Drawing.Point(274, 63);
-            this.userNameTextBox.Multiline = true;
+            this.userNameTextBox.Location = new System.Drawing.Point(233, 35);
             this.userNameTextBox.Name = "userNameTextBox";
-            this.userNameTextBox.Size = new System.Drawing.Size(234, 30);
+            this.userNameTextBox.Size = new System.Drawing.Size(177, 20);
             this.userNameTextBox.TabIndex = 0;
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Location = new System.Drawing.Point(274, 103);
-            this.passwordTextBox.Multiline = true;
+            this.passwordTextBox.Location = new System.Drawing.Point(233, 81);
             this.passwordTextBox.Name = "passwordTextBox";
-            this.passwordTextBox.Size = new System.Drawing.Size(234, 30);
+            this.passwordTextBox.Size = new System.Drawing.Size(177, 20);
             this.passwordTextBox.TabIndex = 1;
-            this.passwordTextBox.UseSystemPasswordChar = true;
             // 
             // registerNewUserButton
             // 
             this.registerNewUserButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.registerNewUserButton.Location = new System.Drawing.Point(274, 139);
+            this.registerNewUserButton.Location = new System.Drawing.Point(233, 124);
             this.registerNewUserButton.Name = "registerNewUserButton";
-            this.registerNewUserButton.Size = new System.Drawing.Size(113, 31);
+            this.registerNewUserButton.Size = new System.Drawing.Size(77, 31);
             this.registerNewUserButton.TabIndex = 4;
             this.registerNewUserButton.Text = "회원가입";
             this.registerNewUserButton.UseVisualStyleBackColor = true;
@@ -70,9 +67,9 @@
             // loginButton
             // 
             this.loginButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.loginButton.Location = new System.Drawing.Point(393, 138);
+            this.loginButton.Location = new System.Drawing.Point(316, 124);
             this.loginButton.Name = "loginButton";
-            this.loginButton.Size = new System.Drawing.Size(115, 31);
+            this.loginButton.Size = new System.Drawing.Size(94, 31);
             this.loginButton.TabIndex = 5;
             this.loginButton.Text = "로그인";
             this.loginButton.UseVisualStyleBackColor = true;
@@ -81,9 +78,9 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(12, 49);
+            this.pictureBox1.Location = new System.Drawing.Point(25, 22);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(142, 117);
+            this.pictureBox1.Size = new System.Drawing.Size(96, 89);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
@@ -91,20 +88,20 @@
             // username_lable
             // 
             this.username_lable.AutoSize = true;
-            this.username_lable.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.username_lable.Location = new System.Drawing.Point(169, 68);
+            this.username_lable.Font = new System.Drawing.Font("Arial", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.username_lable.Location = new System.Drawing.Point(143, 35);
             this.username_lable.Name = "username_lable";
-            this.username_lable.Size = new System.Drawing.Size(102, 22);
+            this.username_lable.Size = new System.Drawing.Size(84, 18);
             this.username_lable.TabIndex = 7;
             this.username_lable.Text = "Username:";
             // 
             // password_lable
             // 
             this.password_lable.AutoSize = true;
-            this.password_lable.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.password_lable.Location = new System.Drawing.Point(172, 111);
+            this.password_lable.Font = new System.Drawing.Font("Arial", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.password_lable.Location = new System.Drawing.Point(146, 81);
             this.password_lable.Name = "password_lable";
-            this.password_lable.Size = new System.Drawing.Size(99, 22);
+            this.password_lable.Size = new System.Drawing.Size(81, 18);
             this.password_lable.TabIndex = 8;
             this.password_lable.Text = "Password:";
             // 
@@ -112,7 +109,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(522, 201);
+            this.ClientSize = new System.Drawing.Size(450, 172);
             this.Controls.Add(this.password_lable);
             this.Controls.Add(this.username_lable);
             this.Controls.Add(this.pictureBox1);
