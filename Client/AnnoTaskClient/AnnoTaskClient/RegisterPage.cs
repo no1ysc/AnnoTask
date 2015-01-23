@@ -16,5 +16,11 @@ namespace AnnoTaskClient
         {
             InitializeComponent();
         }
+
+        // (기흥) 계정 등록 버튼 클릭
+        private void registerButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

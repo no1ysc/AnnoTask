@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnnoTaskClient.UIController;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,25 @@ namespace AnnoTaskClient
         public LoginPage()
         {
             InitializeComponent();
+        }
+
+
+        private void LoginPage_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            UIHandler.Instance.CommonUI.setMainWindowEnableStatus(true);
+        }
+
+        // 유저 계정 생성을 위한 회원가입 페이지 이동
+        private void registerNewUserButton_Click(object sender, EventArgs e)
+        {
+            RegisterPage registerPage = new RegisterPage();
+            registerPage.Show();
+            UIHandler.Instance.CommonUI.setLoginPageEnableStatus(false);
+        }
+
+        private void loginButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

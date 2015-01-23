@@ -83,6 +83,11 @@ namespace AnnoTaskClient.Logic
 			return true;
 		}
 
+        /*
+         * TODO 로그인 및 회원 가입  
+         * 
+         */
+
         // (기흥) phase2.5 start
         internal TermFreqByDoc[] JobStart()
         {

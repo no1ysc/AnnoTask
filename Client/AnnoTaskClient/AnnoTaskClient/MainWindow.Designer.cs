@@ -40,7 +40,8 @@ namespace AnnoTaskClient
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            //this.불러오기ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.로그인ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.로그아웃ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -101,8 +102,6 @@ namespace AnnoTaskClient
             this.openAddThesaurusWindowButton = new System.Windows.Forms.Button();
             this.addDeleteListButton = new System.Windows.Forms.Button();
             this.frequencyBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.로그인ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.로그아웃ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -174,7 +173,7 @@ namespace AnnoTaskClient
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(792, 51);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(57, 13);
+            this.label7.Size = new System.Drawing.Size(61, 13);
             this.label7.TabIndex = 21;
             this.label7.Text = "총 문서수:";
             // 
@@ -192,7 +191,7 @@ namespace AnnoTaskClient
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(879, 51);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(57, 13);
+            this.label4.Size = new System.Drawing.Size(61, 13);
             this.label4.TabIndex = 19;
             this.label4.Text = "총 단어수:";
             // 
@@ -227,18 +226,23 @@ namespace AnnoTaskClient
             // fileMenuItem
             // 
             this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            //this.불러오기ToolStripMenuItem,
             this.로그인ToolStripMenuItem,
             this.로그아웃ToolStripMenuItem});
             this.fileMenuItem.Name = "fileMenuItem";
             this.fileMenuItem.Size = new System.Drawing.Size(43, 20);
             this.fileMenuItem.Text = "파일";
             // 
-            // 불러오기ToolStripMenuItem
+            // 로그인ToolStripMenuItem
             // 
-            //this.불러오기ToolStripMenuItem.Name = "불러오기ToolStripMenuItem";
-            //this.불러오기ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            //this.불러오기ToolStripMenuItem.Text = "불러오기";
+            this.로그인ToolStripMenuItem.Name = "로그인ToolStripMenuItem";
+            this.로그인ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.로그인ToolStripMenuItem.Text = "로그인";
+            // 
+            // 로그아웃ToolStripMenuItem
+            // 
+            this.로그아웃ToolStripMenuItem.Name = "로그아웃ToolStripMenuItem";
+            this.로그아웃ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.로그아웃ToolStripMenuItem.Text = "로그아웃";
             // 
             // tabControl1
             // 
@@ -336,7 +340,7 @@ namespace AnnoTaskClient
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label3.Location = new System.Drawing.Point(4, 4);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 15);
+            this.label3.Size = new System.Drawing.Size(72, 15);
             this.label3.TabIndex = 0;
             this.label3.Text = "단어리스트";
             // 
@@ -375,7 +379,7 @@ namespace AnnoTaskClient
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label5.Location = new System.Drawing.Point(3, 4);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(67, 15);
+            this.label5.Size = new System.Drawing.Size(72, 15);
             this.label5.TabIndex = 0;
             this.label5.Text = "문서리스트";
             // 
@@ -398,7 +402,7 @@ namespace AnnoTaskClient
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label6.Location = new System.Drawing.Point(3, 4);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(55, 15);
+            this.label6.Size = new System.Drawing.Size(59, 15);
             this.label6.TabIndex = 0;
             this.label6.Text = "기사전문";
             // 
@@ -489,7 +493,7 @@ namespace AnnoTaskClient
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label8.Location = new System.Drawing.Point(4, 4);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(67, 15);
+            this.label8.Size = new System.Drawing.Size(72, 15);
             this.label8.TabIndex = 0;
             this.label8.Text = "단어리스트";
             // 
@@ -528,7 +532,7 @@ namespace AnnoTaskClient
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label9.Location = new System.Drawing.Point(3, 4);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(67, 15);
+            this.label9.Size = new System.Drawing.Size(72, 15);
             this.label9.TabIndex = 0;
             this.label9.Text = "문서리스트";
             // 
@@ -551,7 +555,7 @@ namespace AnnoTaskClient
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label10.Location = new System.Drawing.Point(3, 4);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(55, 15);
+            this.label10.Size = new System.Drawing.Size(59, 15);
             this.label10.TabIndex = 0;
             this.label10.Text = "기사전문";
             // 
@@ -643,7 +647,7 @@ namespace AnnoTaskClient
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label11.Location = new System.Drawing.Point(4, 4);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(67, 15);
+            this.label11.Size = new System.Drawing.Size(72, 15);
             this.label11.TabIndex = 0;
             this.label11.Text = "단어리스트";
             // 
@@ -682,7 +686,7 @@ namespace AnnoTaskClient
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label12.Location = new System.Drawing.Point(3, 4);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(67, 15);
+            this.label12.Size = new System.Drawing.Size(72, 15);
             this.label12.TabIndex = 0;
             this.label12.Text = "문서리스트";
             // 
@@ -705,7 +709,7 @@ namespace AnnoTaskClient
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label13.Location = new System.Drawing.Point(3, 4);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(55, 15);
+            this.label13.Size = new System.Drawing.Size(59, 15);
             this.label13.TabIndex = 0;
             this.label13.Text = "기사전문";
             // 
@@ -797,7 +801,7 @@ namespace AnnoTaskClient
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label14.Location = new System.Drawing.Point(4, 4);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(67, 15);
+            this.label14.Size = new System.Drawing.Size(72, 15);
             this.label14.TabIndex = 0;
             this.label14.Text = "단어리스트";
             // 
@@ -836,7 +840,7 @@ namespace AnnoTaskClient
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label15.Location = new System.Drawing.Point(3, 4);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(67, 15);
+            this.label15.Size = new System.Drawing.Size(72, 15);
             this.label15.TabIndex = 0;
             this.label15.Text = "문서리스트";
             // 
@@ -859,7 +863,7 @@ namespace AnnoTaskClient
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label16.Location = new System.Drawing.Point(3, 4);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(55, 15);
+            this.label16.Size = new System.Drawing.Size(59, 15);
             this.label16.TabIndex = 0;
             this.label16.Text = "기사전문";
             // 
@@ -897,18 +901,6 @@ namespace AnnoTaskClient
             // frequencyBindingSource
             // 
             this.frequencyBindingSource.DataSource = typeof(AnnoTaskClient.Logic.Frequency);
-            // 
-            // 로그인ToolStripMenuItem
-            // 
-            this.로그인ToolStripMenuItem.Name = "로그인ToolStripMenuItem";
-            this.로그인ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.로그인ToolStripMenuItem.Text = "로그인";
-            // 
-            // 로그아웃ToolStripMenuItem
-            // 
-            this.로그아웃ToolStripMenuItem.Name = "로그아웃ToolStripMenuItem";
-            this.로그아웃ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.로그아웃ToolStripMenuItem.Text = "로그아웃";
             // 
             // MainWindow
             // 

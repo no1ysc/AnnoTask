@@ -8,6 +8,7 @@ namespace AnnoTaskClient.UIController
 	class CommonUI
 	{
 		private MainWindow mainWindow;
+        private LoginPage loginPage;
 
 		public CommonUI(MainWindow mainWindow)
 		{
@@ -70,6 +71,16 @@ namespace AnnoTaskClient.UIController
 		{
 			mainWindow.Enabled = status;
 		}
+
+        /// <summary>
+        /// @Author : kihpark
+        /// 로그인윈도우 활성화/비활성화
+        /// </summary>
+        /// <param name="status"></param>
+        public void setLoginPageEnableStatus(bool status)
+        {
+            loginPage.Enabled = status;
+        }
 
 		public int TermCount
 		{
@@ -165,5 +176,6 @@ namespace AnnoTaskClient.UIController
 			updateList.Add(term);
 			UpdateTermList(updateList, tabNumber);
 		}
-	}
+
+    }
 }
