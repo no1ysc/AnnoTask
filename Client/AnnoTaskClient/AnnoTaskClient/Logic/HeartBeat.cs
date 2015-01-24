@@ -30,7 +30,7 @@ namespace AnnoTaskClient.Logic
 		/// 작성자 :이승철
 		/// HeartBeat을 멈출때 사용
 		/// </summary>
-		public void destroyHeartBeat()
+		public void DestroyHeartBeat()
 		{
 			running = false;
 			Thread.Sleep(600);
