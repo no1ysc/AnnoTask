@@ -1066,8 +1066,8 @@ namespace AnnoTaskClient
 		public System.Windows.Forms.Button btnJobStart;
         public System.Windows.Forms.Button openAddThesaurusWindowButton;
         private System.Windows.Forms.Button addDeleteListButton;
-        private System.Windows.Forms.ToolStripMenuItem 로그인ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 로그아웃ToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem 로그인ToolStripMenuItem;
 	}
 }
 

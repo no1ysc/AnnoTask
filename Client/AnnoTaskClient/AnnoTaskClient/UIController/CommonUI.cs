@@ -23,6 +23,7 @@ namespace AnnoTaskClient.UIController
 		private delegate void SetButtonEnable(bool bState);
         private delegate void CloseLoginPage(); // Login 창 닫기
         private delegate void SetLoginUserName(string userName);
+        private delegate void DisableLogin(); // 로그인 성공 시 로그인 메뉴 비활성화
 
         private void closeLoginPage()
         {
@@ -33,6 +34,11 @@ namespace AnnoTaskClient.UIController
         {
             mainWindow.UserName = userName;
             mainWindow.Text = mainWindow.Text + "- " + userName;
+        }
+
+        private void disableLogin()
+        {
+            mainWindow.로그인ToolStripMenuItem.Enabled = false;
         }
 
 		private void setTermCount(int value)
@@ -82,6 +88,12 @@ namespace AnnoTaskClient.UIController
         {
             SetLoginUserName setUserName = new SetLoginUserName(setLoginUserName);
             mainWindow.Invoke(setUserName, new object[] { userName });
+        }
+
+        public void LoginDisable()
+        {
+            DisableLogin disable_login = new DisableLogin(disableLogin);
+            mainWindow.Invoke(disable_login, new object[] { });
         }
 
 		/// <summary>
