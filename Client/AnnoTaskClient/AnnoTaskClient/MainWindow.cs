@@ -407,13 +407,21 @@ namespace AnnoTaskClient
 
         private void 로그아웃ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // 서버 연결 끊기
-			logic.DoLogOut();
-            // 메인 윈도우 초기화
+			// 사용자 선택후 진행.
+			string msg = "정말 로그아웃 하시겠습니까?\r\n";
+			msg += "('예'를 클릭하시면 화면에 보이는 모든 사항이 초기화 됩니다.)";
+			DialogResult result = MessageBox.Show(msg, "로그아웃", MessageBoxButtons.YesNo);
+			if (result == DialogResult.Yes)
+			{
+				// 서버 연결 끊기
 
-            // 메인 윈도우 사용자 이름 지우기
+				logic.DoLogOut();
+				// 메인 윈도우 초기화
 
-            // 로그인 창 새로 띄우기
+				// 메인 윈도우 사용자 이름 지우기
+
+				// 로그인 창 새로 띄우기
+			}           
         }
 	}
 }
