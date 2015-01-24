@@ -74,6 +74,11 @@ namespace AnnoTaskClient
 			this.article2.Text = "";
 			this.article3.Text = "";
 			this.article4.Text = "";
+
+			this.progressBar.Value = 0;
+			this.progressLabel.Text = "";
+			this.docCount.Text = "";
+			this.termCount.Text = "";
 		}
 
 		/// <summary>
