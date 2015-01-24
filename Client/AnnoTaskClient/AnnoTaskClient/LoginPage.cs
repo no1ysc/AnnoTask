@@ -1,4 +1,5 @@
-﻿using AnnoTaskClient.UIController;
+﻿using AnnoTaskClient.Logic;
+using AnnoTaskClient.UIController;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +14,8 @@ namespace AnnoTaskClient
 {
     public partial class LoginPage : Form
     {
+        private MainLogic logic = UIHandler.Instance.logic;
+
         // 워터마크 설정
         protected string waterMarkTextUserName = "이메일";
         protected string waterMarkTextPassword = "비밀번호";
@@ -27,14 +30,14 @@ namespace AnnoTaskClient
             // 텍스트박스 초기 포커스 설정
             passwordTextBox.Select();
 
-            userNameTextBox.ForeColor = waterMarkColor;
-            userNameTextBox.Text = waterMarkTextUserName;
+            userIDTextBox.ForeColor = waterMarkColor;
+            userIDTextBox.Text = waterMarkTextUserName;
 
             passwordTextBox.ForeColor = waterMarkColor;
             passwordTextBox.Text = waterMarkTextPassword;
 
-            this.userNameTextBox.Leave += new System.EventHandler(this.userNameTextBox_Leave);
-            this.userNameTextBox.Enter += new System.EventHandler(this.userNameTextBox_Enter);
+            this.userIDTextBox.Leave += new System.EventHandler(this.userNameTextBox_Leave);
+            this.userIDTextBox.Enter += new System.EventHandler(this.userNameTextBox_Enter);
 
             this.passwordTextBox.Leave += new System.EventHandler(this.passwordTextBox_Leave);
             this.passwordTextBox.Enter += new System.EventHandler(this.passwordTextBox_Enter);
@@ -44,20 +47,20 @@ namespace AnnoTaskClient
         // 유저네임 텍스트박스에서 다른 곳으로 옮겨 갔을 경우
         private void userNameTextBox_Leave(object sender, EventArgs e)
         {
-            if (userNameTextBox.Text == "")
+            if (userIDTextBox.Text == "")
             {
-                userNameTextBox.Text = waterMarkTextUserName;
-                userNameTextBox.ForeColor = waterMarkColor;
+                userIDTextBox.Text = waterMarkTextUserName;
+                userIDTextBox.ForeColor = waterMarkColor;
             }
         }
 
         // 유저네임 텍스트박스가 클릭 됐을 경우
         private void userNameTextBox_Enter(object sender, EventArgs e)
         {
-            if (userNameTextBox.Text == waterMarkTextUserName)
+            if (userIDTextBox.Text == waterMarkTextUserName)
             {
-                userNameTextBox.Text = "";
-                userNameTextBox.ForeColor = fontColor;
+                userIDTextBox.Text = "";
+                userIDTextBox.ForeColor = fontColor;
             }
         }
 
@@ -100,7 +103,12 @@ namespace AnnoTaskClient
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-
+            string userID = this.userIDTextBox.Text.Trim();
+            string password = this.passwordTextBox.Text.Trim();
+            if (!this.userIDTextBox.Text.Trim().Equals("") && !this.passwordTextBox.Text.Trim().Equals(""))
+            {
+                logic.doLogin(userID, password);
+            }
         }
     }
 }

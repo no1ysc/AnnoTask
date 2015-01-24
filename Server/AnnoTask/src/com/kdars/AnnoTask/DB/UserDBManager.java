@@ -33,8 +33,8 @@ public class UserDBManager {
 		return userDB.getUserInfo(emailAddress);
 	}
 
-	public UserInfo loginCheck(String loginID, String password) {
-		return userDB.loginCheck(loginID, password);
+	public UserInfo loginCheck(String userID, String password) {
+		return userDB.loginCheck(userID, password);
 	}
 
 	public void userActivation(String userID) {

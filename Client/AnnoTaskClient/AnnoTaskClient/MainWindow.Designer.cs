@@ -237,12 +237,14 @@ namespace AnnoTaskClient
             this.로그인ToolStripMenuItem.Name = "로그인ToolStripMenuItem";
             this.로그인ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.로그인ToolStripMenuItem.Text = "로그인";
+            this.로그인ToolStripMenuItem.Click += new System.EventHandler(this.로그인ToolStripMenuItem_Click);
             // 
             // 로그아웃ToolStripMenuItem
             // 
             this.로그아웃ToolStripMenuItem.Name = "로그아웃ToolStripMenuItem";
             this.로그아웃ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.로그아웃ToolStripMenuItem.Text = "로그아웃";
+            this.로그아웃ToolStripMenuItem.Click += new System.EventHandler(this.로그아웃ToolStripMenuItem_Click);
             // 
             // tabControl1
             // 

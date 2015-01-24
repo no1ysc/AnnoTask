@@ -135,7 +135,26 @@ namespace AnnoTaskClient.Logic
 
     }
 
-	
+    public class UserLogin : InternalCommand
+    {
+        public UserLogin(string userID, string pass)
+        {
+            command = "Login";
+            this.userID = userID;
+            this.password = pass;
+        }
+
+        private string userID;
+        public string UserID
+        {
+            get { return userID; }
+        }
+        private string password;
+        public string Password
+        {
+            get { return password; }
+        }
+    }
 
 	
 	

@@ -18,6 +18,11 @@ namespace AnnoTaskClient
 	public partial class MainWindow : Form
 	{        
 		private Thread mainLogicWorker;
+        public LoginPage loginPage
+        {
+            get;
+            set;
+        }
         
         private MainLogic logic = UIHandler.Instance.logic;
         public MainLogic getMainLogic()
@@ -98,7 +103,7 @@ namespace AnnoTaskClient
         /// </summary>
         private void startLogin()
         {
-            LoginPage loginPage = new LoginPage();
+            loginPage = new LoginPage();
             loginPage.Owner = this;
             this.Enabled = false;
 
@@ -388,6 +393,17 @@ namespace AnnoTaskClient
 
 
             logic.clickedAddDeleteList(selectedTerms, tabNum);
+        }
+
+        private void 로그인ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // (기흥) Login Page 뛰우기
+            startLogin();
+        }
+
+        private void 로그아웃ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 	}
 }

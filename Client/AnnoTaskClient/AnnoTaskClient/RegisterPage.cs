@@ -209,6 +209,7 @@ namespace AnnoTaskClient
                 logic.registerNewUser(userName, userID, password);
                 this.Owner.Close();
                 this.Close();
+                UIHandler.Instance.CommonUI.setButtonEnableState(true);
             }
 
         }

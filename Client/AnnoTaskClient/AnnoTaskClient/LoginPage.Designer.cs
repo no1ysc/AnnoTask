@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginPage));
-            this.userNameTextBox = new System.Windows.Forms.TextBox();
+            this.userIDTextBox = new System.Windows.Forms.TextBox();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.registerNewUserButton = new System.Windows.Forms.Button();
             this.loginButton = new System.Windows.Forms.Button();
@@ -39,12 +39,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // userNameTextBox
+            // userIDTextBox
             // 
-            this.userNameTextBox.Location = new System.Drawing.Point(233, 35);
-            this.userNameTextBox.Name = "userNameTextBox";
-            this.userNameTextBox.Size = new System.Drawing.Size(177, 20);
-            this.userNameTextBox.TabIndex = 0;
+            this.userIDTextBox.Location = new System.Drawing.Point(233, 35);
+            this.userIDTextBox.Name = "userIDTextBox";
+            this.userIDTextBox.Size = new System.Drawing.Size(177, 20);
+            this.userIDTextBox.TabIndex = 0;
             // 
             // passwordTextBox
             // 
@@ -89,11 +89,11 @@
             // 
             this.username_lable.AutoSize = true;
             this.username_lable.Font = new System.Drawing.Font("Arial", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.username_lable.Location = new System.Drawing.Point(143, 35);
+            this.username_lable.Location = new System.Drawing.Point(162, 35);
             this.username_lable.Name = "username_lable";
-            this.username_lable.Size = new System.Drawing.Size(84, 18);
+            this.username_lable.Size = new System.Drawing.Size(65, 18);
             this.username_lable.TabIndex = 7;
-            this.username_lable.Text = "Username:";
+            this.username_lable.Text = "User ID:";
             // 
             // password_lable
             // 
@@ -116,7 +116,7 @@
             this.Controls.Add(this.loginButton);
             this.Controls.Add(this.registerNewUserButton);
             this.Controls.Add(this.passwordTextBox);
-            this.Controls.Add(this.userNameTextBox);
+            this.Controls.Add(this.userIDTextBox);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.Name = "LoginPage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -130,7 +130,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox userNameTextBox;
+        private System.Windows.Forms.TextBox userIDTextBox;
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.Button registerNewUserButton;
         private System.Windows.Forms.Button loginButton;

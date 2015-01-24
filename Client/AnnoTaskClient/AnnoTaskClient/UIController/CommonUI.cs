@@ -21,6 +21,12 @@ namespace AnnoTaskClient.UIController
 		private delegate void SetDocCountDelegate(int value);
 		private delegate void SetProgressValueDelegate(int value);
 		private delegate void SetButtonEnable(bool bState);
+        private delegate void CloseLoginPage(); // Login 창 닫기
+
+        private void closeLoginPage()
+        {
+            mainWindow.loginPage.Close();
+        }
 
 		private void setTermCount(int value)
 		{
@@ -59,7 +65,10 @@ namespace AnnoTaskClient.UIController
 			}
 		}
 
-
+        public void LoginPageClose(){
+            CloseLoginPage closeLogin = new CloseLoginPage(closeLoginPage);
+            mainWindow.Invoke(closeLogin, new object[] { });
+        }
 
 		
 		/// <summary>

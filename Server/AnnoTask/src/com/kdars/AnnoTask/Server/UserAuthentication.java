@@ -12,7 +12,6 @@ import com.kdars.AnnoTask.DB.UserDBManager;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddUserAccount;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestCheckUserID;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestLogin;
-import com.kdars.AnnoTask.Server.Command.Server2Client.LoginFail;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendUserIdCheckResult;
 import com.kdars.AnnoTask.Server.Command.Server2Client.UserInfo;
 
@@ -76,8 +75,8 @@ public class UserAuthentication extends Thread{
 			requestAddUserAccount(requestAddUserAccount);
 		}
 		
-		// TODO 로그인 시도
-		if(commandFromUser.contains("requestAuthentication")){
+		// 유저 로그인 시도
+		if(commandFromUser.contains("userID")){
 			RequestLogin requestLogin = new JSONDeserializer<RequestLogin>().deserialize(commandFromUser, RequestLogin.class);
 			requestLogin(requestLogin);
 		}
@@ -113,28 +112,24 @@ public class UserAuthentication extends Thread{
 	private void requestLogin(RequestLogin requestLogin) {
 		// 로그인 인증
 		if(authentication(requestLogin)){
-			System.out.println(socket.getInetAddress().getAddress().toString() + " 로그인 성공!");
 			bValidConnection = false;
 		}else{
-			System.out.println(socket.getInetAddress().getAddress().toString() + " 로그인 인증 실패!");
+			System.out.println(socket.getInetAddress() + " 로그인 인증 실패!");
 		}
 	}
 
 	private boolean authentication(RequestLogin requestLogin) {
 		UserInfo userInfo = new UserInfo();
-		LoginFail loginFail = new LoginFail();
-		userInfo = UserDBManager.getInstance().loginCheck(requestLogin.loginID, requestLogin.password);
+		boolean ret = false;
+		userInfo = UserDBManager.getInstance().loginCheck(requestLogin.userID, requestLogin.password);
 		// LOGIN SUCCESS
-		if(userInfo != null){
+		if(userInfo.userId != null && userInfo.userName != null){
 			login(userInfo);
-			return true;
-			
-		// LOGIN FAIL
-		}else{
-			loginFail.loginFail = "Either UserId or Password was Incorrect!";
-			transferObject(loginFail);
-			return false;
+			ret = true;
 		}
+		userInfo.isLoginSuccess = ret;
+		transferObject(userInfo);
+		return ret;
 	}
 	/** Command 처리 함수들 (끝) **/
 
@@ -146,9 +141,7 @@ public class UserAuthentication extends Thread{
 		userID = userInfo.userId;
 		userName = userInfo.userName;
 		userListener.createActiveUser(socket, userID, userName);
-		System.out.println(userName + "(" + userID + ")" + "님이 IP주소 " + socket.getInetAddress().getAddress().toString() + "로 접속하였습니다.");
-		//로그인 성공 packet 보내기
-		transferObject(userInfo);
+		System.out.println(userName + "(" + userID + ")" + "님이 IP주소 " + socket.getInetAddress() + "로 접속하였습니다.");
 		
 		//유저 접속 상태 정보 업데이트 (활성화)
 		UserDBManager.getInstance().userActivation(userID);
@@ -161,7 +154,7 @@ public class UserAuthentication extends Thread{
 		userID = UserDBManager.getInstance().getUserInformation(requestAddUserAccount.userID).userId;
 		userName = UserDBManager.getInstance().getUserInformation(requestAddUserAccount.userID).userName;
 		userListener.createActiveUser(socket, userID, userName);
-		System.out.println(userName + "(" + userID + ")" + "님이 IP주소 " + socket.getInetAddress().getAddress().toString() + "로 접속하였습니다.");
+		System.out.println(userName + "(" + userID + ")" + "님이 IP주소 " + socket.getInetAddress() + "로 접속하였습니다.");
 		//로그인 성공 packet 보내기
 		transferObject(userInfo);
 		

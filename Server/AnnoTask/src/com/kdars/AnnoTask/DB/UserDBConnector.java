@@ -94,15 +94,15 @@ public class UserDBConnector {
 		return userInfo;
 	}
 
-	public UserInfo loginCheck(String loginID, String password) {
+	public UserInfo loginCheck(String userID, String password) {
 		UserInfo userInfo = new UserInfo();
 		ResultSet resultSet = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + loginID + "\";");
+			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + userID + "\" and password = \"" + password +"\";");
 			while(resultSet.next()){
 				if(password.equals(resultSet.getString(4))){
-					userInfo = getUserInfo(loginID);
+					userInfo = getUserInfo(userID);
 				}else{
 					return null;
 				}

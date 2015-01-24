@@ -109,7 +109,27 @@ namespace AnnoTaskClient.Logic
             data.password = password;
             string json_RequestRegisterUserAccount = new JsonConverter<Command.Client2Server.RegisterUserAccount>().Object2Json(data);
             _transferToServer(json_RequestRegisterUserAccount);
+
+            string json_userInfo = m_Reader.ReadLine();
+            Command.Server2Client.UserInfo userInfo = new JsonConverter<Command.Server2Client.UserInfo>().Json2Object(json_userInfo);
+            userInfo.userName;
         }
+
+        // 유저 로그인
+        internal bool loginUser(string userID, string password)
+        {
+            Command.Client2Server.UserLogin data = new Command.Client2Server.UserLogin();
+            data.userID = userID;
+            data.password = password;
+            string json_RequestUserLogin = new JsonConverter<Command.Client2Server.UserLogin>().Object2Json(data);
+            _transferToServer(json_RequestUserLogin);
+
+            // 로그인 결과 확인
+            string json_isLoginSuccess = m_Reader.ReadLine();
+            Command.Server2Client.UserInfo isLoginSuccess = new JsonConverter<Command.Server2Client.UserInfo>().Json2Object(json_isLoginSuccess);
+            return isLoginSuccess.isLoginSuccess;
+        }
+
 
         // (기흥) phase2.5 start
         internal TermFreqByDoc[] JobStart()
@@ -538,6 +558,5 @@ namespace AnnoTaskClient.Logic
 			string json_addDeleteList = new JsonConverter<Command.Client2Server.HeartBeat>().Object2Json(heartBeat);
 			_transferToServer(json_addDeleteList);
 		}
-
     }
 }

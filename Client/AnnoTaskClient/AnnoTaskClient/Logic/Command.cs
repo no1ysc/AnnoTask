@@ -15,6 +15,13 @@ namespace AnnoTaskClient.Logic
                 public bool isDuplicate;
             }
 
+            public class UserInfo
+            {
+                public string userId;
+                public string userName;
+                public bool isLoginSuccess;
+            }
+
 			public class SendDocumentCount
 			{
 				// 문서갯수 이만큼임.1-2
