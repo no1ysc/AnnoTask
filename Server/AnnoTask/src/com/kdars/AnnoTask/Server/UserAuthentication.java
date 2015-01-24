@@ -153,6 +153,7 @@ public class UserAuthentication extends Thread{
 		UserInfo userInfo = new UserInfo();
 		userID = UserDBManager.getInstance().getUserInformation(requestAddUserAccount.userID).userId;
 		userName = UserDBManager.getInstance().getUserInformation(requestAddUserAccount.userID).userName;
+		userInfo.isLoginSuccess = true;
 		userListener.createActiveUser(socket, userID, userName);
 		System.out.println(userName + "(" + userID + ")" + "님이 IP주소 " + socket.getInetAddress() + "로 접속하였습니다.");
 		//로그인 성공 packet 보내기

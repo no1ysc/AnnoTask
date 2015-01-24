@@ -101,7 +101,7 @@ namespace AnnoTaskClient.Logic
 
 
         // 새 유저 등록
-        internal void registerNewUser(string userName, string userID, string password)
+        internal UserInfo registerNewUser(string userName, string userID, string password)
         {
             Command.Client2Server.RegisterUserAccount data = new Command.Client2Server.RegisterUserAccount();
             data.userName = userName;
@@ -110,13 +110,17 @@ namespace AnnoTaskClient.Logic
             string json_RequestRegisterUserAccount = new JsonConverter<Command.Client2Server.RegisterUserAccount>().Object2Json(data);
             _transferToServer(json_RequestRegisterUserAccount);
 
-            string json_userInfo = m_Reader.ReadLine();
-            Command.Server2Client.UserInfo userInfo = new JsonConverter<Command.Server2Client.UserInfo>().Json2Object(json_userInfo);
-            userInfo.userName;
+            string json_isRegisterSuccess = m_Reader.ReadLine();
+            Command.Server2Client.UserInfo isRegisterSuccess = new JsonConverter<Command.Server2Client.UserInfo>().Json2Object(json_isRegisterSuccess);
+            UserInfo userInfo = new UserInfo();
+            userInfo.userId = isRegisterSuccess.userId;
+            userInfo.userName = isRegisterSuccess.userName;
+            userInfo.isLoginSuccess = isRegisterSuccess.isLoginSuccess;
+            return userInfo;
         }
 
         // 유저 로그인
-        internal bool loginUser(string userID, string password)
+        internal UserInfo loginUser(string userID, string password)
         {
             Command.Client2Server.UserLogin data = new Command.Client2Server.UserLogin();
             data.userID = userID;
@@ -127,7 +131,12 @@ namespace AnnoTaskClient.Logic
             // 로그인 결과 확인
             string json_isLoginSuccess = m_Reader.ReadLine();
             Command.Server2Client.UserInfo isLoginSuccess = new JsonConverter<Command.Server2Client.UserInfo>().Json2Object(json_isLoginSuccess);
-            return isLoginSuccess.isLoginSuccess;
+
+            UserInfo userInfo = new UserInfo();
+            userInfo.userId = isLoginSuccess.userId;
+            userInfo.userName = isLoginSuccess.userName;
+            userInfo.isLoginSuccess = isLoginSuccess.isLoginSuccess;
+            return userInfo;
         }
 
 

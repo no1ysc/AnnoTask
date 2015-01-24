@@ -22,10 +22,17 @@ namespace AnnoTaskClient.UIController
 		private delegate void SetProgressValueDelegate(int value);
 		private delegate void SetButtonEnable(bool bState);
         private delegate void CloseLoginPage(); // Login 창 닫기
+        private delegate void SetLoginUserName(string userName);
 
         private void closeLoginPage()
         {
             mainWindow.loginPage.Close();
+        }
+
+        private void setLoginUserName(string userName)
+        {
+            mainWindow.UserName = userName;
+            mainWindow.Text = mainWindow.Text + "- " + userName;
         }
 
 		private void setTermCount(int value)
@@ -65,12 +72,18 @@ namespace AnnoTaskClient.UIController
 			}
 		}
 
-        public void LoginPageClose(){
+        public void LoginPageClose()
+        {
             CloseLoginPage closeLogin = new CloseLoginPage(closeLoginPage);
             mainWindow.Invoke(closeLogin, new object[] { });
         }
 
-		
+        public void UserNameSet(string userName)
+        {
+            SetLoginUserName setUserName = new SetLoginUserName(setLoginUserName);
+            mainWindow.Invoke(setUserName, new object[] { userName });
+        }
+
 		/// <summary>
 		/// @Author : JS
 		/// 메인윈도우 활성화/비활성화

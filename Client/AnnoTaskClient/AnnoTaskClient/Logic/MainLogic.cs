@@ -169,13 +169,20 @@ namespace AnnoTaskClient.Logic
         // 유저 계정 등록
         private void register(string userName, string userID, string password)
         {
-            clientWormHole.registerNewUser(userName, userID, password);
+            UserInfo userInfo = clientWormHole.registerNewUser(userName, userID, password);
+            if (userInfo.isLoginSuccess)
+            {
+                UIHandler.Instance.CommonUI.UserNameSet(userInfo.userName);
+                return;
+            }
         }
 
         // 유저 로그인
         internal void login(string userID, string password)
         {
-            if (!clientWormHole.loginUser(userID, password))
+            UserInfo userInfo = clientWormHole.loginUser(userID, password);
+            bool isLoginSuccess = userInfo.isLoginSuccess;
+            if (!isLoginSuccess)
             {
                 MessageBox.Show("아이디 또는 비밀번호가 틀렸습니다.");
                 return;
@@ -185,6 +192,8 @@ namespace AnnoTaskClient.Logic
                 MessageBox.Show("로그인에 성공하였습니다.");
                 UIHandler.Instance.CommonUI.LoginPageClose(); // 로그인 창 닫기
                 UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true;
+                UIHandler.Instance.CommonUI.UserNameSet(userInfo.userName);
+
                 return;
             }
         }

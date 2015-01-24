@@ -117,6 +117,7 @@
     <Compile Include="AddThesaurusWindow\LinkedListItem.cs" />
     <Compile Include="LastDocListNode.cs" />
     <Compile Include="Configure.cs" />
+    <Compile Include="Logic\UserInfo.cs" />
     <Compile Include="Logic\ClientWormHole.cs" />
     <Compile Include="Logic\Command.cs" />
     <Compile Include="Logic\DocMeta.cs" />

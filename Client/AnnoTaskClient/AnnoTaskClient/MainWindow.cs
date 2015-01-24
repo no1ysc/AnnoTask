@@ -16,7 +16,13 @@ using System.Collections;
 namespace AnnoTaskClient
 {
 	public partial class MainWindow : Form
-	{        
+	{
+        private string userName;
+        public string UserName
+        {
+            get { return userName; }
+            set { userName = value; }
+        }
 		private Thread mainLogicWorker;
         public LoginPage loginPage
         {
