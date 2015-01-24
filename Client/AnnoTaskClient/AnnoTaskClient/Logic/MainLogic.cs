@@ -84,7 +84,8 @@ namespace AnnoTaskClient.Logic
 			{
 				// 서버 연결 안내문.
 				//MessageBox.Show("서버 연결완료");
-				UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true;
+                Thread.Sleep(500);
+                UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true;
 			}
 			else
 			{
@@ -122,6 +123,10 @@ namespace AnnoTaskClient.Logic
 
 			switch(command)
 			{
+                case "Register":
+                    RegisterUserAccount registerUserAccount = (RegisterUserAccount)internalCommand;
+                    register(registerUserAccount.UserName, registerUserAccount.UserID, registerUserAccount.Password);
+                    break;
 				case "JobStart":
 					jobStart();
 					UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true;
@@ -156,6 +161,11 @@ namespace AnnoTaskClient.Logic
 			}
 
 		}
+
+        private void register(string userName, string userID, string password)
+        {
+            clientWormHole.registerNewUser(userName, userID, password);
+        }
 
         // (기흥) phase2.5 
 		private void jobStart()
@@ -239,6 +249,16 @@ namespace AnnoTaskClient.Logic
 			UIHandler.Instance.CommonUI.DocCount = 0;
 			UIHandler.Instance.CommonUI.ProgressBar = 0;
 		}
+
+        internal bool isUserIDExist(string userID)
+        {
+            return clientWormHole.isUserIDExist(userID);
+        }
+
+        internal void registerNewUser(string userName, string userID, string password)
+        {
+            commandQ.AddLast(new RegisterUserAccount(userName, userID, password));
+        }
 
 		internal void clickedJobStart()
 		{
@@ -542,5 +562,6 @@ namespace AnnoTaskClient.Logic
 		//{
 		//	commandQ.AddLast(new OpenThesaurusWindow(paramSelectedTerms));
 		//}
-	}
+
+    }
 }

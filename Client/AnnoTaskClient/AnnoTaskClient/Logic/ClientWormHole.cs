@@ -83,6 +83,34 @@ namespace AnnoTaskClient.Logic
 			return true;
 		}
 
+        /*
+         * TODO 로그인 및 회원 가입   
+         */
+        // 유저 중복 검사
+        internal bool isUserIDExist(string userID)
+        {
+            Command.Client2Server.CheckUserID data = new Command.Client2Server.CheckUserID();
+            data.checkUserID = userID;
+            string json_RequestUserIdCheck = new JsonConverter<Command.Client2Server.CheckUserID>().Object2Json(data);
+            _transferToServer(json_RequestUserIdCheck);
+
+            string json_CheckResult = m_Reader.ReadLine();
+            Command.Server2Client.IsDuplicateUserID isDuplicateUserID = new JsonConverter<Command.Server2Client.IsDuplicateUserID>().Json2Object(json_CheckResult);
+            return isDuplicateUserID.isDuplicate;
+        }
+
+
+        // 새 유저 등록
+        internal void registerNewUser(string userName, string userID, string password)
+        {
+            Command.Client2Server.RegisterUserAccount data = new Command.Client2Server.RegisterUserAccount();
+            data.userName = userName;
+            data.userID = userID;
+            data.password = password;
+            string json_RequestRegisterUserAccount = new JsonConverter<Command.Client2Server.RegisterUserAccount>().Object2Json(data);
+            _transferToServer(json_RequestRegisterUserAccount);
+        }
+
         // (기흥) phase2.5 start
         internal TermFreqByDoc[] JobStart()
         {
@@ -510,5 +538,6 @@ namespace AnnoTaskClient.Logic
 			string json_addDeleteList = new JsonConverter<Command.Client2Server.HeartBeat>().Object2Json(heartBeat);
 			_transferToServer(json_addDeleteList);
 		}
-	}
+
+    }
 }

@@ -10,6 +10,11 @@ namespace AnnoTaskClient.Logic
 	{
 		public class Server2Client
 		{
+            public class IsDuplicateUserID
+            {
+                public bool isDuplicate;
+            }
+
 			public class SendDocumentCount
 			{
 				// 문서갯수 이만큼임.1-2
@@ -106,6 +111,24 @@ namespace AnnoTaskClient.Logic
 
 		public class Client2Server
 		{
+            public class CheckUserID
+            {
+                public string checkUserID;
+            }
+
+            public class RegisterUserAccount
+            {
+                public string userName;
+                public string userID; // email address
+                public string password;
+            }
+
+            public class UserLogin
+            {
+                public string userID; // email address
+                public string password;
+            }
+
             //phase2.5 JobStart
             public class RequestAnnoTaskWork
             {

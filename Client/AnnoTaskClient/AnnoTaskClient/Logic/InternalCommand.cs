@@ -107,6 +107,34 @@ namespace AnnoTaskClient.Logic
 		}
 	}
 
+    public class RegisterUserAccount : InternalCommand
+    {
+        public RegisterUserAccount(string userName, string userID, string password)
+        {
+            command = "Register";
+            this.userName = userName;
+            this.userID = userID;
+            this.password = password;
+        }
+
+        private string userName;
+        public string UserName
+        {
+            get { return userName; }
+        }
+        private string userID;
+        public string UserID
+        {
+            get { return userID; }
+        }
+        private string password;
+        public string Password
+        {
+            get { return password; }
+        }
+
+    }
+
 	
 
 	

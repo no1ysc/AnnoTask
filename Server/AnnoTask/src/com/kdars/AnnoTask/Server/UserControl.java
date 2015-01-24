@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.kdars.AnnoTask.ContextConfig;
+import com.kdars.AnnoTask.DB.ActivityLogDBManager;
 import com.kdars.AnnoTask.DB.ConceptToList;
 import com.kdars.AnnoTask.DB.ContentDBManager;
 import com.kdars.AnnoTask.DB.DeleteListDBManager;
@@ -21,11 +22,13 @@ import com.kdars.AnnoTask.DB.LinkedList;
 import com.kdars.AnnoTask.DB.TermFreqByDoc;
 import com.kdars.AnnoTask.DB.TermFreqDBManager;
 import com.kdars.AnnoTask.DB.ThesaurusDBManager;
+import com.kdars.AnnoTask.DB.UserDBManager;
 import com.kdars.AnnoTask.MapReduce.DocMetaSet;
 import com.kdars.AnnoTask.MapReduce.Monitor;
 import com.kdars.AnnoTask.Server.Command.Client2Server.DocumentRequest;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddDeleteList;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddThesaurus;
+import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAddUserAccount;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestAnnoTaskWork;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestByDate;
 import com.kdars.AnnoTask.Server.Command.Client2Server.RequestConceptToList;
@@ -52,12 +55,13 @@ public class UserControl extends Thread{
 	private Socket	socket;
 	private BufferedReader input;
 	private BufferedWriter output;
-	private int userID;
+	private String userID;
+	private String userName;
 	private boolean bValidConnection = true;
 	public boolean getbValidConnection(){
 		return this.bValidConnection;
 	}
-	private long lastHeartBeat = System.currentTimeMillis();;
+	private long lastHeartBeat = System.currentTimeMillis();
 	
 	private ArrayList<Document> 		requestDocs;
 	private ArrayList<LinkedList> 		linkedLists;
@@ -65,11 +69,12 @@ public class UserControl extends Thread{
 	private AddLocker locker;		// 시소러스, 딜리트 테이블 다른 유저가 안잡았는지 체크하고 싱크를 맞추기 위한 용도.
 	private ExecutorService eservice = null;	// 코어할당 받아 쓰레딩하기 위함.
 	
-	public UserControl(Socket socket, int userID, AddLocker locker){
+	public UserControl(Socket socket, String userID, String userName, AddLocker locker){
 		this.socket = socket;
 		this.userID = userID;
+		this.userName = userName;
 		this.locker = locker;
-		System.out.println(socket.getInetAddress().getAddress().toString() + "은 User ID " + userID + "로 접속하였습니다.");
+
 		try {
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF8"));
@@ -81,6 +86,7 @@ public class UserControl extends Thread{
 	
 	@Override
 	protected void finalize() throws Throwable {
+		UserDBManager.getInstance().userDeactivation(userID); // 유저 접속 상태 업데이트
 		input.close();
 		output.close();
 		socket.close();
@@ -126,8 +132,8 @@ public class UserControl extends Thread{
 			
 		}
 		//termUnlock(userID);
-		System.out.println("유저 " + userID + "(" + socket.getInetAddress().toString() + ")이  접속을 종료하였습니다.");
-		
+		UserDBManager.getInstance().userDeactivation(userID); // 유저 접속 상태 업데이트
+		System.out.println("유저 " + userName + "(" + userID + ")님이 정상적으로 AnnoTask를 종료하였습니다.");
 	}
 	
 	/**
@@ -138,9 +144,6 @@ public class UserControl extends Thread{
 	public long getLastHeartBeat(){
 		return this.lastHeartBeat;
 	}
-	private void commandToUser(Object commandToUser) {
-		
-	}
 	
 	/**
 	 * @author kihpark
@@ -149,17 +152,17 @@ public class UserControl extends Thread{
 	public void forceDown(){
 		this.bValidConnection = false;
 		try {
-//			this.socket.setSoTimeout(10);
 			this.socket.close();
 			while(this.isAlive());	// 죽을때까지 대기.
-			System.out.println("유저 " + userID + "(" + socket.getInetAddress().toString() + ")의  접속이 강제로 종료되었습니다.");
+			UserDBManager.getInstance().userDeactivation(userID); // 유저 접속 상태 업데이트
+			System.out.println("유저 " + userName + "(" + userID + ")의  접속이 서버로부터 강제 종료되었습니다.");
 		} catch (IOException e) {
 //			e.printStackTrace();
 		}
 	}
 
 	private void commandParser(String commandFromUser) {
-		
+
 		/*
 		 * (기흥) phase2.5 새로 정책을 바꿔서 짤 코드
 		 * 구현 계획 1: Client로 부터 작업 요청시 서버는 contentdb.job_table에서 client_jobstatus가 0인 녀석 중 10개의 doc_id를 가져오도록 한다. 가져오면 해당 status를 1로 업데이트.
@@ -218,7 +221,7 @@ public class UserControl extends Thread{
 		}
 		
 	}
-	
+
 	// 트리뷰 요청 시
 	private void requestDocMetaHandler(RequestDocMeta requestDocMeta) {
 		List<Integer> termLinkedDocIds = requestDocMeta.termLinkedDocIds;
@@ -255,9 +258,11 @@ public class UserControl extends Thread{
 			for (String deleteTerm : requestedDeleteList.addDeleteList) {
 				synchronized (this.locker) {
 					if (isExistThesaurusTable(deleteTerm)){
-						removeThesaurusTable(deleteTerm);
+						removeFromThesaurusTable(deleteTerm);
 					}
 					addDeleteList(deleteTerm);
+					// (기흥) 로그 남기기 -- 시소러스에서 불용어로 전환
+					ActivityLogDBManager.getInstance().changeThes2DeleteList(userID, deleteTerm);
 					returnList.add(new ReturnAddDeleteList(deleteTerm, "Normal", "Normal"));
 				}
 			}
@@ -276,6 +281,8 @@ public class UserControl extends Thread{
 					} else {
 						// 어느 테이블에도 속하지 않은 경우는 그냥 작업.
 						addDeleteList(deleteTerm);
+						// (기흥) 로그 남기기 -- 순수 불용어 추가
+						ActivityLogDBManager.getInstance().add_deletelist(userID, deleteTerm);
 						returnList.add(new ReturnAddDeleteList(deleteTerm, "Normal", "Normal"));
 					}
 				}
@@ -298,13 +305,19 @@ public class UserControl extends Thread{
 				if (isExistDeleteList(conceptFrom)){
 					removeDeleteList(conceptFrom);
 					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					// (기흥) 로그 남기기 -- 불용어에서 시소러스로 전환
+					ActivityLogDBManager.getInstance().change_DeleteList2Thes(userID, conceptFrom, conceptTo, metaOntology);
 					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "ExistDeleteList");
 				} else if (isExistThesaurusTable(conceptFrom)){
-					removeThesaurusTable(conceptFrom);
+					removeFromThesaurusTable(conceptFrom);
 					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					// (기흥) 로그 남기기 -- 시소러스 업데이트
+					ActivityLogDBManager.getInstance().update_thesaurus(userID, conceptFrom, conceptTo, metaOntology);
 					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "ExistThesaurusTable");
 				} else {
 					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					// (기흥) 로그 남기기 -- 순수 시소러스 추가
+					ActivityLogDBManager.getInstance().add_thesaurus(userID, conceptFrom, conceptTo, metaOntology);
 					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "Normal");
 				}			
 			} else {
@@ -317,6 +330,8 @@ public class UserControl extends Thread{
 				} else {
 					// 어느 테이블에도 속하지 않은 경우는 그냥 작업.
 					addThesaurus(conceptFrom, conceptTo, metaOntology);
+					// (기흥) 로그 남기기 -- 순수 시소러스 추가
+					ActivityLogDBManager.getInstance().add_thesaurus(userID, conceptFrom, conceptTo, metaOntology);
 					returnAddThesaurus = new ReturnAddThesaurus(conceptFrom, "Normal", "Normal");
 				}
 			}
@@ -349,7 +364,7 @@ public class UserControl extends Thread{
 	 * @author JS
 	 * @param term
 	 */
-	private void removeThesaurusTable(String term) {
+	private void removeFromThesaurusTable(String term) {
 		ThesaurusDBManager.getInstance().deleteTerm(term);
 	}
 
@@ -380,7 +395,11 @@ public class UserControl extends Thread{
 	 */
 	private void addDeleteList(String term){
 		DeleteListDBManager.getInstance().AddTermToDelete(term);
-		TermFreqDBManager.getInstance().deleteTerm(term);
+		TermFreqDBManager.getInstance().flagDeleteTerm(term);
+//		TermFreqDBManager.getInstance().deleteTerm(term);
+		// (기흥) 유저의 불용어 추가 횟수 업데이트
+		UserDBManager.getInstance().increaseDeleteListAddedCount(userID);
+
 	}
 	
 	/**
@@ -392,11 +411,13 @@ public class UserControl extends Thread{
 	 */
 	private void addThesaurus(String conceptFrom, String conceptTo, String metaOntology){
 		ThesaurusDBManager.getInstance().setEntry(conceptFrom, conceptTo, metaOntology);
-		TermFreqDBManager.getInstance().deleteTerm(conceptFrom);
+		TermFreqDBManager.getInstance().flagDeleteTerm(conceptFrom);
+//		TermFreqDBManager.getInstance().deleteTerm(conceptFrom);
+		// (기흥) 유저의 사전 추가 횟수 업데이트
+		UserDBManager.getInstance().increaseThesaurusAddedCount(userID);
+
 	}
 		
-	
-	
 	private void documentRequestHandler(DocumentRequest documentRequest) {
 		Document document = ContentDBManager.getInstance().getContent(documentRequest.documentID);
 		
@@ -482,49 +503,6 @@ public class UserControl extends Thread{
 		return filtering;
 	}
 		
-	//(진규) phase 2.5에서부터 NgramFilter 구현 방식 바뀜.	
-//		int nGramNumber = ContextConfig.getInstance().getN_Gram();
-//		HashMap<String, Integer> termHash = new HashMap<String, Integer>();
-//		ArrayList<DocTermFreqByTerm[]> docByTermList = new ArrayList<DocTermFreqByTerm[]>();
-//		for (Document doc : requestDocs){
-//			DocTermFreqByTerm[] docByTerm = TermFreqDBManager.getInstance().getDocByTerm(doc.getDocumentID(), doc.getCategory(), doc.getTitle());
-//			docByTermList.add(docByTerm);
-//			for (int nGramIndex = 1; nGramIndex < nGramNumber; nGramIndex++){
-//				for (String term : docByTerm[nGramIndex].keySet()){
-//					
-//					if (termHash.containsKey(term)){
-//						int priorValue = termHash.get(term);
-//						termHash.replace(term, priorValue, priorValue + docByTerm[nGramIndex].get(term));
-//					} else {
-//						termHash.put(term, docByTerm[nGramIndex].get(term));
-//					}
-//					
-//				}
-//			}
-//		}
-//		
-//		for (String appendTerm : termHash.keySet()){
-//			if (termHash.get(appendTerm) < 2){
-//				int whiteSpaceCount = 0;
-//				Pattern p = Pattern.compile(" ");
-//				Matcher m = p.matcher(appendTerm);
-//				while(m.find()){
-//					m.start();
-//					whiteSpaceCount++;
-//				}
-//				for (DocTermFreqByTerm[] docTermFreqByTerm : docByTermList){
-//					docTermFreqByTerm[whiteSpaceCount].remove(appendTerm);
-//				}
-//			} else {
-//			
-//				
-//			}
-//		}
-//		
-//	return docByTermList;	
-//	}
-	
-	
 	private void requestByDateHandler(RequestByDate requestByDate) {
 			// TODO 날짜날라오면 할꺼.
 			/*
@@ -598,22 +576,6 @@ public class UserControl extends Thread{
 		transferObject(meta);
 	}
 	
-	//(진규) phase 2.5에서부터 NgramFilter 구현 방식 바뀜.
-//	private void transferDocbyTerm(DocTermFreqByTerm[] docByTerm) {
-//		for (int index = 0; index < docByTerm.length; index++){
-//			TermTransfer termTransfer = new TermTransfer();
-//			termTransfer.docCategory = docByTerm[index].getDocCategory();
-//			termTransfer.docID = docByTerm[index].getDocID();
-//			termTransfer.ngram = docByTerm[index].getNGram();
-//			termTransfer.docTitle = docByTerm[index].getTitle();
-//			termTransfer.termsJson = new JSONSerializer().exclude("*.class").serialize(docByTerm[index]);
-//			
-////			System.out.println(termTransfer.termsJson);
-//			
-//			transferObject(termTransfer);
-//		}		
-//	}
-
 	private void transferObject(Object obj) {
 		String json = new JSONSerializer().exclude("*.class").serialize(obj);
 		
@@ -628,20 +590,6 @@ public class UserControl extends Thread{
 		}
 	}
 
-	//(진규) phase 2.5에서부터 NgramFilter 구현 방식 바뀜.
-//	private void termLockInDoc(TermFreqByDoc TermByDoc) {	
-//		for (int index = 0; index < docByTerm.length; index++){
-//			
-//			for (Iterator<Map.Entry<String, Integer>> iter = docByTerm[index].entrySet().iterator(); iter.hasNext();){
-//				Map.Entry<String, Integer> entry = iter.next();
-//				String term = entry.getKey();
-//				if (!TermFreqDBManager.getInstance().termLock(term, userID)){
-//					iter.remove();
-//				}
-//			}
-//		}
-//	}
-	
 	private void termUnlock(int userID) {
 		// TODO Auto-generated method stub
 		TermFreqDBManager.getInstance().termUnlock(userID);

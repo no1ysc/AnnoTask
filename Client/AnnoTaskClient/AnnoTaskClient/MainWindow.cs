@@ -18,7 +18,7 @@ namespace AnnoTaskClient
 	public partial class MainWindow : Form
 	{        
 		private Thread mainLogicWorker;
-     
+        
         private MainLogic logic = UIHandler.Instance.logic;
         public MainLogic getMainLogic()
         {
@@ -35,6 +35,10 @@ namespace AnnoTaskClient
 			mainLogicWorker.Name = "MainLogic";
 			mainLogicWorker.Start();
 			UIHandler.Instance.runUIHandler(this);
+
+            // (기흥) Login Page 뛰우기
+            startLogin();
+
 		}
 
 		// 종료 이벤트 핸들러
@@ -87,10 +91,19 @@ namespace AnnoTaskClient
 			this.addDeleteListButton.Enabled = false;
 		}
 
-		//private string getArticle(string term, string category, string title)
-		//{
-		//	return logic.loadArticle(term, category, title);
-		//}
+        /// <summary>
+        /// 작성자 : 박기흥
+        /// 작성일 : 20150122
+        /// AnnoTask 실행 시 로그인 프로시져 부터 동작하도록...
+        /// </summary>
+        private void startLogin()
+        {
+            LoginPage loginPage = new LoginPage();
+            loginPage.Owner = this;
+            this.Enabled = false;
+
+            loginPage.Show();
+        }
 
 		private void btnJobStartHandler()
 		{
