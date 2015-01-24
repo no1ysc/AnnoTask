@@ -3,6 +3,8 @@ package com.kdars.AnnoTask.DB;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 import com.kdars.AnnoTask.ContextConfig;
 import com.kdars.AnnoTask.Server.Command.Server2Client.UserInfo;
@@ -185,6 +187,18 @@ public class UserDBConnector {
 		}
 
 		return false;
+	}
+
+	public void updateLatestLogin(String userID) {
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			java.sql.Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+			stmt.execute("update " + userAccountsTable + " set latestLogin = \"" + currentTimestamp + "\" where email = \"" + userID + "\";");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+
 	}
 	
 }

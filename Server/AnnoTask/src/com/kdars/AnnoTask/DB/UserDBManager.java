@@ -60,4 +60,8 @@ public class UserDBManager {
 	public boolean checkUserID(String checkUserID) {
 		return userDB.checkUserID(checkUserID);
 	}
+
+	public void updateLatestLoginTime(String userID) {
+		userDB.updateLatestLogin(userID);
+	}
 }
