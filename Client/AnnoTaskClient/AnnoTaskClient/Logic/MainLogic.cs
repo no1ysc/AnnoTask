@@ -178,7 +178,6 @@ namespace AnnoTaskClient.Logic
         {
 			// 서버와의 연결이 필요한 시점은 회원가입 시도 시 와 로그인 시도 시 뿐임.
 			connectToServer();
-            clientWormHole.registerNewUser(userName, userID, password);
             UserInfo userInfo = clientWormHole.registerNewUser(userName, userID, password);
             if (userInfo.isLoginSuccess)
             {
@@ -192,7 +191,6 @@ namespace AnnoTaskClient.Logic
         {
 			// 서버와의 연결이 필요한 시점은 회원가입 시도 시 와 로그인 시도 시 뿐임.
 			connectToServer();
-            if (!clientWormHole.loginUser(userID, password))
             UserInfo userInfo = clientWormHole.loginUser(userID, password);
             bool isLoginSuccess = userInfo.isLoginSuccess;
             if (!isLoginSuccess)

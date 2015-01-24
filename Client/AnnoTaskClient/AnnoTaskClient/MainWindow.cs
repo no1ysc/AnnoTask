@@ -409,7 +409,14 @@ namespace AnnoTaskClient
 
         private void 로그아웃ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // 서버 연결 끊기
 
+            // 메인 윈도우 초기화
+
+            // 메인 윈도우 사용자 이름 지우기
+
+            // 로그인 창 새로 띄우기
+            startLogin();
         }
 	}
 }
