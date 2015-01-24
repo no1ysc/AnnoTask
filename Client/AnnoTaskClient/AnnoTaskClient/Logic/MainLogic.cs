@@ -203,9 +203,9 @@ namespace AnnoTaskClient.Logic
             {
                 MessageBox.Show("로그인에 성공하였습니다.");
                 UIHandler.Instance.CommonUI.LoginPageClose(); // 로그인 창 닫기
-                UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true;
-                UIHandler.Instance.CommonUI.UserNameSet(userInfo.userName);
-
+                UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true; // 메인 윈도우 버튼 활성화
+                UIHandler.Instance.CommonUI.UserNameSet(userInfo.userName); // 메인 윈도우 사용자 이름
+                UIHandler.Instance.CommonUI.LoginDisable(); // 메뉴 로그인 비활성화
                 return;
             }
         }

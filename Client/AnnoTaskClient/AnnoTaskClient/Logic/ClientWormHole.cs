@@ -119,7 +119,7 @@ namespace AnnoTaskClient.Logic
             _transferToServer(json_RequestRegisterUserAccount);
 
             string json_isRegisterSuccess = m_Reader.ReadLine();
-            Command.Server2Client.UserInfo isRegisterSuccess = new JsonConverter<Command.Server2Client.UserInfo>().Json2Object(json_isRegisterSuccess);
+            Command.Server2Client.LoginResponseInfo isRegisterSuccess = new JsonConverter<Command.Server2Client.LoginResponseInfo>().Json2Object(json_isRegisterSuccess);
             UserInfo userInfo = new UserInfo();
             userInfo.userId = isRegisterSuccess.userId;
             userInfo.userName = isRegisterSuccess.userName;
@@ -138,7 +138,7 @@ namespace AnnoTaskClient.Logic
 
             // 로그인 결과 확인
             string json_isLoginSuccess = m_Reader.ReadLine();
-            Command.Server2Client.UserInfo isLoginSuccess = new JsonConverter<Command.Server2Client.UserInfo>().Json2Object(json_isLoginSuccess);
+            Command.Server2Client.LoginResponseInfo isLoginSuccess = new JsonConverter<Command.Server2Client.LoginResponseInfo>().Json2Object(json_isLoginSuccess);
 
             UserInfo userInfo = new UserInfo();
             userInfo.userId = isLoginSuccess.userId;

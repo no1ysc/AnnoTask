@@ -15,7 +15,7 @@ namespace AnnoTaskClient.Logic
                 public bool isDuplicate;
             }
 
-            public class UserInfo
+            public class LoginResponseInfo
             {
                 public string userId;
                 public string userName;
