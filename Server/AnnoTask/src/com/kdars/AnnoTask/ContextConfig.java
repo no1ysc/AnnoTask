@@ -98,7 +98,7 @@ public class ContextConfig {
 	public final String CONTENT_DB_jobTABLE_NAME = "job_table";
 	
 	/* ContentProcessor Attributes */
-	private int maxContentProcessor = 10;
+	private int maxContentProcessor = 1;
 	public int getMaxContentProcessor(){
 		return this.maxContentProcessor;
 	}
