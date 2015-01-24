@@ -147,6 +147,8 @@ public class UserAuthentication extends Thread{
 		UserDBManager.getInstance().userActivation(userID);
 		//유저 로그인 횟수 업데이트
 		UserDBManager.getInstance().increaseLoginCount(userID);
+		//유저 마지막 로그인 시간 업데이트
+		UserDBManager.getInstance().updateLatestLoginTime(userID);
 	}
 
 	private void automaticLogin(	RequestAddUserAccount requestAddUserAccount) {
@@ -163,6 +165,8 @@ public class UserAuthentication extends Thread{
 		UserDBManager.getInstance().userActivation(userID);
 		//유저 로그인 횟수 업데이트
 		UserDBManager.getInstance().increaseLoginCount(userID);
+		//유저 마지막 로그인 시간 업데이트
+		UserDBManager.getInstance().updateLatestLoginTime(userID);
 	}
 	
 	private boolean addNewUser(RequestAddUserAccount requestAddUserAccount) {
