@@ -138,6 +138,10 @@ namespace AnnoTaskClient.Logic
                     UserLogin userLogin = (UserLogin)internalCommand;
                     login(userLogin.UserID, userLogin.Password);
                     break;
+				case "Logout":
+					UserLogout userLogout = (UserLogout)internalCommand;
+					logout();
+					break;
 				case "JobStart":
 					jobStart();
 					UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true;
@@ -173,6 +177,8 @@ namespace AnnoTaskClient.Logic
 
 		}
 
+
+
         // 유저 계정 등록
         private void register(string userName, string userID, string password)
         {
@@ -187,7 +193,7 @@ namespace AnnoTaskClient.Logic
         }
 
         // 유저 로그인
-        internal void login(string userID, string password)
+        private void login(string userID, string password)
         {
 			// 서버와의 연결이 필요한 시점은 회원가입 시도 시 와 로그인 시도 시 뿐임.
 			connectToServer();
@@ -210,9 +216,14 @@ namespace AnnoTaskClient.Logic
             }
         }
 
-		internal void DoLogOut()
+		/// <summary>
+		/// 로그아웃 시도.
+		/// </summary>
+		private void logout()
 		{
+			disconnectServer();
 
+			UIHandler.Instance.CommonUI.AfterLogout();
 		}
 
         // (기흥) phase2.5 
@@ -298,37 +309,44 @@ namespace AnnoTaskClient.Logic
 			UIHandler.Instance.CommonUI.ProgressBar = 0;
 		}
 
-        internal bool isUserIDExist(string userID)
+		#region 커맨드를 생성하는 메서드들
+		internal bool IsUserIDExist(string userID)
         {
             return clientWormHole.isUserIDExist(userID);
         }
 
-        internal void registerNewUser(string userName, string userID, string password)
+        internal void RegisterNewUser(string userName, string userID, string password)
         {
             commandQ.AddLast(new RegisterUserAccount(userName, userID, password));
         }
 
-        internal void doLogin(string userID, string pass)
+        internal void DoLogin(string userID, string pass)
         {
             commandQ.AddLast(new UserLogin(userID, pass));
         }
 
-		internal void clickedJobStart()
+		internal void DoLogOut()
+		{
+			commandQ.AddLast(new UserLogout());
+		}
+
+		internal void ClickedJobStart()
 		{
 			commandQ.AddLast(new JobStart());
 		}
 
-        internal void getConceptToList(string term)
+        internal void GetConceptToList(string term)
         {     
             commandQ.AddLast(new GetConceptToList(term));
         }
 
-        internal void getLinkedList(String term)
+        internal void GetLinkedList(String term)
 		{
             commandQ.AddLast(new GetLinkedList(term));
         }
 
-        
+		#endregion
+
 		/// <summary>
 		/// 작성자 : 박기흥
 		/// // 단어 선택 시

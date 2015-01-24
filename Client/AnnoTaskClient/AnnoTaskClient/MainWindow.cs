@@ -17,12 +17,9 @@ namespace AnnoTaskClient
 {
 	public partial class MainWindow : Form
 	{
-        private string userName;
-        public string UserName
-        {
-            get { return userName; }
-            set { userName = value; }
-        }
+        public string UserName { get; set; }
+		public string OriginProgramTitle { get; set; }
+       
 		private Thread mainLogicWorker;
         public LoginPage loginPage
         {
@@ -42,14 +39,15 @@ namespace AnnoTaskClient
 
 			this.Disposed += exitWindow;
 
+			OriginProgramTitle = this.Text;
+				 
 			mainLogicWorker = new Thread(new ThreadStart(logic.doWork));
 			mainLogicWorker.Name = "MainLogic";
 			mainLogicWorker.Start();
 			UIHandler.Instance.runUIHandler(this);
 
             // (기흥) Login Page 뛰우기
-            startLogin();
-
+            StartLogin();
 		}
 
 		// 종료 이벤트 핸들러
@@ -60,7 +58,7 @@ namespace AnnoTaskClient
 			logic = null;
 		}
 
-		private void clearUIContents()
+		internal void ClearUIContents()
 		{
 			this.wordList1.Rows.Clear();
 			this.wordList2.Rows.Clear();
@@ -107,7 +105,7 @@ namespace AnnoTaskClient
         /// 작성일 : 20150122
         /// AnnoTask 실행 시 로그인 프로시져 부터 동작하도록...
         /// </summary>
-        private void startLogin()
+        internal void StartLogin()
         {
             loginPage = new LoginPage();
             loginPage.Owner = this;
@@ -118,8 +116,8 @@ namespace AnnoTaskClient
 
 		private void btnJobStartHandler()
 		{
-			clearUIContents();
-			logic.clickedJobStart();
+			ClearUIContents();
+			logic.ClickedJobStart();
 		}
 
         // (기흥) "작업 시작하기" 버튼 클릭 시
@@ -404,7 +402,7 @@ namespace AnnoTaskClient
         private void 로그인ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // (기흥) Login Page 뛰우기
-            startLogin();
+            StartLogin();
         }
 
         private void 로그아웃ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -416,7 +414,6 @@ namespace AnnoTaskClient
             // 메인 윈도우 사용자 이름 지우기
 
             // 로그인 창 새로 띄우기
-            startLogin();
         }
 	}
 }

@@ -175,7 +175,7 @@ namespace AnnoTaskClient
 			}
 
 			//ConceptToChangedEventControl = false; // 이벤트 막이.
-			logic.getConceptToList(text);
+			logic.GetConceptToList(text);
 		}
 
 		private void ConceptToTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -241,7 +241,7 @@ namespace AnnoTaskClient
 			string selectedTerm = this.ConceptToComboBox.SelectedItem.ToString();
 			this.ConceptToTextBox.Text = selectedTerm;		// 선택된 텀 적어줌.
 			__changeMetaOntology(this.ConceptToComboBox.SelectedItem as ConceptTo);
-			logic.getLinkedList(selectedTerm);
+			logic.GetLinkedList(selectedTerm);
 			ConceptToComboBox.DroppedDown = false;
 			ConceptToChangedEventControl = true;
 		}
