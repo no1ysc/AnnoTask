@@ -8,7 +8,7 @@ namespace AnnoTaskClient.UIController
 	class CommonUI
 	{
 		private MainWindow mainWindow;
-        private LoginPage loginPage;
+        private LoginPage loginPage;		/// 박기흥 다시 보셈.
 
 		public CommonUI(MainWindow mainWindow)
 		{
@@ -113,7 +113,7 @@ namespace AnnoTaskClient.UIController
         /// <param name="status"></param>
         public void setLoginPageEnableStatus(bool status)
         {
-            loginPage.Enabled = status;
+			loginPage.Enabled = status;
         }
 
 		public int TermCount
@@ -211,5 +211,24 @@ namespace AnnoTaskClient.UIController
 			UpdateTermList(updateList, tabNumber);
 		}
 
-    }
+
+		/// <summary>
+		/// 로그아웃 이후의 동작.
+		/// </summary>
+		internal void AfterLogout()
+		{
+			DelAfterLogout delAfterLogout = new DelAfterLogout(afterLogout);
+			mainWindow.Invoke(delAfterLogout, new object[] {  });
+		}
+		private delegate void DelAfterLogout();
+		private void afterLogout()
+		{
+			// 메인 윈도우 초기화
+			mainWindow.ClearUIContents();
+			// 메인 윈도우 사용자 이름 지우기
+			mainWindow.Text = mainWindow.OriginProgramTitle;
+			// 로그인 창 새로 띄우기
+			mainWindow.StartLogin();
+		}
+	}
 }

@@ -107,7 +107,7 @@ namespace AnnoTaskClient
             string password = this.passwordTextBox.Text.Trim();
             if (!this.userIDTextBox.Text.Trim().Equals("") && !this.passwordTextBox.Text.Trim().Equals(""))
             {
-                logic.doLogin(userID, password);
+                logic.DoLogin(userID, password);
             }
         }
     }

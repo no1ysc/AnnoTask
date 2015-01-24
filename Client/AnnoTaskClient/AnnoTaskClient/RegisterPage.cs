@@ -194,7 +194,7 @@ namespace AnnoTaskClient
             password = this.passwordTextBox.Text.Trim();
 
             // userID 중복 검사
-            if (logic.isUserIDExist(userID))
+            if (logic.IsUserIDExist(userID))
             {
                 MessageBox.Show("이미 가입된 이메일 주소입니다.");
                 this.Enabled = true;
@@ -206,7 +206,7 @@ namespace AnnoTaskClient
             }
             else
             {
-                logic.registerNewUser(userName, userID, password);
+                logic.RegisterNewUser(userName, userID, password);
                 this.Owner.Close();
                 this.Close();
                 UIHandler.Instance.CommonUI.setButtonEnableState(true);

@@ -156,6 +156,13 @@ namespace AnnoTaskClient.Logic
         }
     }
 
+	public class UserLogout : InternalCommand
+	{
+		public UserLogout()
+		{
+			command = "Logout";
+		}
+	}
 	
 	
 	
