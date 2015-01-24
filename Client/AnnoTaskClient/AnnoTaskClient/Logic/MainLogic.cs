@@ -210,6 +210,10 @@ namespace AnnoTaskClient.Logic
             }
         }
 
+		internal void DoLogOut()
+		{
+
+		}
 
         // (기흥) phase2.5 
 		private void jobStart()
@@ -612,5 +616,7 @@ namespace AnnoTaskClient.Logic
 		//	commandQ.AddLast(new OpenThesaurusWindow(paramSelectedTerms));
 		//}
 
-    }
+
+
+	}
 }
