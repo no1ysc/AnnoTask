@@ -68,35 +68,15 @@ namespace AnnoTaskClient.Logic
 		public void KillLogicThread()
 		{
 			this.running = false;
-			heartBeat.destroyHeartBeat();
+			heartBeat.DestroyHeartBeat();
 		}
 		#endregion
-
-
-
 
 
 		private LinkedList<InternalCommand> commandQ = new LinkedList<InternalCommand>();
 
 		public  void doWork()
 		{
-			if (clientWormHole.Connect())
-			{
-				// 서버 연결 안내문.
-				//MessageBox.Show("서버 연결완료");
-                Thread.Sleep(500);
-                UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true;
-			}
-			else
-			{
-				// 서버 연결 실패, 지연됨.
-				MessageBox.Show("서버 연결실패");
-			}
-
-			heartBeat = new HeartBeat(clientWormHole);
-			heartBeat.run();
-			
-
 			while (running)
 			{
 				while(commandQ.Count != 0)
@@ -109,6 +89,33 @@ namespace AnnoTaskClient.Logic
 
 			// 종료시 처리.
 			clientWormHole.Destroy();
+		}
+
+		private void connectToServer()
+		{
+			if (clientWormHole.Connect())
+			{
+				// 서버 연결 안내문.
+				//MessageBox.Show("서버 연결완료");
+				Thread.Sleep(500);
+				UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true;
+			}
+			else
+			{
+				// 서버 연결 실패, 지연됨.
+				MessageBox.Show("서버 연결실패");
+			}
+
+			heartBeat = new HeartBeat(clientWormHole);
+			heartBeat.run();
+		}
+
+		private void disconnectServer()
+		{
+			heartBeat.DestroyHeartBeat();
+			heartBeat = null;
+
+			clientWormHole.Disconnect();
 		}
 
 		private void CommandParser()
@@ -169,6 +176,9 @@ namespace AnnoTaskClient.Logic
         // 유저 계정 등록
         private void register(string userName, string userID, string password)
         {
+			// 서버와의 연결이 필요한 시점은 회원가입 시도 시 와 로그인 시도 시 뿐임.
+			connectToServer();
+            clientWormHole.registerNewUser(userName, userID, password);
             UserInfo userInfo = clientWormHole.registerNewUser(userName, userID, password);
             if (userInfo.isLoginSuccess)
             {
@@ -180,11 +190,15 @@ namespace AnnoTaskClient.Logic
         // 유저 로그인
         internal void login(string userID, string password)
         {
+			// 서버와의 연결이 필요한 시점은 회원가입 시도 시 와 로그인 시도 시 뿐임.
+			connectToServer();
+            if (!clientWormHole.loginUser(userID, password))
             UserInfo userInfo = clientWormHole.loginUser(userID, password);
             bool isLoginSuccess = userInfo.isLoginSuccess;
             if (!isLoginSuccess)
             {
                 MessageBox.Show("아이디 또는 비밀번호가 틀렸습니다.");
+				disconnectServer();
                 return;
             }
             else

@@ -45,12 +45,20 @@ namespace AnnoTaskClient.Logic
 				if (failCount > Configure.Instance.ConnectionWaitTimeS)
 				{
 					connected = false;
-					MessageBox.Show("서버에 연결하지 못했습니다.");
+					MessageBox.Show("서버 연결 시도 초과.");
 					return false;
 				}
 				Thread.Sleep(1000);
 				failCount++;
 			}			
+		}
+
+		public void Disconnect()
+		{
+			m_Writer.Close();
+			m_Reader.Close();
+			m_ns.Close();
+			m_client.Close();
 		}
 
 		private TcpClient m_client;
