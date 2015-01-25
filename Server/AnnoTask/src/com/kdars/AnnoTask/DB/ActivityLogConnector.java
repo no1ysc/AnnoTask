@@ -2,6 +2,7 @@ package com.kdars.AnnoTask.DB;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 
 import com.kdars.AnnoTask.ContextConfig;
@@ -65,8 +66,9 @@ public class ActivityLogConnector {
 	public void add_deletelist(String userID, String deleteTerm) {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
+			java.sql.Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 			stmt.executeUpdate("insert into " + activityLogTable  + "(email, category, deletelist, timestamp) "
-					+ "values (\""+userID+"\", \"add_deletelist\", \"" +deleteTerm+ "\", " + calendar.getTime().getTime() +");");
+					+ "values (\""+userID+"\", \"add_deletelist\", \"" +deleteTerm+ "\", \"" + currentTimestamp +"\");");
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -76,8 +78,9 @@ public class ActivityLogConnector {
 	public void changeThes2DeleteList(String userID, String deleteTerm) {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
+			java.sql.Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 			stmt.executeUpdate("insert into " + activityLogTable  + "(email, category, deletelist, conceptTo, timestamp) "
-					+ "values (\""+userID+"\", \"chage_thesaurus_to_deletelist\", \"" +deleteTerm+ "\", \"" +deleteTerm+ "\", " + calendar.getTime().getTime() +");");
+					+ "values (\""+userID+"\", \"chage_thesaurus_to_deletelist\", \"" +deleteTerm+ "\", \"" +deleteTerm+ "\", \"" + currentTimestamp +"\");");
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -88,8 +91,9 @@ public class ActivityLogConnector {
 	public void change_DeleteList2Thes(String userID, String conceptFrom, String conceptTo, String metaOntology) {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
+			java.sql.Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 			stmt.executeUpdate("insert into " + activityLogTable  + "(email, category, deletelist, conceptFrom, conceptTo, metaOntology, timestamp) "
-					+ "values (\""+userID+"\", \"chage_deletelist_to_thesaurus\", \"" +conceptFrom+ "\", \"" +conceptFrom+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", "+ calendar.getTime().getTime() +");");
+					+ "values (\""+userID+"\", \"chage_deletelist_to_thesaurus\", \"" +conceptFrom+ "\", \"" +conceptFrom+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", \""+ currentTimestamp +"\");");
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -99,8 +103,9 @@ public class ActivityLogConnector {
 	public void add_thesaurus(String userID, String conceptFrom, String conceptTo, String metaOntology) {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
+			java.sql.Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 			stmt.executeUpdate("insert into " + activityLogTable  + "(email, category, conceptFrom, conceptTo, metaOntology, timestamp) "
-					+ "values (\""+userID+"\", \"add_thesaurus\", \"" +conceptFrom+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", "+ calendar.getTime().getTime() +");");
+					+ "values (\""+userID+"\", \"add_thesaurus\", \"" +conceptFrom+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", \""+ currentTimestamp +"\");");
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -110,8 +115,9 @@ public class ActivityLogConnector {
 	public void update_thesaurus(String userID, String conceptFrom, String conceptTo, String metaOntology) {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
+			java.sql.Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 			stmt.executeUpdate("insert into " + activityLogTable  + "(email, category, conceptFrom, conceptTo, metaOntology, timestamp) "
-					+ "values (\""+userID+"\", \"update_thesaurus\", \"" +conceptFrom+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", "+ calendar.getTime().getTime() +");");
+					+ "values (\""+userID+"\", \"update_thesaurus\", \"" +conceptFrom+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", \""+ currentTimestamp +"\");");
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
