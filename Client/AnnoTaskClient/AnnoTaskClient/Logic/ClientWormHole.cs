@@ -115,7 +115,8 @@ namespace AnnoTaskClient.Logic
             Command.Client2Server.RegisterUserAccount data = new Command.Client2Server.RegisterUserAccount();
             data.userName = userName;
             data.userID = userID;
-            data.password = Encrypt(password); // 비밀번호 encrypt해서 보내기
+            data.password = password;
+            //data.password = Encrypt(password); // 비밀번호 encrypt해서 보내기
             string json_RequestRegisterUserAccount = new JsonConverter<Command.Client2Server.RegisterUserAccount>().Object2Json(data);
             _transferToServer(json_RequestRegisterUserAccount);
 
@@ -133,7 +134,8 @@ namespace AnnoTaskClient.Logic
         {
             Command.Client2Server.UserLogin data = new Command.Client2Server.UserLogin();
             data.userID = userID;
-            data.password = Encrypt(password); // 비밀번호 encrypt해서 보내기
+            data.password = password;
+            //data.password = Encrypt(password); // 비밀번호 encrypt해서 보내기
             string json_RequestUserLogin = new JsonConverter<Command.Client2Server.UserLogin>().Object2Json(data);
             _transferToServer(json_RequestUserLogin);
 

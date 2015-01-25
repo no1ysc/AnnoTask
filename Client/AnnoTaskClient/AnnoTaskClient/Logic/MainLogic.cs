@@ -185,7 +185,6 @@ namespace AnnoTaskClient.Logic
             UserInfo userInfo = clientWormHole.registerNewUser(userName, userID, password);
             if (userInfo.isLoginSuccess)
             {
-                UIHandler.Instance.CommonUI.UserNameSet(userInfo.userName);
                 UIHandler.Instance.CommonUI.UserNameSet(userInfo.userName); // 메인 윈도우 사용자 이름
                 return;
             }
