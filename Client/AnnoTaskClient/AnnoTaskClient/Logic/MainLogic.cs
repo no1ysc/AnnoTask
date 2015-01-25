@@ -182,8 +182,6 @@ namespace AnnoTaskClient.Logic
         // 유저 계정 등록
         private void register(string userName, string userID, string password)
         {
-			// 서버와의 연결이 필요한 시점은 회원가입 시도 시 와 로그인 시도 시 뿐임.
-			connectToServer();
             UserInfo userInfo = clientWormHole.registerNewUser(userName, userID, password);
             if (userInfo.isLoginSuccess)
             {
@@ -312,6 +310,9 @@ namespace AnnoTaskClient.Logic
 		#region 커맨드를 생성하는 메서드들
 		internal bool IsUserIDExist(string userID)
         {
+            // 서버와의 연결이 필요한 시점은 회원가입 시도 시 와 로그인 시도 시 뿐임.
+            connectToServer();
+
             return clientWormHole.isUserIDExist(userID);
         }
 

@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 namespace AnnoTaskClient.Logic
 {
@@ -92,7 +93,7 @@ namespace AnnoTaskClient.Logic
 		}
 
         /*
-         * TODO 로그인 및 회원 가입   
+         * 로그인 및 회원 가입   
          */
         // 유저 중복 검사
         internal bool isUserIDExist(string userID)
@@ -114,7 +115,7 @@ namespace AnnoTaskClient.Logic
             Command.Client2Server.RegisterUserAccount data = new Command.Client2Server.RegisterUserAccount();
             data.userName = userName;
             data.userID = userID;
-            data.password = password;
+            data.password = Encrypt(password); // 비밀번호 encrypt해서 보내기
             string json_RequestRegisterUserAccount = new JsonConverter<Command.Client2Server.RegisterUserAccount>().Object2Json(data);
             _transferToServer(json_RequestRegisterUserAccount);
 
@@ -132,7 +133,7 @@ namespace AnnoTaskClient.Logic
         {
             Command.Client2Server.UserLogin data = new Command.Client2Server.UserLogin();
             data.userID = userID;
-            data.password = password;
+            data.password = Encrypt(password); // 비밀번호 encrypt해서 보내기
             string json_RequestUserLogin = new JsonConverter<Command.Client2Server.UserLogin>().Object2Json(data);
             _transferToServer(json_RequestUserLogin);
 
@@ -575,5 +576,31 @@ namespace AnnoTaskClient.Logic
 			string json_addDeleteList = new JsonConverter<Command.Client2Server.HeartBeat>().Object2Json(heartBeat);
 			_transferToServer(json_addDeleteList);
 		}
+
+        /// <summary>
+        /// Encrypts a given password and returns the encrypted data
+        /// as a base64 string.
+        /// </summary>
+        /// <param name="plainText">An unencrypted string that needs
+        /// to be secured.</param>
+        /// <returns>A base64 encoded string that represents the encrypted
+        /// binary data.
+        /// </returns>
+        /// <remarks>This solution is not really secure as we are
+        /// keeping strings in memory. If runtime protection is essential,
+        /// <see cref="SecureString"/> should be used.</remarks>
+        /// <exception cref="ArgumentNullException">If <paramref name="plainText"/>
+        /// is a null reference.</exception>
+        public string Encrypt(string plainText)
+        {
+            if (plainText == null) throw new ArgumentNullException("plainText");
+
+            //encrypt data
+            var data = Encoding.Unicode.GetBytes(plainText);
+            byte[] encrypted = ProtectedData.Protect(data, null, DataProtectionScope.LocalMachine);
+            //return as base64 string
+            return Convert.ToBase64String(encrypted);
+        }
     }
+
 }

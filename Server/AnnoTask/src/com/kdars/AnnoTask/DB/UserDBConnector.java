@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.kdars.AnnoTask.ContextConfig;
 import com.kdars.AnnoTask.Server.Command.Server2Client.UserInfo;
 
@@ -64,9 +66,11 @@ public class UserDBConnector {
 	}
 	
 	public boolean registerNewUser(String email, String password, String userName){
+		String pass = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			stmt.executeUpdate("insert into " + userAccountsTable  + "(email, user_name, password) values (\""+email+"\", \"" +userName+ "\", \"" +password+ "\");");
+			pass = escape(password);
+			stmt.executeUpdate("insert into " + userAccountsTable  + "(email, user_name, password) values (\""+email+"\", \"" +userName+ "\", \"" +pass+ "\");");
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -96,14 +100,17 @@ public class UserDBConnector {
 		return userInfo;
 	}
 
+	// 로그인 로직
 	public UserInfo loginCheck(String userID, String password) {
 		UserInfo userInfo = new UserInfo();
 		ResultSet resultSet = null;
+		String pass = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + userID + "\" and password = \"" + password +"\";");
 			while(resultSet.next()){
-				if(password.equals(resultSet.getString(4))){
+				pass = unescape(resultSet.getString(4));
+				if(password.equals(pass)){
 					userInfo = getUserInfo(userID);
 				}else{
 					return null;
@@ -200,5 +207,16 @@ public class UserDBConnector {
 		}		
 
 	}
+	
+	private String escape(String text) {
+		String result = StringEscapeUtils.escapeHtml4(text);
+		return result;
+	}
+	
+	private String unescape(String text) {
+		String result = StringEscapeUtils.unescapeHtml4(text);
+		return result;
+	}
+
 	
 }
