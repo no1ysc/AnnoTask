@@ -107,7 +107,8 @@ public class UserDBConnector {
 		String pass = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + userID + "\" and password = \"" + password +"\";");
+			pass = escape(password);
+			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + userID + "\" and password = \"" + pass +"\";");
 			while(resultSet.next()){
 				pass = unescape(resultSet.getString(4));
 				if(password.equals(pass)){
