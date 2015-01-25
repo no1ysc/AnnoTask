@@ -66,7 +66,7 @@ public class UserDBConnector {
 	}
 	
 	public boolean registerNewUser(String email, String password, String userName){
-		String pass = null;
+//		String pass = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 //			pass = escape(password);
@@ -105,7 +105,7 @@ public class UserDBConnector {
 	public UserInfo loginCheck(String userID, String password) {
 		UserInfo userInfo = new UserInfo();
 		ResultSet resultSet = null;
-		String pass = null;
+//		String pass = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 //			pass = escape(password);
