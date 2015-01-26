@@ -55,7 +55,7 @@ public class ContextConfig {
 	/* Delimiter Setting */
 	
 	/* Special Character Setting */
-	private String specialCharsPattern= "[\\x{0021}-\\x{002f}_\\x{003a}-\\x{0040}_\\x{005b}-\\x{0060}_\\x{007b}-\\x{007e}_\\x{2018}-\\x{201f}]";
+	private String specialCharsPattern= "[\\x{0021}-\\x{002f}_\\x{003a}-\\x{0040}_\\x{005b}-\\x{0060}_\\x{007b}-\\x{007e}_\\x{2018}-\\x{201f}_\\x{ff00}-\\x{ff0f}_\\x{ff1a}-\\x{ff20}_\\x{ff3b}-\\x{ff40}_\\x{ff5b}-\\x{ff65}_\\x{ffe0}-\\x{ffee}]";
 	private String specialCharsPattern_delete = "[\\x{2010}-\\x{2017}_\\x{2020}-\\x{206f}_\\x{2460}-\\x{24ff}_\\x{25a0}-\\x{26ff}_\\x{1f330}-\\x{1f5ff}]";
 	public String getSpecialCharPattern(){
 		return this.specialCharsPattern;
