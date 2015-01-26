@@ -123,7 +123,7 @@ public class UserAuthentication extends Thread{
 		boolean ret = false;
 		userInfo = UserDBManager.getInstance().loginCheck(requestLogin.userID, requestLogin.password);
 		// LOGIN SUCCESS
-		if(userInfo.userId != null && userInfo.userName != null){
+		if(userInfo != null){
 			login(userInfo);
 			ret = true;
 		}
