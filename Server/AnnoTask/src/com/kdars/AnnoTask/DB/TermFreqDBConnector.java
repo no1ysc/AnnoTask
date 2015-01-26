@@ -161,10 +161,27 @@ public class TermFreqDBConnector {
 	 * @return
 	 */
 	public boolean flagDeleteTerm(String term){
+		ResultSet resultSet = null;
+		ArrayList<String> docID_TermList = new ArrayList<String>();
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			String deleteTerm = escape(term);
-			stmt.execute("update " + termFreqTable + " set " + colName8 + " = " + flag + " where " + colName4 + " = \"" + deleteTerm + "\";"); /* AND " + colName7 + " = '" + String.valueOf(termHolder) + "';");*/
+			resultSet = stmt.executeQuery("select " + colName1 + " from " + termFreqTable + " where " + colName4 + " = \"" + deleteTerm + "\";");
+			
+			while(resultSet.next()){
+				String docID_Term = unescape(resultSet.getString(1));
+				docID_TermList.add(docID_Term);
+			}
+			
+			StringBuilder queryMaker = new StringBuilder();
+			queryMaker.append("update " + termFreqTable + " set " + colName8 + " = " + flag + " where ");
+			
+			for (String id : docID_TermList){
+				queryMaker.append(colName1 + " = \"" + escape(id) + "\" or ");
+			}
+			
+			queryMaker.replace(queryMaker.length()-4, queryMaker.length(), ";");
+			stmt.execute(queryMaker.toString());
 			stmt.close();
 //		disconnect(sqlConnectionLocal);
 	} catch (SQLException e) {

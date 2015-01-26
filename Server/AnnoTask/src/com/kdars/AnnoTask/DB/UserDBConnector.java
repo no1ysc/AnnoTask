@@ -66,11 +66,12 @@ public class UserDBConnector {
 	}
 	
 	public boolean registerNewUser(String email, String password, String userName){
-		String pass = null;
+//		String pass = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			pass = escape(password);
-			stmt.executeUpdate("insert into " + userAccountsTable  + "(email, user_name, password) values (\""+email+"\", \"" +userName+ "\", \"" +pass+ "\");");
+//			pass = escape(password);
+//			stmt.executeUpdate("insert into " + userAccountsTable  + "(email, user_name, password) values (\""+email+"\", \"" +userName+ "\", \"" +pass+ "\");");
+			stmt.executeUpdate("insert into " + userAccountsTable  + "(email, user_name, password) values (\""+email+"\", \"" +userName+ "\", \"" +password+ "\");");
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -104,14 +105,16 @@ public class UserDBConnector {
 	public UserInfo loginCheck(String userID, String password) {
 		UserInfo userInfo = new UserInfo();
 		ResultSet resultSet = null;
-		String pass = null;
+//		String pass = null;
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-			pass = escape(password);
-			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + userID + "\" and password = \"" + pass +"\";");
+//			pass = escape(password);
+//			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + userID + "\" and password = \"" + pass +"\";");
+			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + userID + "\" and password = \"" + password +"\";");
 			while(resultSet.next()){
-				pass = unescape(resultSet.getString(4));
-				if(password.equals(pass)){
+//				pass = unescape(resultSet.getString(4));
+//				if(password.equals(password)){
+				if(password.equals(resultSet.getString(4))){
 					userInfo = getUserInfo(userID);
 				}else{
 					return null;
