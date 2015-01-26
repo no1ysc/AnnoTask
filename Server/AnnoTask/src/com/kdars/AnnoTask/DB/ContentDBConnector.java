@@ -331,5 +331,4 @@ public class ContentDBConnector {
 		}
 		return count;
 	}
-s	
 }
