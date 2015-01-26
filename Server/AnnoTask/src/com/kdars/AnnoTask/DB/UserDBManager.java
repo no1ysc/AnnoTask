@@ -32,8 +32,9 @@ public class UserDBManager {
 	}
 
 	public boolean registerNewUser(String email, String password, String userName){
-		String encryptedPassword = encryptPasswordForDB(password);
-		if(userDB.registerNewUser(email, encryptedPassword, userName)){
+		String decryptedPasswordFromClient = decryptFromRequest(password);
+		String encryptedPasswordForDB = encryptPasswordForDB(decryptedPasswordFromClient);
+		if(userDB.registerNewUser(email, encryptedPasswordForDB, userName)){
 			return true;
 		}else{
 			System.out.println("Failed to register new user in AnnoTask!");
@@ -175,8 +176,7 @@ public class UserDBManager {
 			PublicKey pubKey = factory.generatePublic(pubSpec);
 			cipher.init(Cipher.ENCRYPT_MODE, pubKey);
 			byte[] encrypted = cipher.doFinal(encData);
-			String encode = Base64.getEncoder().encodeToString(encrypted);
-			System.out.println("encrypted: " + encode);
+			encryptedPassword = Base64.getEncoder().encodeToString(encrypted);
 		} catch (Exception e){
 			e.printStackTrace();
 		}
