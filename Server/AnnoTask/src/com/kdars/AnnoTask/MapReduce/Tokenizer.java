@@ -12,6 +12,7 @@ public class Tokenizer {
 	private int CharLimit = ContextConfig.getInstance().getCharLimit();
 	private int DocLimit = ContextConfig.getInstance().getDocLimit();
 	private String specialCharsPattern= ContextConfig.getInstance().getSpecialCharPattern();
+	private String specialCharsPattern_delete = ContextConfig.getInstance().getSpecialCharPattern_delete();
 	private String[] PostFix = ContextConfig.getInstance().getPostFix();
 //	private String specialCharProcessingString;
 	
@@ -58,6 +59,10 @@ public class Tokenizer {
 				// 일단 만들어.
 				String checkTerm = termList.get(genPoint + gramPoint);
 				if(checkTerm.length() >= CharLimit){
+					break;
+				}
+				
+				if(deleteCharacterCheck(checkTerm)){
 					break;
 				}
 				
@@ -110,38 +115,70 @@ public class Tokenizer {
 	private boolean isStartWithSpecialChar(String string) {
 		return isSpecialChar(string.charAt(0));
 	}
+	
 	private boolean isEndWithSpecialChar(String string) {
 		return isSpecialChar(string.charAt(string.length()-1));
 	}
+	
 	private boolean isSpecialChar(char c){
 		if (Pattern.compile(specialCharsPattern).matcher(String.valueOf(c)).find()){
 			return	true;
 		}
 		return false;
 	}
-	private String removeSpecialChar(String str){
-		ArrayList<Integer> specialCharCheck = specialCharPatternMatch(str);
-		if (specialCharCheck.isEmpty()) {
-			return str;
-		}
-		
-		if (specialCharCheck.size() == str.length()){
-			return null;
-		}
-		
-		int beginIndex = 0;
-		while (specialCharCheck.contains(beginIndex)){
-			beginIndex++;
-		}
-		
-		int tempEndIndex = str.length()-1;
-		while (specialCharCheck.contains(tempEndIndex)){
-			tempEndIndex--;
-		}
-		
-		return str.substring(beginIndex, tempEndIndex+1);
+	
+	private boolean deleteCharacterCheck(String str){
+		return Pattern.compile(specialCharsPattern_delete).matcher(str).find();
 	}
 	
+	private String removeSpecialChar(String str){
+		Pattern p = Pattern.compile(specialCharsPattern);
+		Matcher m = p.matcher(str);
+		
+		int firstIndex = 0;
+		int lastIndex = 0;
+		int lastOffset = 0;;
+		boolean firstChecker = false;
+		while(m.find()){
+			int specialIndex = m.start();
+			
+			if(specialIndex==0 ){
+				firstChecker = true;
+			}
+			
+			if(firstChecker && ((specialIndex - firstIndex) <= 1)){
+				firstIndex = specialIndex;
+			}
+			
+			if((specialIndex - lastIndex) <= 1){
+				lastOffset ++;
+				lastIndex = specialIndex;
+				continue;
+			}
+			
+			lastOffset = 0;
+			
+			lastIndex = specialIndex;
+		}
+		
+		if (firstChecker){
+			firstIndex += 1;
+		}
+		
+		if(lastIndex != str.length()-1){
+			return (str.substring(firstIndex, str.length()));
+		}
+		
+		if (lastIndex < lastOffset){
+			return null;
+		}
+
+		if (lastIndex == lastOffset){
+			return str.substring(firstIndex, lastIndex - lastOffset + 1);
+		}
+		
+		return str.substring(firstIndex, lastIndex - lastOffset);
+	}
 	
 	private ArrayList<String> docAndTermLengthCheck(String doc, int LengthLimit){
 		ArrayList<String> splitdoc = new ArrayList<String>();
@@ -160,17 +197,6 @@ public class Tokenizer {
 		splitdoc.add(doc.substring(startIndex, doc.length()));
 		
 		return splitdoc;
-	}
-
-
-	private ArrayList<Integer> specialCharPatternMatch(String specialCharCheck){
-		ArrayList<Integer> intArray = new ArrayList<Integer>();
-		Pattern p = Pattern.compile(specialCharsPattern);
-		Matcher m = p.matcher(specialCharCheck);
-		while(m.find()){
-			intArray.add(m.start());
-		}
-		return intArray;
 	}
 	
 	private String deletePostFix(String processedString){
