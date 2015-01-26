@@ -21,14 +21,15 @@ public class Monitor extends Thread{
 	
 	public void run(){
 		while(true){
-			if(processQueue.size() < ContextConfig.getInstance().getMaxContentProcessor()){
-				// create ContentProcessor and allocate job by giving doc_id for each thread and start running.
+			if(processQueue.size() < ContextConfig.getInstance().getMaxContentProcessor() && !checkJobCandidateCount()){
+				 // 프로세스 큐 사이즈가 상한 개수를 넘지 않고 유저가 가져갈 데이터가 불충분할 경우 작업 시작
 				if(checkUpdates()){
 					jobAllocate().start();
-				}else{ 
-					delayMonitor(1000);
-				}
+				}				
+			}else{ // 아니면 작업 ㄴㄴ
+				delayMonitor(1000);		
 			}
+
 			
 			// 3. Check ContentProcessor's status, if complete then delete from ArrayList and set complete_status to 1 in job_table
 			for(int i = processQueue.size()-1; i >= 0 ; i--){
@@ -47,19 +48,22 @@ public class Monitor extends Thread{
 		}
 	}
 	
+	private boolean checkJobCandidateCount() {
+		return ContentDBManager.getInstance().isJobCandidatesEnough();
+	}
+
 	// 	1. Check whether ContentProcessors are free or not 
 	//	2. Check job_table where working_status is 0, false; get doc_id 
 	private boolean checkUpdates(){
 		ArrayList<Integer> temp = ContentDBManager.getInstance().getJobCandidates();
 		if(temp.size() != 0){
 			jobCandidates.add(temp.get(0));
-//			System.out.println(jobCandidates.size());
 		}
 			
 			return !jobCandidates.isEmpty();
 	}
 	
-	// TODO: maximum job number per thread need to be defined
+	// maximum job number per thread need to be defined
 	private ContentProcessor jobAllocate(){  
 		ContentProcessor cp = new ContentProcessor(jobCandidates.get(0));
 		processQueue.add(cp);
@@ -72,7 +76,6 @@ public class Monitor extends Thread{
 		try {
 			sleep(mSecond);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -36,7 +36,7 @@ public class ContentProcessor extends Thread{
 	
 	public void run(){
 		this.state = ProcessState.Running;
-
+		System.out.println("System now parsing document id : "+String.valueOf(docID));
 		if(document != null){
 			Tokenizer tokenizer = new Tokenizer();
 			DuplicationChecker dupChecker = new DuplicationChecker();
@@ -47,7 +47,7 @@ public class ContentProcessor extends Thread{
 		}
 		
 		this.state = ProcessState.Completed;
-		System.out.println("completed");
+		System.out.println(document.getDocumentID() + " is completed now");
 	}
 	
 	/**

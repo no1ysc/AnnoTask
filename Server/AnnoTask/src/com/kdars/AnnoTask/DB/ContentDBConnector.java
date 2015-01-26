@@ -124,8 +124,6 @@ public class ContentDBConnector {
 			resultSet = stmt.executeQuery("select * from " + jobTable + " where " + columnName + " = " + String.valueOf(id));
 			if(resultSet.next()){
 				docID_List.add(resultSet.getInt("doc_id"));
-	
-				System.out.println(docID_List.get(docID_List.size()-1));
 			}
 			// update working_status to 1
 			for(int i = 0; i< docID_List.size(); i++){
@@ -265,36 +263,6 @@ public class ContentDBConnector {
 		return docID_List;
 	}
 
-/*	public DocMetaSet queryDocMetaWithCategory(List<Integer> docIDList, String category) {
-		//HashMap<String, HashMap<Integer, String>>
-		DocMetaSet finalDocMetaTransfer = new DocMetaSet();
-		ResultSet resultSet = null;
-		try {
-			java.sql.Statement stmt = sqlConnection.createStatement();
-			StringBuilder sb = new StringBuilder();
-			sb.append("select doc_id, title from " + contentTable + " where ");
-			for(int doc_id : docIDList){
-				sb.append("( category = \"" + category + "\" and doc_id = " + doc_id + " ) OR ");
-			}
-			sb.replace(sb.length()-4, sb.length(), ";");
-			resultSet = stmt.executeQuery(sb.toString());
-			
-			boolean forLoopBreaker;
-			while(resultSet.next()){
-				forLoopBreaker = false;
-				int doc_id = resultSet.getInt(1);
-				String title = unescape(resultSet.getString(2));
-				finalDocMetaTransfer.docMeta.put(doc_id, title);
-			}
-			stmt.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return finalDocMetaTransfer;
-	}*/
-
 	public ArrayList<String> queryCategoryList(List<Integer> termLinkedDocIds) {
 		ArrayList<String> categoryList = new ArrayList<String>();
 		ResultSet resultSet = null;
@@ -345,53 +313,23 @@ public class ContentDBConnector {
 		
 		return titleList;
 	}
-	
-//	public DocMetaTransfer queryDocMeta(List<Integer> docIDList) {
-//		//HashMap<String, HashMap<Integer, String>>
-//		DocMetaTransfer finalDocMetaTransfer = new DocMetaTransfer();
-//		HashMap<String, HashMap<Integer, String>> finalData = new HashMap<String, HashMap<Integer, String>>();
-//		HashMap<Integer, String> data = new HashMap<Integer, String>();
-//		ResultSet resultSet = null;
-//		try {
-//			java.sql.Statement stmt = sqlConnection.createStatement();
-//			StringBuilder sb = new StringBuilder();
-//			sb.append("select category, doc_id, title from " + contentTable + " where ");
-//			for(int doc_id : docIDList){
-//				sb.append("doc_id = " + doc_id + " OR ");
-//			}
-//			sb.replace(sb.length()-4, sb.length(), ";");
-//			resultSet = stmt.executeQuery(sb.toString());
-//			
-//			boolean forLoopBreaker;
-//			while(resultSet.next()){
-//				forLoopBreaker = false;
-//				String category = resultSet.getString(1);
-//				int doc_id = resultSet.getInt(2);
-//				String title = unescape(resultSet.getString(3));
-//				if(finalData.size() != 0){
-//					for ( String cat : finalData.keySet()){
-//						if (cat.equals(category)){
-//							finalData.get(cat).put(doc_id, title);
-//							forLoopBreaker = true;
-//							continue;
-//						}
-//					}					
-//				}
-//				
-//				if (forLoopBreaker){
-//					continue;
-//				}
-//				data.put(doc_id, title);
-//				finalData.put(category, data);
-//				data.clear();
-//			}
-//			stmt.close();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		finalDocMetaTransfer.docMeta = finalData;
-//		return finalDocMetaTransfer;
-//	}
+
+	public int queryCompleteJobCount() {
+		ResultSet resultSet = null;
+		int count = 0;
+		try {
+			java.sql.Statement stmt = sqlConnection.createStatement();
+			// 유저가 가져갈 수 있는 데이터 풀 계산
+			resultSet = stmt.executeQuery("select count(*) from " + jobTable + " where complete_status = 1 and client_jobstatus = 0;");
+			if(resultSet.next()){
+				count = resultSet.getInt(1);
+			}
+			stmt.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+s	
 }

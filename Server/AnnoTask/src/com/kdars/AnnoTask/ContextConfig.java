@@ -8,6 +8,12 @@ public class ContextConfig {
 		return	globalContext;
 	}
 	
+	
+	private int ServerHoldDocumentCount = 100;
+	public int getServerHoldDocumentCount() {
+		return ServerHoldDocumentCount;
+	}
+	
 	//TODO: 처음에 프로그램 시작할때, DB 전부 연결될때까지 대기하는 부분,
 	// TODO : TermDB Lock 걸린거 전부 풀어주고 초기화 하는 부분.,
 	
@@ -102,7 +108,7 @@ public class ContextConfig {
 	public final String CONTENT_DB_jobTABLE_NAME = "job_table";
 	
 	/* ContentProcessor Attributes */
-	private int maxContentProcessor = 1;
+	private int maxContentProcessor = 5;
 	public int getMaxContentProcessor(){
 		return this.maxContentProcessor;
 	}
