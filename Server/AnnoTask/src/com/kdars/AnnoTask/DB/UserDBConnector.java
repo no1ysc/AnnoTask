@@ -9,6 +9,7 @@ import java.util.Calendar;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import com.kdars.AnnoTask.ContextConfig;
+import com.kdars.AnnoTask.Server.UserIDPasswordSet;
 import com.kdars.AnnoTask.Server.Command.Server2Client.UserInfo;
 
 /**
@@ -102,23 +103,28 @@ public class UserDBConnector {
 	}
 
 	// 로그인 로직
-	public UserInfo loginCheck(String userID, String password) {
-		UserInfo userInfo = new UserInfo();
+	// 이승철 수정, 패스워드는 파라미터로 받지 않고 유저ID를 받을 것.
+	public UserIDPasswordSet getUserIDPass(String userID) {
+		UserIDPasswordSet userIDPasswordSet = null; 
 		ResultSet resultSet = null;
-//		String pass = null;
+
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
-//			pass = escape(password);
-//			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + userID + "\" and password = \"" + pass +"\";");
-			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + userID + "\" and password = \"" + password +"\";");
+//			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + userID + "\" and password = \"" + password +"\";");
+			resultSet = stmt.executeQuery("select * from " + userAccountsTable + " where email = \"" + userID + "\";");
 			while(resultSet.next()){
+				UserInfo userInfo = new UserInfo();
+				userInfo.userId = resultSet.getString(2);
+				userInfo.userName = resultSet.getString(3);
+				userIDPasswordSet = new UserIDPasswordSet(userInfo.userId, unescape(resultSet.getString(4)), userInfo);
 //				pass = unescape(resultSet.getString(4));
 //				if(password.equals(password)){
-				if(password.equals(resultSet.getString(4))){
-					userInfo = getUserInfo(userID);
-				}else{
-					return null;
-				}
+				
+//				if(password.equals(resultSet.getString(4))){
+//					userInfo = getUserInfo(userID);
+//				}else{
+//					return null;
+//				}
 			}
 			stmt.close();
 		} catch (SQLException e) {
@@ -126,7 +132,7 @@ public class UserDBConnector {
 			e.printStackTrace();
 			return null;
 		}
-		return userInfo;
+		return userIDPasswordSet;
 	}
 
 	// 유저 접속중 상태 flag 활성화

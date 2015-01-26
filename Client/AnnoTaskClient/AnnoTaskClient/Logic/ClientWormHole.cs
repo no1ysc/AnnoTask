@@ -115,8 +115,7 @@ namespace AnnoTaskClient.Logic
             Command.Client2Server.RegisterUserAccount data = new Command.Client2Server.RegisterUserAccount();
             data.userName = userName;
             data.userID = userID;
-            data.password = password;
-            //data.password = Encrypt(password); // 비밀번호 encrypt해서 보내기
+            data.password = encrypt(password); // 비밀번호 encrypt해서 보내기
             string json_RequestRegisterUserAccount = new JsonConverter<Command.Client2Server.RegisterUserAccount>().Object2Json(data);
             _transferToServer(json_RequestRegisterUserAccount);
 
@@ -134,8 +133,7 @@ namespace AnnoTaskClient.Logic
         {
             Command.Client2Server.UserLogin data = new Command.Client2Server.UserLogin();
             data.userID = userID;
-            data.password = password;
-            //data.password = Encrypt(password); // 비밀번호 encrypt해서 보내기
+            data.password = encrypt(password); // 비밀번호 encrypt해서 보내기
             string json_RequestUserLogin = new JsonConverter<Command.Client2Server.UserLogin>().Object2Json(data);
             _transferToServer(json_RequestUserLogin);
 
@@ -580,28 +578,32 @@ namespace AnnoTaskClient.Logic
 		}
 
         /// <summary>
-        /// Encrypts a given password and returns the encrypted data
-        /// as a base64 string.
+        /// 지정된 public key로 Password Encryption
         /// </summary>
-        /// <param name="plainText">An unencrypted string that needs
-        /// to be secured.</param>
-        /// <returns>A base64 encoded string that represents the encrypted
-        /// binary data.
-        /// </returns>
-        /// <remarks>This solution is not really secure as we are
-        /// keeping strings in memory. If runtime protection is essential,
-        /// <see cref="SecureString"/> should be used.</remarks>
-        /// <exception cref="ArgumentNullException">If <paramref name="plainText"/>
-        /// is a null reference.</exception>
-        public string Encrypt(string plainText)
+        /// <param name="plainText"></param>
+        /// <returns></returns>
+        private string encrypt(string plainText)
         {
             if (plainText == null) throw new ArgumentNullException("plainText");
 
-            //encrypt data
-            var data = Encoding.Unicode.GetBytes(plainText);
-            byte[] encrypted = ProtectedData.Protect(data, null, DataProtectionScope.LocalMachine);
-            //return as base64 string
-            return Convert.ToBase64String(encrypted);
+			string publicKeyString = "<RSAKeyValue><Modulus>qaFx1UhSkXdh2BvbiMMAh5YMh/txhdKPqipyPKAP5X8LgfCKlDRmq8XGYoJnWxfB7qB9c7/eB46pwDXBh0Z9fFT11BB4lAyFLOihKMouSc10I4wdhuMAvHXw6F2QFYoBPAzqs/Okisd71kv52iDkCwHpJsXBGmK97J40oKVXcNM=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
+
+			const int PROVIDER_RSA_FULL = 1;
+			const string CONTAINER_NAME = "KDARS_ANNOTASK";
+
+			CspParameters cspParams;
+			cspParams = new CspParameters(PROVIDER_RSA_FULL);
+			cspParams.KeyContainerName = CONTAINER_NAME;
+			RSACryptoServiceProvider rsa1 = new RSACryptoServiceProvider(1024, cspParams);
+
+			rsa1.FromXmlString(publicKeyString);
+
+			System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+			byte[] textBytes = encoding.GetBytes(plainText);
+			byte[] encryptedOutput = rsa1.Encrypt(textBytes, false);
+			string outputB64 = Convert.ToBase64String(encryptedOutput);
+
+			return outputB64;
         }
     }
 
