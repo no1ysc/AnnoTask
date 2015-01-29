@@ -10,5 +10,10 @@ public class ConceptToList {
 		this.conceptToTerm = conceptToTerm;
 		this.metaontology = meta;
 	}
+	
+	@Override
+	public String toString(){
+		return conceptToTerm;
+	}
 
 }

@@ -195,6 +195,7 @@ public class ThesaurusDBConnector {
 	 * @param queryTerm
 	 * @return
 	 * 이승철 수정, 20141223, 컨셉투 쿼리방식 수정
+	 * 이승철 수정, 20150126, 클라이언트에서 쿼리하는 방식이 타자칠때마다가 아닌 특정키(엔터)를 누를때만 요청하는것으로 바뀌었으므로, 갯수제한은 위에서 채크한다.
 	 */
 	public ArrayList<ConceptToList> queryConceptList(String queryTerm) {
 		ArrayList<ConceptToList> ret = new ArrayList<ConceptToList>();
@@ -203,12 +204,12 @@ public class ThesaurusDBConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			resultSet = stmt.executeQuery("select * from " + conceptToTable + " where " + toColName1 + " like \"%" + queryTerm +"%\";");
-			int queryCount = ContextConfig.getInstance().getLimitConceptToCount();
+//			int queryCount = ContextConfig.getInstance().getLimitConceptToCount();
 			while (resultSet.next()){
 				ret.add(new ConceptToList(resultSet.getInt(foreignKeyColName), resultSet.getString(toColName1), resultSet.getString(toColName2)));
-				if (--queryCount == 0){
-					break;
-				}
+//				if (--queryCount == 0){
+//					break;
+//				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
