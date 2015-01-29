@@ -47,6 +47,7 @@ import com.kdars.AnnoTask.Server.Command.Server2Client.SendDocumentCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.SendLinkedListCount;
 import com.kdars.AnnoTask.Server.Command.Server2Client.TermTransfer;
 import com.kdars.AnnoTask.Server.Command.Server2Client.TotalTermCount;
+import com.kdars.AnnoTask.Server.WordProc.WordMatchInWordSet;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
@@ -526,9 +527,10 @@ public class UserControl extends Thread{
 	 */
 	private void requestConceptToList(RequestConceptToList requestConceptToList) {
 		ArrayList<ConceptToList>	originConceptLists = ThesaurusDBManager.getInstance().getConceptToList(requestConceptToList.term);
-		ArrayList<ConceptToList>	processedConceptLists = new ArrayList<ConceptToList>();
+		ArrayList<ConceptToList>	processedConceptLists;
 		
-		outputScheme(originConceptLists, processedConceptLists);
+		// Configure 에 설정된 갯수만큼만 보낼 수 있도록 가공하고, 매칭 우선순위가 높은 순으로 정렬
+		processedConceptLists = outputScheme(requestConceptToList.term, originConceptLists);
 
 		SendConceptToCount sendConceptToCount = new SendConceptToCount();
 		sendConceptToCount.conceptToCount = processedConceptLists.size();
@@ -544,14 +546,22 @@ public class UserControl extends Thread{
 	
 	/**
 	 * @author JS
+	 * @param term : 정렬 기준 단어
 	 * @param originConceptLists : source
 	 * @param processedConceptLists : dst
-	 * 20141223, 설정한 정책대로 정리,가공, 현재는 카운드만 제한을 둠.
+	 * 20141223, 설정한 정책대로 정리,가공함  현재는 카운드만 제한을 둠.
+	 * 20150126, 단어 매칭이 높은 순으로 정렬, 같은 단어, 전방일치, 중간일치, 후방일치 
 	 */
-	private void outputScheme(ArrayList<ConceptToList> originConceptLists, ArrayList<ConceptToList> processedConceptLists) {
-		for (int count = 0; count < originConceptLists.size(); count++){
-			processedConceptLists.add(originConceptLists.get(count));
+	private ArrayList<ConceptToList> outputScheme(String term, ArrayList<ConceptToList> originConceptLists) {
+		// DB에서 읽어온 컨셉리스트 정렬
+		ArrayList<ConceptToList> processedConceptLists = new WordMatchInWordSet<ConceptToList>(term, originConceptLists).getResult();
+				
+		// 개수 제한.
+		if (processedConceptLists.size() > ContextConfig.getInstance().getLimitConceptToCount()){
+			processedConceptLists.subList(ContextConfig.getInstance().getLimitConceptToCount(), processedConceptLists.size()).clear();
 		}
+		
+		return processedConceptLists; 
 	}
 
 	private void requestLinkedList(RequestGetLinkedList requestedLinkedList) {
