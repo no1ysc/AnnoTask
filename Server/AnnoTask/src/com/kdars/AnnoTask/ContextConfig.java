@@ -9,7 +9,7 @@ public class ContextConfig {
 	}
 	
 	
-	private int ServerHoldDocumentCount = 100;
+	private int ServerHoldDocumentCount = 1000;
 	public int getServerHoldDocumentCount() {
 		return ServerHoldDocumentCount;
 	}

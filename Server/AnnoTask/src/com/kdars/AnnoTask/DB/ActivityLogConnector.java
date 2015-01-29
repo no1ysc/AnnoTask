@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.kdars.AnnoTask.ContextConfig;
 
 /**
@@ -67,8 +69,9 @@ public class ActivityLogConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			java.sql.Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+			String term = escape(deleteTerm);
 			stmt.executeUpdate("insert into " + activityLogTable  + "(email, category, deletelist, timestamp) "
-					+ "values (\""+userID+"\", \"add_deletelist\", \"" +deleteTerm+ "\", \"" + currentTimestamp +"\");");
+					+ "values (\""+userID+"\", \"add_deletelist\", \"" +term+ "\", \"" + currentTimestamp +"\");");
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -79,8 +82,9 @@ public class ActivityLogConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			java.sql.Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+			String term = escape(deleteTerm);
 			stmt.executeUpdate("insert into " + activityLogTable  + "(email, category, deletelist, conceptTo, timestamp) "
-					+ "values (\""+userID+"\", \"chage_thesaurus_to_deletelist\", \"" +deleteTerm+ "\", \"" +deleteTerm+ "\", \"" + currentTimestamp +"\");");
+					+ "values (\""+userID+"\", \"chage_thesaurus_to_deletelist\", \"" +term+ "\", \"" +term+ "\", \"" + currentTimestamp +"\");");
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -92,8 +96,9 @@ public class ActivityLogConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			java.sql.Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+			String term = escape(conceptFrom);
 			stmt.executeUpdate("insert into " + activityLogTable  + "(email, category, deletelist, conceptFrom, conceptTo, metaOntology, timestamp) "
-					+ "values (\""+userID+"\", \"chage_deletelist_to_thesaurus\", \"" +conceptFrom+ "\", \"" +conceptFrom+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", \""+ currentTimestamp +"\");");
+					+ "values (\""+userID+"\", \"chage_deletelist_to_thesaurus\", \"" +term+ "\", \"" +term+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", \""+ currentTimestamp +"\");");
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -104,8 +109,9 @@ public class ActivityLogConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			java.sql.Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+			String term = escape(conceptFrom);
 			stmt.executeUpdate("insert into " + activityLogTable  + "(email, category, conceptFrom, conceptTo, metaOntology, timestamp) "
-					+ "values (\""+userID+"\", \"add_thesaurus\", \"" +conceptFrom+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", \""+ currentTimestamp +"\");");
+					+ "values (\""+userID+"\", \"add_thesaurus\", \"" +term+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", \""+ currentTimestamp +"\");");
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -116,12 +122,26 @@ public class ActivityLogConnector {
 		try {
 			java.sql.Statement stmt = sqlConnection.createStatement();
 			java.sql.Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+			String term = escape(conceptFrom);
 			stmt.executeUpdate("insert into " + activityLogTable  + "(email, category, conceptFrom, conceptTo, metaOntology, timestamp) "
-					+ "values (\""+userID+"\", \"update_thesaurus\", \"" +conceptFrom+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", \""+ currentTimestamp +"\");");
+					+ "values (\""+userID+"\", \"update_thesaurus\", \"" +term+ "\", \"" +conceptTo+ "\", \"" +metaOntology+ "\", \""+ currentTimestamp +"\");");
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	private String escape(String text) {
+		String result = StringEscapeUtils.escapeHtml4(text);
+		return result;
+	}
+	
+	private String unescape(String text) {
+		String result = StringEscapeUtils.unescapeHtml4(text);
+		return result;
+	}
+
 
 }
