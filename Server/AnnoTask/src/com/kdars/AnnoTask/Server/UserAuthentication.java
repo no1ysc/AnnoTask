@@ -74,7 +74,7 @@ public class UserAuthentication extends Thread{
 			RequestAddUserAccount requestAddUserAccount = new JSONDeserializer<RequestAddUserAccount>().deserialize(commandFromUser, RequestAddUserAccount.class);
 			requestAddUserAccount(requestAddUserAccount);
 			
-			
+			return;
 		}
 		
 		// 유저 로그인 시도
