@@ -103,7 +103,7 @@ namespace AnnoTaskClient.Logic
             string json_RequestUserIdCheck = new JsonConverter<Command.Client2Server.CheckUserID>().Object2Json(data);
             _transferToServer(json_RequestUserIdCheck);
 
-            string json_CheckResult = m_Reader.ReadLine();
+			string json_CheckResult = _receiveFromServer();
             Command.Server2Client.IsDuplicateUserID isDuplicateUserID = new JsonConverter<Command.Server2Client.IsDuplicateUserID>().Json2Object(json_CheckResult);
             return isDuplicateUserID.isDuplicate;
         }
@@ -119,7 +119,7 @@ namespace AnnoTaskClient.Logic
             string json_RequestRegisterUserAccount = new JsonConverter<Command.Client2Server.RegisterUserAccount>().Object2Json(data);
             _transferToServer(json_RequestRegisterUserAccount);
 
-            string json_isRegisterSuccess = m_Reader.ReadLine();
+			string json_isRegisterSuccess = _receiveFromServer();
             Command.Server2Client.LoginResponseInfo isRegisterSuccess = new JsonConverter<Command.Server2Client.LoginResponseInfo>().Json2Object(json_isRegisterSuccess);
             UserInfo userInfo = new UserInfo();
             userInfo.userId = isRegisterSuccess.userId;
@@ -138,7 +138,7 @@ namespace AnnoTaskClient.Logic
             _transferToServer(json_RequestUserLogin);
 
             // 로그인 결과 확인
-            string json_isLoginSuccess = m_Reader.ReadLine();
+			string json_isLoginSuccess = _receiveFromServer();
             Command.Server2Client.LoginResponseInfo isLoginSuccess = new JsonConverter<Command.Server2Client.LoginResponseInfo>().Json2Object(json_isLoginSuccess);
 
             UserInfo userInfo = new UserInfo();
@@ -159,7 +159,7 @@ namespace AnnoTaskClient.Logic
 			_transferToServer(json_RequestAnnoTaskWork);
 
             // (기흥) 서버에서 보내온 작업량을 받아서...
-            string json_ReceiveDocCount = m_Reader.ReadLine();
+			string json_ReceiveDocCount = _receiveFromServer();
             Command.Server2Client.SendDocumentCount docCount = new JsonConverter<Command.Server2Client.SendDocumentCount>().Json2Object(json_ReceiveDocCount);
             if (docCount.doucumentCount != 0)
             {

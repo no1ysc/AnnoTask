@@ -50,6 +50,11 @@ public class UserDBManager {
 		UserInfo userInfor = null;
 		UserIDPasswordSet userIDPasswordSetFromDB = userDB.getUserIDPass(userID);
 		
+		// 매칭되는 ID가 없는 경우 null 리턴
+		if (userIDPasswordSetFromDB == null){
+			return null;
+		}
+		
 		// 암복호화 이승철 추가.
 		String userPasswordFromRequest = decryptFromRequest(password);
 		String userPasswordFromDB = decryptFromDB(userIDPasswordSetFromDB.getPassword());
