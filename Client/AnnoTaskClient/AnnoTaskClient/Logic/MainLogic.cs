@@ -190,7 +190,13 @@ namespace AnnoTaskClient.Logic
             }
         }
 
-        // 유저 로그인
+		
+        /// <summary>
+		/// 박기흥, 유저 로그인
+		/// 20140131, 이승철 수정, 동작완료후 버튼활성화. 로직 수정
+		/// </summary>
+		/// <param name="userID"></param>
+		/// <param name="password"></param>
         private void login(string userID, string password)
         {
 			// 서버와의 연결이 필요한 시점은 회원가입 시도 시 와 로그인 시도 시 뿐임.
@@ -201,7 +207,7 @@ namespace AnnoTaskClient.Logic
             {
                 MessageBox.Show("아이디 또는 비밀번호가 틀렸습니다.");
 				disconnectServer();
-                return;
+				UIHandler.Instance.CommonUI.EnableLoginPage = true;
             }
             else
             {
@@ -210,7 +216,6 @@ namespace AnnoTaskClient.Logic
                 UIHandler.Instance.CommonUI.AllButtonEnabledInMainWindow = true; // 메인 윈도우 버튼 활성화
                 UIHandler.Instance.CommonUI.UserNameSet(userInfo.userName); // 메인 윈도우 사용자 이름
                 UIHandler.Instance.CommonUI.LoginDisable(); // 메뉴 로그인 비활성화
-                return;
             }
         }
 
