@@ -18,10 +18,13 @@ namespace AnnoTaskClient.Logic
 	{
 		~ClientWormHole()
 		{
-			m_ns.Close();
-			m_Reader.Close();
-			m_Writer.Close();
-			m_client.Close();
+			if (m_ns != null)
+			{
+				m_ns.Close();
+				m_Reader.Close();
+				m_Writer.Close();
+				m_client.Close();
+			}
 		}
 
 		private bool connected = false;
