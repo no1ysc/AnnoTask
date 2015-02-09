@@ -103,6 +103,7 @@ namespace AnnoTaskClient
 
         private void loginButton_Click(object sender, EventArgs e)
         {
+			PageStatusEnable(false);
             string userID = this.userIDTextBox.Text.Trim();
             string password = this.passwordTextBox.Text.Trim();
             if (!this.userIDTextBox.Text.Trim().Equals("") && !this.passwordTextBox.Text.Trim().Equals(""))
@@ -110,5 +111,17 @@ namespace AnnoTaskClient
                 logic.DoLogin(userID, password);
             }
         }
+
+		/// <summary>
+		/// 20150131, 이승철
+		/// 현재 패이지의 버튼 상태를 바꿈.
+		/// </summary>
+		/// <param name="state"></param>
+		public void PageStatusEnable(bool state){
+			this.loginButton.Enabled = state;
+			this.registerNewUserButton.Enabled = state;
+			this.userIDTextBox.Enabled = state;
+			this.passwordTextBox.Enabled = state;
+		}
     }
 }

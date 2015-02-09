@@ -13,7 +13,14 @@ namespace AnnoTaskClient
 		{
 			conceptToTerm = conceptTo;
 			this.conceptToId = conceptToId;
-			this.meta = meta;
+			if (meta == null)
+			{
+				this.meta = " ";
+			}
+			else
+			{
+				this.meta = meta;
+			}
 		}
 
 		private string conceptToId;

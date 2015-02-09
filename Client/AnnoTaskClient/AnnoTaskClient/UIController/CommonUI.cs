@@ -230,5 +230,23 @@ namespace AnnoTaskClient.UIController
 			// 로그인 창 새로 띄우기
 			mainWindow.StartLogin();
 		}
+
+		/// <summary>
+		/// 20150131, 이승철
+		/// 로그인창 버튼 상태 제어
+		/// </summary>
+		public bool EnableLoginPage
+		{
+			set
+			{
+				LoginPageStateControl delegateVar = new LoginPageStateControl(loginPageStateControl);
+				mainWindow.Invoke(delegateVar, new object[] { value });
+			}
+		}
+		private delegate void LoginPageStateControl(bool value);
+		private void loginPageStateControl(bool value)
+		{
+			loginPage.PageStatusEnable(value);
+		}
 	}
 }

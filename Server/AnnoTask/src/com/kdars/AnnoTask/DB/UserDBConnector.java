@@ -104,6 +104,7 @@ public class UserDBConnector {
 
 	// 로그인 로직
 	// 이승철 수정, 패스워드는 파라미터로 받지 않고 유저ID를 받을 것.
+	// 매칭되는 ID없을시 Null 리턴.
 	public UserIDPasswordSet getUserIDPass(String userID) {
 		UserIDPasswordSet userIDPasswordSet = null; 
 		ResultSet resultSet = null;

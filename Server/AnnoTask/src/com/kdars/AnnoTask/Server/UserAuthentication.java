@@ -73,6 +73,8 @@ public class UserAuthentication extends Thread{
 		if(commandFromUser.contains("userName")){
 			RequestAddUserAccount requestAddUserAccount = new JSONDeserializer<RequestAddUserAccount>().deserialize(commandFromUser, RequestAddUserAccount.class);
 			requestAddUserAccount(requestAddUserAccount);
+			
+			return;
 		}
 		
 		// 유저 로그인 시도
@@ -126,6 +128,10 @@ public class UserAuthentication extends Thread{
 		if(userInfo != null){
 			login(userInfo);
 			ret = true;
+		} else {
+			//LogInFail
+			ret = false;
+			userInfo = new UserInfo();
 		}
 		userInfo.isLoginSuccess = ret;
 		transferObject(userInfo);

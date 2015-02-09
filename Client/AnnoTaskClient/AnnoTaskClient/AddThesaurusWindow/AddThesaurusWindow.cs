@@ -163,19 +163,20 @@ namespace AnnoTaskClient
 
 		private void ConceptToTextBox_TextChanged(object sender, EventArgs e)
 		{
-			string text = (sender as TextBox).Text;
+			// 20150129 이승철, 사용자가 타자를 칠때마다 쿼리하는 것이 아닌 명시적 동작을 주었을때 해당기능 동작하는 것으로 바꿈
+			//string text = (sender as TextBox).Text;
 
-			if (!ConceptToChangedEventControl)
-			{
-				return;
-			}
-			if (text.Equals(""))
-			{
-				return;
-			}
+			//if (!ConceptToChangedEventControl)
+			//{
+			//	return;
+			//}
+			//if (text.Equals(""))
+			//{
+			//	return;
+			//}
 
-			//ConceptToChangedEventControl = false; // 이벤트 막이.
-			logic.GetConceptToList(text);
+			////ConceptToChangedEventControl = false; // 이벤트 막이.
+			//logic.GetConceptToList(text);
 		}
 
 		private void ConceptToTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -207,10 +208,21 @@ namespace AnnoTaskClient
 					ConceptToChangedEventControl = true;
 					break;
 				case Keys.Down:
-					if (!ConceptToComboBox.DroppedDown)
+					if (!ConceptToComboBox.DroppedDown)		
 					{
+						/// 드롭다운 메뉴가 표시가 되지 않은 경우 새로 표기해주어야 함.
+						/// 20150127 요구사항 반영, 유저가 키를 입력할때마다 쿼리를 날리는것이 아닌 명시적 동작. 
+						/// 즉, 아래방향 화살표키를 눌렀을때 쿼리하는 동작.
+						string text = (sender as TextBox).Text;
+						if (text.Equals(""))
+						{
+							break;
+						}
+
+						logic.GetConceptToList(text);
 						break;
 					}
+
 					if (this.ConceptToComboBox.SelectedIndex >= this.ConceptToComboBox.Items.Count - 1)
 					{
 						break;
