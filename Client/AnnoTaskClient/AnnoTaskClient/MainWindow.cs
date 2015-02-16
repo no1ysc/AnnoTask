@@ -216,6 +216,8 @@ namespace AnnoTaskClient
 			{
 				MessageBox.Show("선택된 단어가 없습니다.\r\n" +
 								"단어 선택 후 Thesaurus 추가를 진행해주십시오.");
+
+				this.Enabled = true;		// 이승철 추가, 
 				return;
 			}
 

@@ -45,7 +45,7 @@ public class ThesaurusDBConnector {
 			String conceptToIDgetQuery = "select " + foreignKeyColName + " from " + conceptToTable + " where " + toColName1 + " = \"" + conceptToEscape + "\";";
 			
 			ResultSet checkConceptToID = stmt.executeQuery(conceptToIDgetQuery);
-			if (!checkConceptToID.next()){
+			if (!checkConceptToID.next()){		/// 새로 ConceptTo를 적는경우
 				stmt.executeUpdate(conceptToInsertQuery);
 				ResultSet getConceptToID = stmt.executeQuery(conceptToIDgetQuery);
 				getConceptToID.next();
@@ -54,9 +54,14 @@ public class ThesaurusDBConnector {
 				stmt.executeUpdate(conceptFromInsertQuery);
 				stmt.close();
 				return true;
-			}
-			
+			} 
+			// 기존에 있는 ConceptTo 를 반영해야할 경우.
+			// 윗 로직에서 검증거쳐왔으므로 여기선 무조껀 바꾸어주는걸로,
+				
 			thes.setConceptToID(checkConceptToID.getInt(1));
+			java.sql.Statement stmt2 = sqlConnection.createStatement();
+			stmt2.executeUpdate("update " + conceptToTable + " set " + toColName2 + "=\"" + thes.getMetaOntology() + "\", " + toColName3 + "=\"" + thes.getMetaOntology() + "\" where " + foreignKeyColName + "=\"" + thes.getConceptToID() + "\";");
+			
 			String conceptFromInsertQuery = "insert into " + conceptFromTable + " (" + fromColName2 + ", " + foreignKeyColName + ") values (\"" + conceptFromEscape + "\", '" + String.valueOf(thes.getConceptToID()) + "');";
 			stmt.executeUpdate(conceptFromInsertQuery);
 			stmt.close();
